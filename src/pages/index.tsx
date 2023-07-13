@@ -6,8 +6,8 @@ import { Preview } from "@/components/Preview";
 import { DetailsBar } from "@/components/DetailsBar";
 import { ComponentsBar } from "@/components/ComponentsBar";
 
-import "allotment/dist/style.css";
 import styles from "@/styles/Home.module.css";
+import "allotment/dist/style.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

@@ -15,3 +15,20 @@
 body {
   background: rgb(237, 232, 232);
 }
+
+h3 {
+  font-variation-settings: "wght" 650;
+}
+h1 {
+  font-variation-settings: "wght" 850;
+}
+h2 {
+  font-variation-settings: "wght" 750;
+}
+
+h1,
+h2,
+h3,
+p {
+  color: #393939;
+}

@@ -1,22 +1,19 @@
-import styles from "@/styles/Content.module.css";
+import styles from "@/styles/DetailsBar.module.css";
 
 export const DetailsBar = () => (
   <div className={styles.container}>
     <div className={styles.card}>
-      <svg
-        className={styles.svg}
-        preserveAspectRatio="none"
-        stroke="currentColor"
-        fill="none"
-        viewBox="0 0 200 200"
-        aria-hidden="true"
-      >
-        <path
-          vectorEffect="non-scaling-stroke"
-          strokeWidth="2"
-          d="M0 0l200 200M0 200L200 0"
-        ></path>
-      </svg>
+      <h2>Editor</h2>
+
+      <fieldset>
+        <label htmlFor="width">Largura:</label>
+        <input id="width" type="number" placeholder="Insira um valor" />
+      </fieldset>
+
+      <fieldset>
+        <label htmlFor="height">Altura:</label>
+        <input id="height" type="number" placeholder="insira um valor" />
+      </fieldset>
     </div>
   </div>
 );
