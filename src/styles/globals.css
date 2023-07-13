@@ -11,3 +11,7 @@
   padding: 0;
   border: box-sizing;
 }
+
+body {
+  background: rgb(237, 232, 232);
+}
