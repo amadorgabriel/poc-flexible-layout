@@ -29,6 +29,8 @@
   align-items: flex-start;
 
   width: 100%;
+
+  margin-bottom: 1.5rem;
 }
 
 .form label {

@@ -1,22 +1,28 @@
-import styles from "@/styles/Content.module.css";
+import { Field, Form } from "formik";
+
+import styles from "@/styles/ComponentsBar.module.css";
 
 export const ComponentsBar = () => (
   <div className={styles.container}>
-    <div className={styles.card}>
-      <svg
-        className={styles.svg}
-        preserveAspectRatio="none"
-        stroke="currentColor"
-        fill="none"
-        viewBox="0 0 200 200"
-        aria-hidden="true"
-      >
-        <path
-          vectorEffect="non-scaling-stroke"
-          strokeWidth="2"
-          d="M0 0l200 200M0 200L200 0"
-        ></path>
-      </svg>
+    <div className={(styles.content, styles.form)}>
+      <h2>Componentes</h2>
+
+      <Form>
+        <h3>Blocos</h3>
+
+        <fieldset>
+          <label htmlFor="text">Texto:</label>
+          <input id="text" placeholder="Insira um texto" />
+          <button type="submit">Adicionar</button>
+        </fieldset>
+
+        <fieldset>
+          <label htmlFor="image">Imagem:</label>
+          <input id="image" type="file" placeholder="Escolha sua imagem" />
+
+          <button type="submit">Adicionar</button>
+        </fieldset>
+      </Form>
     </div>
   </div>
 );
