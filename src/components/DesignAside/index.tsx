@@ -1,6 +1,6 @@
-import { ChangeEvent, useEffect } from "react";
+import { ChangeEvent } from "react";
+import { Form, useFormikContext } from "formik";
 import { useBlockContext } from "@/contexts/BlockContext";
-import { Field, Form, useFormikContext } from "formik";
 
 import styles from "@/styles/Aside.module.css";
 
@@ -17,23 +17,12 @@ export const DesignAside = () => {
   const { values, setFieldValue, setValues } =
     useFormikContext<DesignAsideProps>();
 
-  // setInitialState
-  useEffect(() => {
-    setValues({
-      width: containerBlock.width || initialContainerBlock.initialSize.width,
-      height: containerBlock.height || initialContainerBlock.initialSize.height,
-      isBlocked:
-        !!containerBlock.isBlocked || !!initialContainerBlock.isBlocked,
-    });
-  }, [containerBlock, initialContainerBlock, setValues]);
-
   const handleSubmit = () => {
     setBlockContainer({
       ...containerBlock,
 
       width: Number(values.width),
       height: Number(values.height),
-
       isBlocked: values.isBlocked,
     });
   };
@@ -48,17 +37,17 @@ export const DesignAside = () => {
         <Form onSubmit={handleSubmit}>
           <fieldset>
             <label htmlFor="isBlocked">Bloqueado:</label>
-            <Field
+            <input
               id="isBlocked"
               type="checkbox"
+              checked={values.isBlocked}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setFieldValue("isBlocked", e.target.checked);
-                console.log(e.target.checked);
               }}
             />
 
             <label htmlFor="width">Largura:</label>
-            <Field
+            <input
               id="width"
               type="number"
               value={values.width}
@@ -69,7 +58,7 @@ export const DesignAside = () => {
             />
 
             <label htmlFor="height">Altura:</label>
-            <Field
+            <input
               id="height"
               type="number"
               value={values.height}
@@ -94,16 +83,13 @@ export const DesignAside = () => {
           </p>
           <p>
             <i>
-              Width:{" "}
-              {containerBlock.width || initialContainerBlock.initialSize.width}
+              Width: {values.width}
               px
             </i>
           </p>
           <p>
             <i>
-              Height:
-              {containerBlock.height ||
-                initialContainerBlock.initialSize.height}
+              Height: {values.height}
               px
             </i>
           </p>

@@ -1,5 +1,6 @@
-import { createContext, useContext, useState } from "react";
+import { initialContainerBlock } from "@/utils/constants";
 import { CommomBlock, ContainerBlock } from "@/@types/Block";
+import { createContext, useContext, useState } from "react";
 
 interface BlockContextProps {
   children: React.ReactNode;
@@ -34,18 +35,3 @@ export const BlockContextProvider = ({ children }: BlockContextProps) => {
 };
 
 export const useBlockContext = () => useContext(BlockContext);
-
-const initialContainerBlock = {
-  // width: 400,
-  // height: 400,
-  name: "Bloco Principal",
-  initialPosition: {
-    x: 450,
-    y: 200,
-  },
-  initialSize: {
-    width: 150,
-    height: 150,
-  },
-  isBlocked: false,
-};
