@@ -1,9 +1,9 @@
-import { useFormikContext } from "formik";
 import { Resizable } from "re-resizable";
-import React, { useRef, useState, useEffect } from "react";
+import { useFormikContext } from "formik";
+import React, { useRef, useState } from "react";
 import { DraggableContainer, DraggableChild } from "react-dragline";
 
-import { ResizeHandle } from "./ResizeHandle";
+import { ResizeHandle } from "./ResizeHandle.component";
 import { useBlockContext } from "@/contexts/BlockContext";
 
 export const Preview = () => {
@@ -41,18 +41,6 @@ export const Preview = () => {
     setFieldValue("width", width);
     setFieldValue("height", height);
   };
-
-  // useEffect(() => {
-  //   setBlockContainer({
-  //     ...containerBlock,
-  //     width: containerRef.current?.state.width
-  //       ? Number(containerRef.current.state.width)
-  //       : initialContainerBlock.initialSize.width,
-  //     height: containerRef.current?.state.height
-  //       ? Number(containerRef.current?.state.height)
-  //       : initialContainerBlock.initialSize.height,
-  //   });
-  // }, [containerBlock, setBlockContainer, initialContainerBlock]);
 
   return (
     <DraggableContainer

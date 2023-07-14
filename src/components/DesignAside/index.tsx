@@ -2,20 +2,20 @@ import { ChangeEvent, useEffect } from "react";
 import { useBlockContext } from "@/contexts/BlockContext";
 import { Field, Form, useFormikContext } from "formik";
 
-import styles from "@/styles/DetailsBar.module.css";
+import styles from "@/styles/Aside.module.css";
 
-export interface DetailsEditoProps {
+export interface DesignAsideProps {
   width: number;
   height: number;
   isBlocked: boolean;
 }
 
-export const DetailsBar = () => {
+export const DesignAside = () => {
   const { containerBlock, initialContainerBlock, setBlockContainer } =
     useBlockContext();
 
   const { values, setFieldValue, setValues } =
-    useFormikContext<DetailsEditoProps>();
+    useFormikContext<DesignAsideProps>();
 
   // setInitialState
   useEffect(() => {
@@ -39,11 +39,13 @@ export const DetailsBar = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={(styles.content, styles.form)}>
-        <Form onSubmit={handleSubmit}>
-          <h2>Editor</h2>
+    <aside className={styles.container}>
+      <h2>Editor</h2>
 
+      <div className={(styles.content, styles.form)}>
+        <h3>Design</h3>
+
+        <Form onSubmit={handleSubmit}>
           <fieldset>
             <label htmlFor="isBlocked">Bloqueado:</label>
             <Field
@@ -54,9 +56,7 @@ export const DetailsBar = () => {
                 console.log(e.target.checked);
               }}
             />
-          </fieldset>
 
-          <fieldset>
             <label htmlFor="width">Largura:</label>
             <Field
               id="width"
@@ -67,9 +67,7 @@ export const DetailsBar = () => {
               }}
               placeholder="Insira um valor"
             />
-          </fieldset>
 
-          <fieldset>
             <label htmlFor="height">Altura:</label>
             <Field
               id="height"
@@ -80,9 +78,9 @@ export const DetailsBar = () => {
               }}
               placeholder="insira um valor"
             />
-          </fieldset>
 
-          <button type="submit">Salvar</button>
+            <button type="submit">Salvar</button>
+          </fieldset>
         </Form>
       </div>
 
@@ -95,13 +93,22 @@ export const DetailsBar = () => {
             <i>Bloco: {containerBlock.name}</i>
           </p>
           <p>
-            <i>Width: {containerBlock.width}px</i>
+            <i>
+              Width:{" "}
+              {containerBlock.width || initialContainerBlock.initialSize.width}
+              px
+            </i>
           </p>
           <p>
-            <i>Height: {containerBlock.height}px</i>
+            <i>
+              Height:
+              {containerBlock.height ||
+                initialContainerBlock.initialSize.height}
+              px
+            </i>
           </p>
         </div>
       </div>
-    </div>
+    </aside>
   );
 };

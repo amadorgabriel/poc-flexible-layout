@@ -4,8 +4,8 @@ import { Allotment } from "allotment";
 import { Inter } from "next/font/google";
 
 import { Preview } from "@/components/Preview";
-import { DetailsBar } from "@/components/DetailsBar";
-import { ComponentsBar } from "@/components/ComponentsBar";
+import { DesignAside } from "@/components/DesignAside";
+import { LayersAside } from "@/components/LayersAside";
 import { BlockContextProvider } from "@/contexts/BlockContext";
 
 import styles from "@/styles/Home.module.css";
@@ -29,7 +29,7 @@ export default function Home() {
           <Formik initialValues={{}} onSubmit={() => {}}>
             <Allotment minSize={100}>
               <Allotment.Pane maxSize={400} minSize={200}>
-                <ComponentsBar />
+                <LayersAside />
               </Allotment.Pane>
 
               <Allotment.Pane>
@@ -37,7 +37,7 @@ export default function Home() {
               </Allotment.Pane>
 
               <Allotment.Pane maxSize={400} minSize={200}>
-                <DetailsBar />
+                <DesignAside />
               </Allotment.Pane>
             </Allotment>
           </Formik>
