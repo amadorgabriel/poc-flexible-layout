@@ -11,7 +11,7 @@ export interface DesignAsideProps {
 }
 
 export const DesignAside = () => {
-  const { containerBlock, initialContainerBlock, setBlockContainer } =
+  const { containerBlock, setBlockContainer } =
     useBlockContext();
 
   const { values, setFieldValue, setValues } =

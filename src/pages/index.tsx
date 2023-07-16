@@ -3,7 +3,8 @@ import { Formik } from "formik";
 import { Allotment } from "allotment";
 import { Inter } from "next/font/google";
 
-import { Preview } from "@/components/Preview";
+// import { Preview } from "@/components/Preview";
+import { Preview2 } from "@/components/Preview/Preview2";
 import { DesignAside } from "@/components/DesignAside";
 import { LayersAside } from "@/components/LayersAside";
 import { initialContainerBlock } from "@/utils/constants";
@@ -40,7 +41,7 @@ export default function Home() {
               </Allotment.Pane>
 
               <Allotment.Pane>
-                <Preview />
+                <Preview2 />
               </Allotment.Pane>
 
               <Allotment.Pane maxSize={400} minSize={200}>

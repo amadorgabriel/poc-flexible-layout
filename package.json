@@ -25,6 +25,7 @@
     "re-resizable": "^6.9.9",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-draggable": "^4.4.5",
     "react-dragline": "^1.1.0",
     "typescript": "5.1.6"
   },
