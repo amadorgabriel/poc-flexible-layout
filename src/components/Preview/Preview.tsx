@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
+import { Container } from "./Container.component";
 import { initialContainerBlock } from "@/utils/constants";
-import { ResizableContainer } from "./ResizableContainer.component";
 import { useBlockContext } from "@/contexts/BlockContext";
+
+import styles from "@/styles/Preview.module.css";
 
 type Position = {
   xRate: number;
@@ -21,37 +23,31 @@ export const Preview2 = () => {
   });
 
   const onDrag = (e: DraggableEvent, data: DraggableData) => {
+    setCurrentPosition({ xRate: data.lastX, yRate: data.lastY });
+
     setBlockContainer({
       ...containerBlock,
 
       x: Number(data.lastX),
       y: Number(data.lastY),
     });
-
-    setCurrentPosition({ xRate: data.lastX, yRate: data.lastY });
   };
 
   return (
-    <div
-      style={{
-        height: "calc(100vh - 40px)",
-        position: "relative",
-        margin: "20px",
-        border: "2px dashed #bab8b8",
-        backgroundImage: "radial-gradient(#c4c4c4 1px, transparent 0)",
-        backgroundSize: "10px 10px",
-      }}
-    >
+    <div className={styles.container}>
       <Draggable
         position={{
           x: currentPosition.xRate,
           y: currentPosition.yRate,
         }}
-        onDrag={onDrag}
+        onDrag={containerBlock.isBlocked ? undefined : onDrag}
+        axis={containerBlock.isBlocked ? "none" : undefined}
         bounds="parent"
       >
         <div
-          style={{ width: "fit-content" }}
+          style={{
+            width: "fit-content",
+          }}
           onMouseDownCapture={() => {
             setFlag(true);
           }}
@@ -59,7 +55,7 @@ export const Preview2 = () => {
             setFlag(false);
           }}
         >
-          <ResizableContainer flag={flag} />
+          <Container flag={flag} />
         </div>
       </Draggable>
     </div>

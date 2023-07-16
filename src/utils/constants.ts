@@ -5,12 +5,12 @@ export const initialContainerBlock = {
   x: 150,
   y: 150,
   initialPosition: {
-    x: 150,
+    x: 200,
     y: 150,
   },
   initialSize: {
     width: 300,
     height: 480,
   },
-  isBlocked: false,
+  isBlocked: true,
 };

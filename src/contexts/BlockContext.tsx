@@ -1,5 +1,5 @@
 import { initialContainerBlock } from "@/utils/constants";
-import { CommomBlock, ContainerBlock } from "@/@types/Block";
+import { CommomBlock, ContainerBlock } from "@/@types/Block.types";
 import { createContext, useContext, useState } from "react";
 
 interface BlockContextProps {

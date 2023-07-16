@@ -1,22 +1,23 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useFormikContext } from "formik";
 import { NumberSize, Resizable } from "re-resizable";
 
 import { ResizeHandle } from "./ResizeHandle.component";
 import { useBlockContext } from "@/contexts/BlockContext";
 import { initialContainerBlock } from "@/utils/constants";
+import { Grid } from "./Grid.components";
 
-interface ResizableContainerProps {
+interface ContainerProps {
   flag: boolean;
 }
 
-export const ResizableContainer = ({ flag }: ResizableContainerProps) => {
+export const Container = ({ flag }: ContainerProps) => {
   const { setFieldValue } = useFormikContext();
 
   const [size, setSize] = useState<Record<string, number>>(
     initialContainerBlock.initialSize
   );
-  const { containerBlock } = useBlockContext();
+  const { containerBlock, setBlockContainer } = useBlockContext();
 
   const handleResizeStart = (
     e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>,
@@ -49,11 +50,26 @@ export const ResizableContainer = ({ flag }: ResizableContainerProps) => {
     setFieldValue("width", width);
     setFieldValue("height", height);
 
-    console.log(e);
-    console.log(direction);
-    console.log(ref);
-    console.log(d);
+    setBlockContainer({
+      ...containerBlock,
+
+      width: Number(width),
+      height: Number(height),
+    });
   };
+
+  // When design form is submitted
+  useEffect(() => {
+    if (
+      containerBlock.width != size.width ||
+      containerBlock.height != size.height
+    ) {
+      setSize({
+        width: containerBlock.width as number,
+        height: containerBlock.height as number,
+      });
+    }
+  }, [containerBlock, size]);
 
   return (
     <Resizable
@@ -173,6 +189,8 @@ export const ResizableContainer = ({ flag }: ResizableContainerProps) => {
         bottomRight: flag ? <ResizeHandle /> : undefined,
       }}
       resizeRatio={1}
-    ></Resizable>
+    >
+      {/* <Grid /> */}
+    </Resizable>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { DraggableContainer, DraggableChild } from "react-dragline";
 
 import { initialContainerBlock } from "@/utils/constants";
-import { ResizableContainer } from "./ResizableContainer.component";
+import { ResizableContainer } from "./Container.component";
 
 export const Preview = () => {
   const [flag, setFlag] = useState(false);

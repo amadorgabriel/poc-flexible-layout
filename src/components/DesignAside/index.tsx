@@ -83,11 +83,11 @@ export const DesignAside = () => {
           <div style={{ marginBottom: "0.75rem" }}>
             <b>Dimensões</b>
             <p>
-              Width: {values.width}
+              Width: {containerBlock.width}
               px
             </p>
             <p>
-              Height: {values.height}
+              Height: {containerBlock.height}
               px
             </p>
           </div>

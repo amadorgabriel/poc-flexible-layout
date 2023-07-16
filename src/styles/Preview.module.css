@@ -1,0 +1,8 @@
+.container {
+  height: calc(100vh - 40px);
+  position: relative;
+  margin: 20px;
+  border: 2px dashed #bab8b8;
+  background-image: radial-gradient(#c4c4c4 1px, transparent 0px);
+  background-size: 10px 10px;
+}
