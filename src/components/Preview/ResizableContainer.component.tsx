@@ -55,13 +55,6 @@ export const ResizableContainer = ({ flag }: ResizableContainerProps) => {
     console.log(d);
   };
 
-  useEffect(() => {
-    setSize({
-      width: containerBlock.width as number,
-      height: containerBlock.height as number,
-    });
-  }, [containerBlock]);
-
   return (
     <Resizable
       enable={

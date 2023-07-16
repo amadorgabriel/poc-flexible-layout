@@ -4,7 +4,7 @@ import { Allotment } from "allotment";
 import { Inter } from "next/font/google";
 
 // import { Preview } from "@/components/Preview";
-import { Preview2 } from "@/components/Preview/Preview2";
+import { Preview2 } from "@/components/Preview/Preview";
 import { DesignAside } from "@/components/DesignAside";
 import { LayersAside } from "@/components/LayersAside";
 import { initialContainerBlock } from "@/utils/constants";

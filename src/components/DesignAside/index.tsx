@@ -5,17 +5,17 @@ import { useBlockContext } from "@/contexts/BlockContext";
 import styles from "@/styles/Aside.module.css";
 
 export interface DesignAsideProps {
+  x: number;
+  y: number;
   width: number;
   height: number;
   isBlocked: boolean;
 }
 
 export const DesignAside = () => {
-  const { containerBlock, setBlockContainer } =
-    useBlockContext();
+  const { containerBlock, setBlockContainer } = useBlockContext();
 
-  const { values, setFieldValue, setValues } =
-    useFormikContext<DesignAsideProps>();
+  const { values, setFieldValue } = useFormikContext<DesignAsideProps>();
 
   const handleSubmit = () => {
     setBlockContainer({
@@ -78,21 +78,25 @@ export const DesignAside = () => {
       <div className={(styles.content, styles.props)}>
         <h3>Propriedades</h3>
         <div>
-          <p>
-            <i>Bloco: {containerBlock.name}</i>
-          </p>
-          <p>
-            <i>
+          <p style={{ marginBottom: "0.75rem" }}>Nome: {containerBlock.name}</p>
+
+          <div style={{ marginBottom: "0.75rem" }}>
+            <b>Dimensões</b>
+            <p>
               Width: {values.width}
               px
-            </i>
-          </p>
-          <p>
-            <i>
+            </p>
+            <p>
               Height: {values.height}
               px
-            </i>
-          </p>
+            </p>
+          </div>
+
+          <div style={{ marginBottom: "0.75rem" }}>
+            <b>Posição</b>
+            <p>Delta X: {containerBlock.x}px</p>
+            <p>Delta Y: {containerBlock.y}px</p>
+          </div>
         </div>
       </div>
     </aside>

@@ -3,6 +3,7 @@ import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
 import { initialContainerBlock } from "@/utils/constants";
 import { ResizableContainer } from "./ResizableContainer.component";
+import { useBlockContext } from "@/contexts/BlockContext";
 
 type Position = {
   xRate: number;
@@ -12,12 +13,21 @@ type Position = {
 export const Preview2 = () => {
   const [flag, setFlag] = useState(false);
 
+  const { containerBlock, setBlockContainer } = useBlockContext();
+
   const [currentPosition, setCurrentPosition] = useState<Position>({
     xRate: initialContainerBlock.initialPosition.x,
     yRate: initialContainerBlock.initialPosition.y,
   });
 
   const onDrag = (e: DraggableEvent, data: DraggableData) => {
+    setBlockContainer({
+      ...containerBlock,
+
+      x: Number(data.lastX),
+      y: Number(data.lastY),
+    });
+
     setCurrentPosition({ xRate: data.lastX, yRate: data.lastY });
   };
 
