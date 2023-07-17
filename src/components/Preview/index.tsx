@@ -1,40 +1,63 @@
 import React, { useState } from "react";
-import { DraggableContainer, DraggableChild } from "react-dragline";
+import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
+import { Container } from "./Container.component";
 import { initialContainerBlock } from "@/utils/constants";
-import { ResizableContainer } from "./Container.component";
+import { useBlockContext } from "@/contexts/BlockContext";
+
+import styles from "@/styles/Preview.module.css";
+
+type Position = {
+  xRate: number;
+  yRate: number;
+};
 
 export const Preview = () => {
   const [flag, setFlag] = useState(false);
 
+  const { containerBlock, setBlockContainer } = useBlockContext();
+
+  const [currentPosition, setCurrentPosition] = useState<Position>({
+    xRate: initialContainerBlock.initialPosition.x,
+    yRate: initialContainerBlock.initialPosition.y,
+  });
+
+  const onDrag = (e: DraggableEvent, data: DraggableData) => {
+    setCurrentPosition({ xRate: data.lastX, yRate: data.lastY });
+
+    setBlockContainer({
+      ...containerBlock,
+
+      x: Number(data.lastX),
+      y: Number(data.lastY),
+    });
+  };
+
   return (
-    <DraggableContainer
-      style={{
-        height: "calc(100vh - 40px)",
-        position: "relative",
-        margin: "20px",
-        border: "2px dashed #bab8b8",
-        backgroundImage: "radial-gradient(#c4c4c4 1px, transparent 0)",
-        backgroundSize: "10px 10px",
-      }}
-      threshold={10}
-    >
-      {[initialContainerBlock].map(({ initialPosition }, index) => {
-        return (
-          <DraggableChild key={index} defaultPosition={initialPosition}>
-            <div
-              onMouseDownCapture={() => {
-                setFlag(true);
-              }}
-              onMouseUpCapture={() => {
-                setFlag(false);
-              }}
-            >
-              <ResizableContainer flag={flag} />
-            </div>
-          </DraggableChild>
-        );
-      })}
-    </DraggableContainer>
+    <div className={styles.container}>
+      <Draggable
+        position={{
+          x: currentPosition.xRate,
+          y: currentPosition.yRate,
+        }}
+        onDrag={containerBlock.isBlocked ? undefined : onDrag}
+        axis={containerBlock.isBlocked ? "none" : undefined}
+        bounds="parent"
+      >
+        <div
+          style={{
+            width: "fit-content",
+          }}
+          onMouseDownCapture={() => {
+            setFlag(true);
+          }}
+          onMouseUpCapture={() => {
+            setFlag(false);
+          }}
+        >
+          <Container flag={flag} />
+        </div>
+      </Draggable>
+    </div>
   );
 };

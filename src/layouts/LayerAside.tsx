@@ -1,16 +1,16 @@
 import { Form } from "formik";
 
-import { Layer } from "./Layer.component";
+import { Layer } from "../components/Layer.component";
 
 import stylesAside from "@/styles/Aside.module.css";
-import stylesLayerAside from "@/styles/LayersAside.module.css";
+import stylesLayerAside from "@/styles/LayerAside.module.css";
 
 const styles = {
   ...stylesLayerAside,
   ...stylesAside,
 };
 
-export const LayersAside = () => (
+export const LayerAside = () => (
   <aside className={styles.container}>
     <h2>Componentes</h2>
 

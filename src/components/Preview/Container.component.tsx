@@ -190,7 +190,7 @@ export const Container = ({ flag }: ContainerProps) => {
       }}
       resizeRatio={1}
     >
-      {/* <Grid /> */}
+      <Grid />
     </Resizable>
   );
 };

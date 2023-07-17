@@ -1,43 +1,31 @@
-import { Responsive as ResponsiveGridLayout } from "react-grid-layout";
+import { Responsive, WidthProvider } from "react-grid-layout";
+const ResponsiveGridLayout = WidthProvider(Responsive);
+
+import { Node } from "./Node.component";
 
 import styles from "@/styles/Preview.module.css";
 
 export const Grid = () => {
   const layout = [
-    { i: "a", x: 0, y: 0, w: 1, h: 2, static: true },
-    { i: "b", x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 },
-    { i: "c", x: 4, y: 0, w: 1, h: 2 },
+    { i: "blue-eyes-dragon", x: 0, y: 0, w: 1, h: 1 },
+    { i: "dark-magician", x: 1, y: 0, w: 1, h: 1 },
+    { i: "kuriboh", x: 2, y: 0, w: 1, h: 1 },
+    { i: "spell-caster", x: 3, y: 0, w: 1, h: 1 },
+    { i: "summoned-skull", x: 4, y: 0, w: 1, h: 1 },
   ];
 
   return (
     <ResponsiveGridLayout
-      rowHeight={30}
-      width={1200}
+      layouts={{ lg: layout }}
+      breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+      // cols={{ lg: 5, md: 4, sm: 3, xs: 2, xxs: 1 }}
+      rowHeight={300}
+      width={1000}
       // className="layout"
       // breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-      // cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
     >
-      <div
-        className={styles.layout}
-        key="a"
-        data-grid={{ x: 0, y: 0, w: 1, h: 2, static: true }}
-      >
-        a
-      </div>
-      <div
-        className={styles.layout}
-        key="b"
-        data-grid={{ x: 1, y: 0, w: 3, h: 2, minW: 2, maxW: 4 }}
-      >
-        b
-      </div>
-      <div
-        className={styles.layout}
-        key="c"
-        data-grid={{ x: 4, y: 0, w: 1, h: 2 }}
-      >
-        c
-      </div>
+      <Node text="Texto 1" />
+      <Node text="Texto 2" />
     </ResponsiveGridLayout>
   );
 };

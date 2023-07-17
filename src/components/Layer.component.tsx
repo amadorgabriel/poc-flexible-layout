@@ -4,7 +4,7 @@ import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import TextFieldsOutlinedIcon from "@mui/icons-material/TextFieldsOutlined";
 
-import styles from "@/styles/LayersAside.module.css";
+import styles from "@/styles/LayerAside.module.css";
 import { useState } from "react";
 
 type LayerProps = {
