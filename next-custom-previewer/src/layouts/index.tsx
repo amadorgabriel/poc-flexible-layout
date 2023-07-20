@@ -3,8 +3,6 @@ import { LayerAside } from "@/layouts/LayerAside";
 import { DesignAside } from "@/layouts/DesignAside";
 import { Preview } from "@/components/Preview/index";
 
-import { Artboard } from "@/components/Artboard";
-
 export const Layout = () => {
   return (
     <Allotment minSize={100}>
@@ -14,9 +12,6 @@ export const Layout = () => {
 
       <Allotment.Pane>
         <Preview />
-        {/* <Artboard /> */}
-
-        {/* Separar em duas aplicações*/}
       </Allotment.Pane>
 
       <Allotment.Pane maxSize={400} minSize={200}>
