@@ -1,8 +1,10 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Form, useFormikContext } from "formik";
 import { useBlockContext } from "@/contexts/BlockContext";
 
 import styles from "@/components/layout/Aside/Aside.module.css";
+import { useDebounce } from "@/hooks/useDebounce";
+import { Input } from "@/components/Input";
 
 export interface EditorAsideProps {
   x: number;
@@ -17,22 +19,38 @@ export const EditorAside = () => {
 
   const { values, setFieldValue } = useFormikContext<EditorAsideProps>();
 
-  const handleSubmit = () => {
+  const [currKey, setCurrKey] = useState<string>("");
+  const [currValue, setCurrValue] = useState<string | number | boolean>("");
+  const debouncedValue = useDebounce<string | number | boolean>(
+    currValue,
+    1000
+  );
+
+  const handleChange = (key: string, newValue: string | number | boolean) => {
+    setFieldValue(key, newValue);
+
+    setCurrKey(key);
+    setCurrValue(newValue);
+  };
+
+  useEffect(() => {
     setBlockContainer({
       ...containerBlock,
-
-      width: Number(values.width),
-      height: Number(values.height),
-      isBlocked: values.isBlocked,
+      [currKey]: currValue,
     });
-  };
+  }, [
+    debouncedValue,
+    currKey,
+    containerBlock,
+    setFieldValue,
+    setBlockContainer,
+    currValue,
+  ]);
 
   return (
     <React.Fragment>
-      <div className={(styles.asideContent, styles.form)}>
-        <h3>Design</h3>
-
-        <Form onSubmit={handleSubmit}>
+      <div className={styles.asideContent}>
+        <Form onSubmit={() => {}} className={styles.subContent}>
           <fieldset>
             <label htmlFor="isBlocked">Bloqueado:</label>
             <input
@@ -40,42 +58,39 @@ export const EditorAside = () => {
               type="checkbox"
               checked={values.isBlocked}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setFieldValue("isBlocked", e.target.checked);
+                handleChange("isBlocked", e.target.checked);
               }}
             />
-
-            <label htmlFor="width">Largura:</label>
-            <input
-              id="width"
-              type="number"
-              value={values.width}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setFieldValue("width", Number(e.target.value));
-              }}
-              placeholder="Insira um valor"
-            />
-
-            <label htmlFor="height">Altura:</label>
-            <input
-              id="height"
-              type="number"
-              value={values.height}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setFieldValue("height", Number(e.target.value));
-              }}
-              placeholder="insira um valor"
-            />
-
-            <button type="submit">Salvar</button>
           </fieldset>
+
+          <Input.Text
+            id="width"
+            label="Largura:"
+            type="number"
+            placeholder="Insira um valor"
+            value={values.width}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              handleChange("width", Number(e.target.value));
+            }}
+          />
+
+          <Input.Text
+            label="Altura"
+            id="height"
+            type="number"
+            placeholder="insira um valor"
+            value={values.height}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              handleChange("height", Number(e.target.value));
+            }}
+          />
         </Form>
       </div>
 
-      <hr></hr>
-
       <div className={(styles.asideContent, styles.properties)}>
         <h3>Propriedades</h3>
-        <div>
+
+        <div className={styles.subContent}>
           <p style={{ marginBottom: "0.75rem" }}>Nome: {containerBlock.name}</p>
 
           <div style={{ marginBottom: "0.75rem" }}>

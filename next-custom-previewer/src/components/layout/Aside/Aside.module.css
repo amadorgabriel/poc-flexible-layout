@@ -10,7 +10,7 @@
 }
 
 .asideContainer h3 {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .asideContainer hr {
@@ -23,17 +23,18 @@
   height: 100%;
 }
 
-.form fieldset {
+.subContent {
+  width: 100%;
+}
+
+.subContent fieldset {
   border: 0;
+  margin-bottom: 0.5rem;
 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-
-  width: 100%;
-
-  margin-bottom: 1.5rem;
 }
 
 .form label {
