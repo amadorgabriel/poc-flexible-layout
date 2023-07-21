@@ -1,9 +1,7 @@
 import { Responsive, WidthProvider } from "react-grid-layout";
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-import { Node } from "./Node.component";
-
-import styles from "@/styles/Preview.module.css";
+import { GridElement } from "@/components/Preview/Grid/GridElement.component";
 
 export const Grid = () => {
   const layout = [
@@ -18,14 +16,11 @@ export const Grid = () => {
     <ResponsiveGridLayout
       layouts={{ lg: layout }}
       breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-      // cols={{ lg: 5, md: 4, sm: 3, xs: 2, xxs: 1 }}
       rowHeight={300}
       width={1000}
-      // className="layout"
-      // breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
     >
-      <Node text="Texto 1" />
-      <Node text="Texto 2" />
+      <GridElement text="Texto 1" />
+      <GridElement text="Texto 2" />
     </ResponsiveGridLayout>
   );
 };

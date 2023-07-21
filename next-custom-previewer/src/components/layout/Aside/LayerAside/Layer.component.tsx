@@ -1,11 +1,12 @@
+import { useState } from "react";
+
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import TextFieldsOutlinedIcon from "@mui/icons-material/TextFieldsOutlined";
 
-import styles from "@/styles/LayerAside.module.css";
-import { useState } from "react";
+import styles from "@/components/layout/Aside/Aside.module.css";
 
 type LayerProps = {
   text?: string;

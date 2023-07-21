@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
-import { Container } from "./Container.component";
+import { Container } from "./Container";
 import { initialContainerBlock } from "@/utils/constants";
 import { useBlockContext } from "@/contexts/BlockContext";
 
-import styles from "@/styles/Preview.module.css";
+import styles from "./Preview.module.css";
 
 type Position = {
   xRate: number;
@@ -34,7 +34,7 @@ export const Preview = () => {
   };
 
   return (
-    <div className={styles.container}>
+    <div className={styles.previewContainer}>
       <Draggable
         position={{
           x: currentPosition.xRate,

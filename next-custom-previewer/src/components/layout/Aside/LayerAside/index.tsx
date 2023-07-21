@@ -1,20 +1,12 @@
+import React from "react";
 import { Form } from "formik";
+import { Layer } from "./Layer.component";
 
-import { Layer } from "../components/Layer.component";
-
-import stylesAside from "@/styles/Aside.module.css";
-import stylesLayerAside from "@/styles/LayerAside.module.css";
-
-const styles = {
-  ...stylesLayerAside,
-  ...stylesAside,
-};
+import styles from "@/components/layout/Aside/Aside.module.css";
 
 export const LayerAside = () => (
-  <aside className={styles.container}>
-    <h2>Componentes</h2>
-
-    <div className={(styles.content, styles.form)}>
+  <React.Fragment>
+    <div className={(styles.asideContent, styles.form)}>
       <h3 className={styles.asterisk}>Blocos Fixos</h3>
 
       <div className={styles.layers}>
@@ -31,7 +23,7 @@ export const LayerAside = () => (
 
     <hr></hr>
 
-    <div className={(styles.content, styles.form)}>
+    <div className={(styles.asideContent, styles.form)}>
       <Form>
         <h3>Novo Bloco</h3>
 
@@ -49,5 +41,5 @@ export const LayerAside = () => (
         </fieldset>
       </Form>
     </div>
-  </aside>
+  </React.Fragment>
 );

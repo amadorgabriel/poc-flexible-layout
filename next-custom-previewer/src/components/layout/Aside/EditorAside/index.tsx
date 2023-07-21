@@ -1,10 +1,10 @@
-import { ChangeEvent } from "react";
+import React, { ChangeEvent } from "react";
 import { Form, useFormikContext } from "formik";
 import { useBlockContext } from "@/contexts/BlockContext";
 
-import styles from "@/styles/Aside.module.css";
+import styles from "@/components/layout/Aside/Aside.module.css";
 
-export interface DesignAsideProps {
+export interface EditorAsideProps {
   x: number;
   y: number;
   width: number;
@@ -12,10 +12,10 @@ export interface DesignAsideProps {
   isBlocked: boolean;
 }
 
-export const DesignAside = () => {
+export const EditorAside = () => {
   const { containerBlock, setBlockContainer } = useBlockContext();
 
-  const { values, setFieldValue } = useFormikContext<DesignAsideProps>();
+  const { values, setFieldValue } = useFormikContext<EditorAsideProps>();
 
   const handleSubmit = () => {
     setBlockContainer({
@@ -28,10 +28,8 @@ export const DesignAside = () => {
   };
 
   return (
-    <aside className={styles.container}>
-      <h2>Editor</h2>
-
-      <div className={(styles.content, styles.form)}>
+    <React.Fragment>
+      <div className={(styles.asideContent, styles.form)}>
         <h3>Design</h3>
 
         <Form onSubmit={handleSubmit}>
@@ -75,7 +73,7 @@ export const DesignAside = () => {
 
       <hr></hr>
 
-      <div className={(styles.content, styles.props)}>
+      <div className={(styles.asideContent, styles.properties)}>
         <h3>Propriedades</h3>
         <div>
           <p style={{ marginBottom: "0.75rem" }}>Nome: {containerBlock.name}</p>
@@ -99,6 +97,6 @@ export const DesignAside = () => {
           </div>
         </div>
       </div>
-    </aside>
+    </React.Fragment>
   );
 };

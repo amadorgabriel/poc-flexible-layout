@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { Grid } from "../Grid";
 import { useFormikContext } from "formik";
+import { useState, useEffect } from "react";
 import { NumberSize, Resizable } from "re-resizable";
 
 import { ResizeHandle } from "./ResizeHandle.component";
 import { useBlockContext } from "@/contexts/BlockContext";
 import { initialContainerBlock } from "@/utils/constants";
-import { Grid } from "./Grid.components";
 
 interface ContainerProps {
   flag: boolean;
