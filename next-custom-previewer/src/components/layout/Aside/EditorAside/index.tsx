@@ -1,10 +1,9 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent } from "react";
 import { Form, useFormikContext } from "formik";
 import { useBlockContext } from "@/contexts/BlockContext";
 
-import styles from "@/components/layout/Aside/Aside.module.css";
-import { useDebounce } from "@/hooks/useDebounce";
 import { Input } from "@/components/Input";
+import styles from "@/components/layout/Aside/Aside.module.css";
 
 export interface EditorAsideProps {
   x: number;
@@ -16,36 +15,7 @@ export interface EditorAsideProps {
 
 export const EditorAside = () => {
   const { containerBlock, setBlockContainer } = useBlockContext();
-
   const { values, setFieldValue } = useFormikContext<EditorAsideProps>();
-
-  const [currKey, setCurrKey] = useState<string>("");
-  const [currValue, setCurrValue] = useState<string | number | boolean>("");
-  const debouncedValue = useDebounce<string | number | boolean>(
-    currValue,
-    1000
-  );
-
-  const handleChange = (key: string, newValue: string | number | boolean) => {
-    setFieldValue(key, newValue);
-
-    setCurrKey(key);
-    setCurrValue(newValue);
-  };
-
-  useEffect(() => {
-    setBlockContainer({
-      ...containerBlock,
-      [currKey]: currValue,
-    });
-  }, [
-    debouncedValue,
-    currKey,
-    containerBlock,
-    setFieldValue,
-    setBlockContainer,
-    currValue,
-  ]);
 
   return (
     <React.Fragment>
@@ -58,7 +28,11 @@ export const EditorAside = () => {
               type="checkbox"
               checked={values.isBlocked}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                handleChange("isBlocked", e.target.checked);
+                setFieldValue("isBlocked", e.target.checked);
+                setBlockContainer({
+                  ...containerBlock,
+                  isBlocked: e.target.checked,
+                });
               }}
             />
           </fieldset>
@@ -70,7 +44,13 @@ export const EditorAside = () => {
             placeholder="Insira um valor"
             value={values.width}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              handleChange("width", Number(e.target.value));
+              setFieldValue("width", Number(e.target.value));
+            }}
+            onEnter={() => {
+              setBlockContainer({
+                ...containerBlock,
+                width: values.width,
+              });
             }}
           />
 
@@ -81,7 +61,13 @@ export const EditorAside = () => {
             placeholder="insira um valor"
             value={values.height}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              handleChange("height", Number(e.target.value));
+              setFieldValue("height", Number(e.target.value));
+            }}
+            onEnter={() => {
+              setBlockContainer({
+                ...containerBlock,
+                width: values.height,
+              });
             }}
           />
         </Form>

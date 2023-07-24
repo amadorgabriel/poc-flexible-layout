@@ -1,15 +1,22 @@
-import { InputHTMLAttributes, useEffect, useRef } from "react";
+import { InputHTMLAttributes, KeyboardEvent, useRef } from "react";
 import { generateUUID } from "@/utils/generate-uuid";
 
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
+  onEnter?: () => void;
 }
 
-export const TextInput = ({ label, ...rest }: TextInputProps) => {
+export const TextInput = ({ label, onEnter, ...rest }: TextInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const uuid = generateUUID();
   const current = inputRef.current;
+
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      onEnter?.();
+    }
+  }
 
   return (
     <fieldset>
@@ -24,6 +31,7 @@ export const TextInput = ({ label, ...rest }: TextInputProps) => {
         onFocus={(e) => {
           e.target.select();
         }}
+        onKeyDown={handleKeyDown}
       />
     </fieldset>
   );

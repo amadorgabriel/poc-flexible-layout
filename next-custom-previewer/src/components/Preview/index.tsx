@@ -23,6 +23,8 @@ export const Preview = () => {
   });
 
   const onDrag = (e: DraggableEvent, data: DraggableData) => {
+    if (containerBlock.isBlocked) return;
+
     setCurrentPosition({ xRate: data.lastX, yRate: data.lastY });
 
     setBlockContainer({
@@ -36,24 +38,38 @@ export const Preview = () => {
   return (
     <div className={styles.previewContainer}>
       <Draggable
-        position={{
-          x: currentPosition.xRate,
-          y: currentPosition.yRate,
-        }}
-        onDrag={containerBlock.isBlocked ? undefined : onDrag}
-        axis={containerBlock.isBlocked ? "none" : undefined}
+        onDrag={onDrag}
+        axis={containerBlock.isBlocked ? "none" : "both"}
         bounds="parent"
+        defaultPosition={{
+          x: initialContainerBlock.initialPosition.x,
+          y: initialContainerBlock.initialPosition.y,
+        }}
+        position={
+          containerBlock.isBlocked
+            ? {
+                x: currentPosition.xRate,
+                y: currentPosition.yRate,
+              }
+            : undefined
+        }
       >
         <div
           style={{
             width: "fit-content",
           }}
-          onMouseDownCapture={() => {
+          onMouseEnter={() => {
             setFlag(true);
           }}
-          onMouseUpCapture={() => {
+          onMouseLeave={() => {
             setFlag(false);
           }}
+          // onMouseDownCapture={() => {
+          //   setFlag(true);
+          // }}
+          // onMouseUpCapture={() => {
+          //   setFlag(false);
+          // }}
         >
           <Container flag={flag} />
         </div>
