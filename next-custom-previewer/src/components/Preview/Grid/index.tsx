@@ -1,26 +1,97 @@
+import _ from "lodash";
+import { useState, useEffect } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
+import { Container } from "../Container";
+
+
+import "react-grid-layout/css/styles.css";
+import "react-resizable/css/styles.css";
+
+interface GridProps {
+  // domElements: any[];
+  rowHeight?: number;
+  onLayoutChange?: (layout: any, layouts: any) => void;
+  cols?: any;
+  breakpoints?: any;
+  // containerPadding?: number[];
+}
+
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-import { GridElement } from "@/components/Preview/Grid/GridElement.component";
+// GridItemWidth = 110px
+export const Grid = ({
+  rowHeight = 30,
+  cols = { lg: 6, md: 5, sm: 4, xs: 3, xxs: 2 },
+  breakpoints = { lg: 660, md: 550, sm: 440, xs: 330, xxs: 220 },
+}: GridProps) => {
+  const [layouts, setLayouts] = useState<{ [index: string]: any[] }>({
+    md: _.map(_.range(0, 6), function (_, i) {
+      var y = Math.ceil(Math.random() * 4) + 1;
+      return {
+        x: (5 * 2) % 12,
+        y: Math.floor(i / 6) * y,
+        w: 1,
+        h: y,
+        i: i.toString(),
+        static: Math.random() < 0.05,
+      };
+    }),
+  });
+  const [currentBreakpoint, setCurrentBreakpoint] = useState<string>("md");
+  const [mounted, setMounted] = useState(false);
+  const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({
+    md: [],
+  });
 
-export const Grid = () => {
-  const layout = [
-    { i: "blue-eyes-dragon", x: 0, y: 0, w: 1, h: 1 },
-    { i: "dark-magician", x: 1, y: 0, w: 1, h: 1 },
-    { i: "kuriboh", x: 2, y: 0, w: 1, h: 1 },
-    { i: "spell-caster", x: 3, y: 0, w: 1, h: 1 },
-    { i: "summoned-skull", x: 4, y: 0, w: 1, h: 1 },
-  ];
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const onBreakpointChange = (breakpoint: any) => {
+    setCurrentBreakpoint(breakpoint);
+    setToolbox({
+      ...toolbox,
+      [breakpoint]: toolbox[breakpoint] || toolbox[currentBreakpoint] || [],
+    });
+  };
+
+  const onLayoutChange = (layout: any, layouts: any) => {
+    setLayouts({ ...layouts });
+  };
+
+  const generateDOM = () => {
+    return _.map(layouts.md, function (l, i) {
+      return (
+        <div key={i} style={{ background: "#ccc" }}>
+          <span className="text">{i}</span>
+        </div>
+      );
+    });
+  };
 
   return (
     <ResponsiveGridLayout
-      layouts={{ lg: layout }}
-      breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
-      rowHeight={300}
-      width={1000}
+      cols={cols}
+      rowHeight={rowHeight}
+      breakpoints={breakpoints}
+
+      compactType={"vertical"}
+      preventCollision={false}
+      
+      style={{ background: "#ffca" }}
+      // ---
+      layouts={layouts}
+      measureBeforeMount={true}
+      useCSSTransforms={mounted}
+      onLayoutChange={onLayoutChange}
+      onBreakpointChange={onBreakpointChange}
+      onWidthChange={() => {
+        console.log("test")
+      }}
+      // isDroppable
     >
-      <GridElement text="Texto 1" />
-      <GridElement text="Texto 2" />
+      {generateDOM()}
+      <Container flag={true} />
     </ResponsiveGridLayout>
   );
 };

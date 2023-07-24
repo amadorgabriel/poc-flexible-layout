@@ -1,9 +1,9 @@
 export type ContainerBlock = {
-  name: string
-  width?: number;
-  height?: number;
-  x?: number;
-  y?: number;
+  name: string;
+  width: number | null;
+  height: number | null;
+  x: number | null;
+  y: number | null;
   initialPosition: {
     x: number;
     y: number;
@@ -13,15 +13,4 @@ export type ContainerBlock = {
     height: number;
   };
   isBlocked?: boolean;
-};
-
-export type CommomBlock = {
-  name: string
-  width: number;
-  height: number;
-
-  text?: string;
-  image?: string;
-  isBlocked?: boolean;
-  isVisible?: boolean;
 };

@@ -42,7 +42,7 @@ export const EditorAside = () => {
             label="Largura:"
             type="number"
             placeholder="Insira um valor"
-            value={values.width}
+            value={values.width ?? containerBlock.initialSize.width}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setFieldValue("width", Number(e.target.value));
             }}
@@ -59,14 +59,14 @@ export const EditorAside = () => {
             id="height"
             type="number"
             placeholder="insira um valor"
-            value={values.height}
+            value={values.height ?? containerBlock.initialSize.height}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setFieldValue("height", Number(e.target.value));
             }}
             onEnter={() => {
               setBlockContainer({
                 ...containerBlock,
-                width: values.height,
+                height: values.height,
               });
             }}
           />
@@ -82,19 +82,24 @@ export const EditorAside = () => {
           <div style={{ marginBottom: "0.75rem" }}>
             <b>Dimensões</b>
             <p>
-              Width: {containerBlock.width}
+              Width: {containerBlock.width ?? containerBlock.initialSize.width}
               px
             </p>
             <p>
-              Height: {containerBlock.height}
+              Height:{" "}
+              {containerBlock.height ?? containerBlock.initialSize.height}
               px
             </p>
           </div>
 
           <div style={{ marginBottom: "0.75rem" }}>
             <b>Posição</b>
-            <p>Delta X: {containerBlock.x}px</p>
-            <p>Delta Y: {containerBlock.y}px</p>
+            <p>
+              Delta X: {containerBlock.x ?? containerBlock.initialPosition.x}px
+            </p>
+            <p>
+              Delta Y: {containerBlock.y ?? containerBlock.initialPosition.y}px
+            </p>
           </div>
         </div>
       </div>

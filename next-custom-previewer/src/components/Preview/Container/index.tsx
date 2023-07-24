@@ -5,7 +5,6 @@ import { NumberSize, Resizable } from "re-resizable";
 
 import { ResizeHandle } from "./ResizeHandle.component";
 import { useBlockContext } from "@/contexts/BlockContext";
-import { initialContainerBlock } from "@/utils/constants";
 
 interface ContainerProps {
   flag: boolean;
@@ -13,11 +12,11 @@ interface ContainerProps {
 
 export const Container = ({ flag }: ContainerProps) => {
   const { setFieldValue } = useFormikContext();
+  const { containerBlock, setBlockContainer } = useBlockContext();
 
   const [size, setSize] = useState<Record<string, number>>(
-    initialContainerBlock.initialSize
+    containerBlock.initialSize
   );
-  const { containerBlock, setBlockContainer } = useBlockContext();
 
   const handleResizeStart = (
     e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>,
@@ -64,9 +63,11 @@ export const Container = ({ flag }: ContainerProps) => {
       containerBlock.width != size.width ||
       containerBlock.height != size.height
     ) {
+      if (!containerBlock.width || !containerBlock.height) return;
+
       setSize({
-        width: containerBlock.width as number,
-        height: containerBlock.height as number,
+        width: containerBlock.width,
+        height: containerBlock.height,
       });
     }
   }, [containerBlock, size]);
@@ -94,11 +95,11 @@ export const Container = ({ flag }: ContainerProps) => {
       }}
       defaultSize={{
         width: containerBlock.initialSize.width,
-        height: containerBlock.initialSize.width,
+        height: containerBlock.initialSize.height,
       }}
       size={{
-        width: size.width as number,
-        height: size.height as number,
+        width: size.width ?? containerBlock.initialSize.width,
+        height: size.height ?? containerBlock.initialSize.height,
       }}
       onResizeStart={handleResizeStart}
       onResizeStop={(e, direction, ref, d) =>
@@ -190,7 +191,7 @@ export const Container = ({ flag }: ContainerProps) => {
       }}
       resizeRatio={1}
     >
-      {/* <Grid /> */}
+      <Grid />
     </Resizable>
   );
 };

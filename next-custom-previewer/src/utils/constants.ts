@@ -1,16 +1,16 @@
 export const initialContainerBlock = {
-  width: 300,
-  height: 480,
   name: "Bloco Principal",
-  x: 150,
-  y: 150,
+  width: null,
+  height: null,
+  x: null,
+  y: null,
   initialPosition: {
-    x: 200,
+    x: 600,
     y: 150,
   },
   initialSize: {
     width: 300,
     height: 480,
   },
-  isBlocked: false,
+  isBlocked: true,
 };
