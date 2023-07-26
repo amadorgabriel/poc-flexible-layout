@@ -11,8 +11,8 @@ export default function App({ Component, pageProps }: AppProps) {
     <BlockContextProvider>
       <Formik
         initialValues={{
-          width: initialContainerBlock.initialSize.width,
-          height: initialContainerBlock.initialSize.height,
+          width: initialContainerBlock.width,
+          height: initialContainerBlock.height,
           isBlocked: initialContainerBlock.isBlocked,
         }}
         onSubmit={() => {}}

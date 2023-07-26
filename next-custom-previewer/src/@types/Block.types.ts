@@ -1,16 +1,12 @@
 export type ContainerBlock = {
   name: string;
-  width: number | null;
-  height: number | null;
+  width: number;
+  height: number;
   x: number | null;
   y: number | null;
   initialPosition: {
     x: number;
     y: number;
-  };
-  initialSize: {
-    width: number;
-    height: number;
   };
   isBlocked?: boolean;
 };

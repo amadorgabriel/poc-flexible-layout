@@ -5,18 +5,27 @@ import { NumberSize, Resizable } from "re-resizable";
 
 import { ResizeHandle } from "./ResizeHandle.component";
 import { useBlockContext } from "@/contexts/BlockContext";
+import { ContainerBlock } from "@/@types/Block.types";
 
 interface ContainerProps {
   flag: boolean;
 }
 
+type Size = {
+  width: number;
+  height: number;
+};
+
+type Nullish<T> = { [P in keyof T]?: T[P] | null };
+
 export const Container = ({ flag }: ContainerProps) => {
   const { setFieldValue } = useFormikContext();
   const { containerBlock, setBlockContainer } = useBlockContext();
 
-  const [size, setSize] = useState<Record<string, number>>(
-    containerBlock.initialSize
-  );
+  const [size, setSize] = useState<Size>({
+    width: containerBlock.width,
+    height: containerBlock.height,
+  });
 
   const handleResizeStart = (
     e: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>,
@@ -57,17 +66,21 @@ export const Container = ({ flag }: ContainerProps) => {
     });
   };
 
-  // When design form is submitted
+  // Update size when design form is submitted
   useEffect(() => {
-    if (
-      containerBlock.width != size.width ||
-      containerBlock.height != size.height
-    ) {
-      if (!containerBlock.width || !containerBlock.height) return;
+    let key: keyof Size = "width";
+    let newState: Nullish<Size> = {
+      height: containerBlock.height,
+      width: containerBlock.width,
+    };
+
+    // size was updated
+    if (newState.height !== size.height || newState.width !== size.width) {
+      if (newState.height !== size.height) key = "height";
 
       setSize({
-        width: containerBlock.width,
-        height: containerBlock.height,
+        ...size,
+        [key]: Number(newState[key]),
       });
     }
   }, [containerBlock, size]);
@@ -94,12 +107,12 @@ export const Container = ({ flag }: ContainerProps) => {
         border: "1px solid black",
       }}
       defaultSize={{
-        width: containerBlock.initialSize.width,
-        height: containerBlock.initialSize.height,
+        width: size.width,
+        height: size.height,
       }}
       size={{
-        width: size.width ?? containerBlock.initialSize.width,
-        height: size.height ?? containerBlock.initialSize.height,
+        width: size.width,
+        height: size.height,
       }}
       onResizeStart={handleResizeStart}
       onResizeStop={(e, direction, ref, d) =>
@@ -191,7 +204,7 @@ export const Container = ({ flag }: ContainerProps) => {
       }}
       resizeRatio={1}
     >
-      <Grid />
+      {/* <Grid /> */}
     </Resizable>
   );
 };

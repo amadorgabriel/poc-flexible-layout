@@ -88,7 +88,7 @@ export const Grid = ({
       onWidthChange={() => {
         console.log("test")
       }}
-      // isDroppable
+      isDroppable
     >
       {generateDOM()}
       <Container flag={true} />
