@@ -5,26 +5,23 @@ import { NumberSize, Resizable } from "re-resizable";
 
 import { ResizeHandle } from "./ResizeHandle.component";
 import { useBlockContext } from "@/contexts/BlockContext";
-import { ContainerBlock } from "@/@types/Block.types";
+
+import { Size } from "@/@types/Block.types";
 
 interface ContainerProps {
   flag: boolean;
 }
 
-type Size = {
-  width: number;
-  height: number;
-};
-
 type Nullish<T> = { [P in keyof T]?: T[P] | null };
 
 export const Container = ({ flag }: ContainerProps) => {
   const { setFieldValue } = useFormikContext();
-  const { containerBlock, setBlockContainer } = useBlockContext();
+  const { containerBlock, setBlockContainer, dispatchWindowResizeEvent } =
+    useBlockContext();
 
   const [size, setSize] = useState<Size>({
-    width: containerBlock.width,
-    height: containerBlock.height,
+    width: containerBlock.dimensions.width,
+    height: containerBlock.dimensions.height,
   });
 
   const handleResizeStart = (
@@ -61,17 +58,20 @@ export const Container = ({ flag }: ContainerProps) => {
     setBlockContainer({
       ...containerBlock,
 
-      width: Number(width),
-      height: Number(height),
+      dimensions: {
+        ...containerBlock.dimensions,
+        width: Number(width),
+        height: Number(height),
+      },
     });
   };
 
-  // Update size when design form is submitted
+  // Update container size when design form is submitted
   useEffect(() => {
     let key: keyof Size = "width";
     let newState: Nullish<Size> = {
-      height: containerBlock.height,
-      width: containerBlock.width,
+      height: containerBlock.dimensions.height,
+      width: containerBlock.dimensions.width,
     };
 
     // size was updated
@@ -85,22 +85,13 @@ export const Container = ({ flag }: ContainerProps) => {
     }
   }, [containerBlock, size]);
 
+  // update grid size when form is submitted
+  useEffect(() => {
+    dispatchWindowResizeEvent();
+  }, [size, dispatchWindowResizeEvent]);
+
   return (
     <Resizable
-      enable={
-        containerBlock.isBlocked
-          ? {
-              top: false,
-              right: false,
-              bottom: false,
-              left: false,
-              topRight: false,
-              bottomRight: false,
-              bottomLeft: false,
-              topLeft: false,
-            }
-          : undefined
-      }
       style={{
         cursor: "move",
         background: "skyblue",
@@ -114,10 +105,17 @@ export const Container = ({ flag }: ContainerProps) => {
         width: size.width,
         height: size.height,
       }}
+      minWidth={containerBlock.dimensions.minHeight}
+      maxWidth={containerBlock.dimensions.maxWidth}
+      minHeight={containerBlock.dimensions.minHeight}
+      maxHeight={containerBlock.dimensions.maxHeight}
       onResizeStart={handleResizeStart}
       onResizeStop={(e, direction, ref, d) =>
         handleResizeStop(e, direction, ref, d)
       }
+      onResize={() => {
+        dispatchWindowResizeEvent();
+      }}
       handleStyles={{
         top: flag
           ? {
@@ -202,9 +200,8 @@ export const Container = ({ flag }: ContainerProps) => {
         bottomLeft: flag ? <ResizeHandle /> : undefined,
         bottomRight: flag ? <ResizeHandle /> : undefined,
       }}
-      resizeRatio={1}
     >
-      {/* <Grid /> */}
+      <Grid />
     </Resizable>
   );
 };

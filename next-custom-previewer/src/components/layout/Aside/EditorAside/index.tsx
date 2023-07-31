@@ -1,27 +1,23 @@
 import React, { ChangeEvent } from "react";
 import { Form, useFormikContext } from "formik";
-import { useBlockContext } from "@/contexts/BlockContext";
+import { FormikValuesProps } from "@/pages/_app";
 
 import { Input } from "@/components/Input";
+import { useBlockContext } from "@/contexts/BlockContext";
 import styles from "@/components/layout/Aside/Aside.module.css";
-
-export interface EditorAsideProps {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  isBlocked: boolean;
-}
 
 export const EditorAside = () => {
   const { containerBlock, setBlockContainer } = useBlockContext();
-  const { values, setFieldValue } = useFormikContext<EditorAsideProps>();
+  const { values, setFieldValue, errors, touched } =
+    useFormikContext<FormikValuesProps>();
 
   return (
     <React.Fragment>
       <div className={styles.asideContent}>
+        <h3> {containerBlock.name}</h3>
+
         <Form onSubmit={() => {}} className={styles.subContent}>
-          <fieldset>
+          {/* <fieldset>
             <label htmlFor="isBlocked">Bloqueado:</label>
             <input
               id="isBlocked"
@@ -35,21 +31,28 @@ export const EditorAside = () => {
                 });
               }}
             />
-          </fieldset>
+          </fieldset> */}
 
           <Input.Text
             id="width"
-            label="Largura:"
+            label="Largura"
             type="number"
             placeholder="Insira um valor"
-            value={values.width ?? containerBlock.initialSize.width}
+            value={values.width}
+            className={
+              errors.width && touched.width ? "input-error" : undefined
+            }
+            errorMessage={errors.width}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setFieldValue("width", Number(e.target.value));
             }}
             onEnter={() => {
               setBlockContainer({
                 ...containerBlock,
-                width: values.width,
+                dimensions: {
+                  ...containerBlock.dimensions,
+                  width: values.width,
+                },
               });
             }}
           />
@@ -58,48 +61,73 @@ export const EditorAside = () => {
             label="Altura"
             id="height"
             type="number"
-            placeholder="insira um valor"
-            value={values.height ?? containerBlock.initialSize.height}
+            placeholder="Insira um valor"
+            value={values.height}
+            className={
+              errors.height && touched.height ? "input-error" : undefined
+            }
+            errorMessage={errors.height}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               setFieldValue("height", Number(e.target.value));
             }}
             onEnter={() => {
               setBlockContainer({
                 ...containerBlock,
-                height: values.height,
+                dimensions: {
+                  ...containerBlock.dimensions,
+                  height: values.height,
+                },
+              });
+            }}
+          />
+
+          <Input.Text
+            label="Colunas"
+            id="columnAmount"
+            type="number"
+            min={1}
+            placeholder="Insira um valor"
+            value={values.colsAmount}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setFieldValue("colsAmount", Number(e.target.value));
+            }}
+            onEnter={() => {
+              setBlockContainer({
+                ...containerBlock,
+                cols: {
+                  ...containerBlock.cols,
+                  amount: values.colsAmount,
+                },
               });
             }}
           />
         </Form>
-      </div>
 
-      <div className={(styles.asideContent, styles.properties)}>
-        <h3>Propriedades</h3>
+        <div className={styles.properties}>
+          <div className={styles.subContent}>
+            <div style={{ marginBottom: "0.75rem" }}>
+              <b>Dimensões</b>
+              <p>
+                Largura: {containerBlock.dimensions.width}
+                px
+              </p>
+              <p>
+                Altura: {containerBlock.dimensions.height}
+                px
+              </p>
+            </div>
 
-        <div className={styles.subContent}>
-          <p style={{ marginBottom: "0.75rem" }}>Nome: {containerBlock.name}</p>
-
-          <div style={{ marginBottom: "0.75rem" }}>
-            <b>Dimensões</b>
-            <p>
-              Width: {containerBlock.width ?? containerBlock.initialSize.width}
-              px
-            </p>
-            <p>
-              Height:{" "}
-              {containerBlock.height ?? containerBlock.initialSize.height}
-              px
-            </p>
-          </div>
-
-          <div style={{ marginBottom: "0.75rem" }}>
-            <b>Posição</b>
-            <p>
-              Delta X: {containerBlock.x ?? containerBlock.initialPosition.x}px
-            </p>
-            <p>
-              Delta Y: {containerBlock.y ?? containerBlock.initialPosition.y}px
-            </p>
+            <div style={{ marginBottom: "0.75rem" }}>
+              <b>Posição</b>
+              <p>
+                Pos. X: {containerBlock.position.x}
+                px
+              </p>
+              <p>
+                Pos. Y: {containerBlock.position.y}
+                px
+              </p>
+            </div>
           </div>
         </div>
       </div>

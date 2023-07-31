@@ -1,3 +1,5 @@
+@import url(./Input.styles.css);
+
 :root {
   --card-background-color: rgb(255, 255, 255);
 }

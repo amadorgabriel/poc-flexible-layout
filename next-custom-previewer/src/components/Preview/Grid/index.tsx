@@ -1,97 +1,82 @@
-import _ from "lodash";
 import { useState, useEffect } from "react";
+import { useBlockContext } from "@/contexts/BlockContext";
 import { Responsive, WidthProvider } from "react-grid-layout";
-import { Container } from "../Container";
-
 
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
-interface GridProps {
-  // domElements: any[];
-  rowHeight?: number;
-  onLayoutChange?: (layout: any, layouts: any) => void;
-  cols?: any;
-  breakpoints?: any;
-  // containerPadding?: number[];
-}
-
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
+export interface GridItemProps {
+  // A string corresponding to the component key
+  i: string;
+
+  // These are all in grid units, not pixels
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  minW?: number;
+  maxW?: number;
+  minH?: number;
+  maxH?: number;
+
+  static?: boolean;
+  isBounded?: boolean;
+  isDraggable?: boolean;
+  isResizable?: boolean;
+  resizeHandles?: Array<"s" | "w" | "e" | "n" | "sw" | "nw" | "se" | "ne">;
+}
+
 // GridItemWidth = 110px
-export const Grid = ({
-  rowHeight = 30,
-  cols = { lg: 6, md: 5, sm: 4, xs: 3, xxs: 2 },
-  breakpoints = { lg: 660, md: 550, sm: 440, xs: 330, xxs: 220 },
-}: GridProps) => {
-  const [layouts, setLayouts] = useState<{ [index: string]: any[] }>({
-    md: _.map(_.range(0, 6), function (_, i) {
-      var y = Math.ceil(Math.random() * 4) + 1;
-      return {
-        x: (5 * 2) % 12,
-        y: Math.floor(i / 6) * y,
-        w: 1,
-        h: y,
-        i: i.toString(),
-        static: Math.random() < 0.05,
-      };
-    }),
-  });
-  const [currentBreakpoint, setCurrentBreakpoint] = useState<string>("md");
-  const [mounted, setMounted] = useState(false);
-  const [toolbox, setToolbox] = useState<{ [index: string]: any[] }>({
-    md: [],
-  });
+export const Grid = () => {
+  const { containerBlock } = useBlockContext();
+
+  const [columnsAmount, setColumnsAmount] = useState<number>(
+    containerBlock.cols.amount
+  );
+
+  const layouts: Record<string, GridItemProps[]> = {
+    lg: [
+      { i: "a", x: 0, y: 0, w: 1, h: 2, minW: 1, minH: 1 },
+      { i: "b", x: 1, y: 0, w: 3, h: 2, minW: 1, minH: 1 },
+      { i: "c", x: 4, y: 0, w: 1, h: 2, minW: 1, minH: 1 },
+    ],
+  };
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const onBreakpointChange = (breakpoint: any) => {
-    setCurrentBreakpoint(breakpoint);
-    setToolbox({
-      ...toolbox,
-      [breakpoint]: toolbox[breakpoint] || toolbox[currentBreakpoint] || [],
-    });
-  };
-
-  const onLayoutChange = (layout: any, layouts: any) => {
-    setLayouts({ ...layouts });
-  };
-
-  const generateDOM = () => {
-    return _.map(layouts.md, function (l, i) {
-      return (
-        <div key={i} style={{ background: "#ccc" }}>
-          <span className="text">{i}</span>
-        </div>
-      );
-    });
-  };
+    if (
+      containerBlock.cols.amount !== columnsAmount &&
+      !!containerBlock.cols.amount
+    ) {
+      setColumnsAmount(containerBlock.cols.amount);
+    }
+  }, [containerBlock, setColumnsAmount, columnsAmount]);
 
   return (
     <ResponsiveGridLayout
-      cols={cols}
-      rowHeight={rowHeight}
-      breakpoints={breakpoints}
-
+      layouts={layouts}
+      breakpoints={{ lg: 12000, md: 12000, sm: 12000, xs: 12000, xxs: 12000 }}
+      cols={{
+        lg: columnsAmount,
+        md: columnsAmount,
+        sm: columnsAmount,
+        xs: columnsAmount,
+        xxs: columnsAmount,
+      }}
+      //---
+      isBounded
+      rowHeight={30}
       compactType={"vertical"}
       preventCollision={false}
-      
+      //---
       style={{ background: "#ffca" }}
-      // ---
-      layouts={layouts}
-      measureBeforeMount={true}
-      useCSSTransforms={mounted}
-      onLayoutChange={onLayoutChange}
-      onBreakpointChange={onBreakpointChange}
-      onWidthChange={() => {
-        console.log("test")
-      }}
-      isDroppable
     >
-      {generateDOM()}
-      <Container flag={true} />
+      {layouts.lg.map((item, index) => (
+        <div key={index} style={{ backgroundColor: "#ccc" }} data-grid={item}>
+          <span className="text">{item.i}</span>
+        </div>
+      ))}
     </ResponsiveGridLayout>
   );
 };

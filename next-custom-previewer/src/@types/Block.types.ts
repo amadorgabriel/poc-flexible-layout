@@ -1,12 +1,29 @@
-export type ContainerBlock = {
-  name: string;
+import { read } from "fs";
+
+export type Position = {
+  x: number;
+  y: number;
+};
+
+export type Size = {
   width: number;
   height: number;
-  x: number | null;
-  y: number | null;
-  initialPosition: {
-    x: number;
-    y: number;
+};
+
+export type ContainerBlock = {
+  name: string;
+  position: Position;
+  dimensions: {
+    width: number;
+    height: number;
+    readonly minWidth: number;
+    readonly maxWidth: number;
+    readonly minHeight: number;
+    readonly maxHeight: number;
+  };
+  cols: {
+    amount: number;
+    readonly minCols: number;
   };
   isBlocked?: boolean;
 };

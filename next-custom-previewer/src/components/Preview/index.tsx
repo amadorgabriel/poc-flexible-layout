@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
-import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
-
+import React, { useState } from "react";
 import { Container } from "./Container";
 import { useBlockContext } from "@/contexts/BlockContext";
+import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
 import styles from "./Preview.module.css";
 
@@ -14,11 +13,12 @@ type Position = {
 export const Preview = () => {
   const [flag, setFlag] = useState(false);
 
-  const { containerBlock, setBlockContainer } = useBlockContext();
+  const { containerBlock, setBlockContainer } =
+    useBlockContext();
 
   const [currentPosition, setCurrentPosition] = useState<Position>({
-    xRate: containerBlock.initialPosition.x,
-    yRate: containerBlock.initialPosition.y,
+    xRate: containerBlock.position.x,
+    yRate: containerBlock.position.y,
   });
 
   const onDrag = (e: DraggableEvent, data: DraggableData) => {
@@ -29,8 +29,10 @@ export const Preview = () => {
     setBlockContainer({
       ...containerBlock,
 
-      x: Number(data.lastX),
-      y: Number(data.lastY),
+      position: {
+        x: Number(data.lastX),
+        y: Number(data.lastY),
+      },
     });
   };
 
@@ -41,8 +43,8 @@ export const Preview = () => {
         axis={containerBlock.isBlocked ? "none" : "both"}
         bounds="parent"
         defaultPosition={{
-          x: containerBlock.initialPosition.x,
-          y: containerBlock.initialPosition.y,
+          x: containerBlock.position.x,
+          y: containerBlock.position.y,
         }}
         position={
           containerBlock.isBlocked
@@ -63,12 +65,6 @@ export const Preview = () => {
           onMouseLeave={() => {
             setFlag(false);
           }}
-          // onMouseDownCapture={() => {
-          //   setFlag(true);
-          // }}
-          // onMouseUpCapture={() => {
-          //   setFlag(false);
-          // }}
         >
           <Container flag={flag} />
         </div>

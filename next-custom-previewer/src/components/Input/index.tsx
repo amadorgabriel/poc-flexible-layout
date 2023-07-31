@@ -1,5 +1,5 @@
-import { TextInput } from "./TextInput";
+import { TextInput } from "./Text";
 
 export const Input = {
-    Text: TextInput
-}
+  Text: TextInput,
+};
