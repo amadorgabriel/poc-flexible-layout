@@ -2,21 +2,19 @@ import React, { ChangeEvent } from "react";
 import { Form, useFormikContext } from "formik";
 import { FormikValuesProps } from "@/pages/_app";
 
-import { Input } from "@/components/Input";
+import { Input } from "@/components/_commons/Input";
 import { useBlockContext } from "@/contexts/BlockContext";
-import styles from "@/components/layout/Aside/Aside.module.css";
+import { Accordion } from "@/components/_commons/Accordion";
 
 export const EditorAside = () => {
-  const { containerBlock, setBlockContainer } = useBlockContext();
+  const { containerBlock, setBlockContainer, gridLayout } = useBlockContext();
   const { values, setFieldValue, errors, touched } =
     useFormikContext<FormikValuesProps>();
 
   return (
-    <React.Fragment>
-      <div className={styles.asideContent}>
-        <h3> {containerBlock.name}</h3>
-
-        <Form onSubmit={() => {}} className={styles.subContent}>
+    <div className="asideContent">
+      <Form onSubmit={() => {}} className="subContent">
+        <Accordion title={containerBlock.name}>
           {/* <fieldset>
             <label htmlFor="isBlocked">Bloqueado:</label>
             <input
@@ -101,36 +99,47 @@ export const EditorAside = () => {
               });
             }}
           />
-        </Form>
 
-        <div className={styles.properties}>
-          <div className={styles.subContent}>
-            <div style={{ marginBottom: "0.75rem" }}>
-              <b>Dimensões</b>
-              <p>
-                Largura: {containerBlock.dimensions.width}
-                px
-              </p>
-              <p>
-                Altura: {containerBlock.dimensions.height}
-                px
-              </p>
-            </div>
+          <hr />
 
-            <div style={{ marginBottom: "0.75rem" }}>
-              <b>Posição</b>
-              <p>
-                Pos. X: {containerBlock.position.x}
-                px
-              </p>
-              <p>
-                Pos. Y: {containerBlock.position.y}
-                px
-              </p>
+          <div className="properties">
+            <div className="subContent">
+              <div style={{ marginBottom: "0.75rem" }}>
+                <b>Dimensões</b>
+                <p>
+                  Largura: {containerBlock.dimensions.width}
+                  px
+                </p>
+                <p>
+                  Altura: {containerBlock.dimensions.height}
+                  px
+                </p>
+              </div>
+
+              <div>
+                <b>Posição</b>
+                <p>
+                  Pos. X: {containerBlock.position.x}
+                  px
+                </p>
+                <p>
+                  Pos. Y: {containerBlock.position.y}
+                  px
+                </p>
+              </div>
             </div>
           </div>
+        </Accordion>
+
+        <h4>Grupos de Conteúdo</h4>
+        <div className="content-groups">
+          {gridLayout.map((grid, index) => (
+            <Accordion title="name" key={index}>
+              <p>{grid.i}</p>
+            </Accordion>
+          ))}
         </div>
-      </div>
-    </React.Fragment>
+      </Form>
+    </div>
   );
 };

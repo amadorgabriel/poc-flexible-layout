@@ -6,3 +6,10 @@
   background-image: radial-gradient(#c4c4c4 1px, transparent 0px);
   background-size: 10px 10px;
 }
+
+.remove-grid-item {
+  position: absolute;
+  right: 2px;
+  top: 0px;
+  cursor: pointer;
+}

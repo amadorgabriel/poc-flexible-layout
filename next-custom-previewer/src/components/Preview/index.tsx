@@ -3,8 +3,6 @@ import { Container } from "./Container";
 import { useBlockContext } from "@/contexts/BlockContext";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
-import styles from "./Preview.module.css";
-
 type Position = {
   xRate: number;
   yRate: number;
@@ -13,8 +11,7 @@ type Position = {
 export const Preview = () => {
   const [flag, setFlag] = useState(false);
 
-  const { containerBlock, setBlockContainer } =
-    useBlockContext();
+  const { containerBlock, setBlockContainer } = useBlockContext();
 
   const [currentPosition, setCurrentPosition] = useState<Position>({
     xRate: containerBlock.position.x,
@@ -37,7 +34,7 @@ export const Preview = () => {
   };
 
   return (
-    <div className={styles.previewContainer}>
+    <div className="previewContainer">
       <Draggable
         onDrag={onDrag}
         axis={containerBlock.isBlocked ? "none" : "both"}

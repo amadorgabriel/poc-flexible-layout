@@ -11,8 +11,6 @@ fieldset > div {
   display: flex;
   flex-direction: column;
   justify-content: center;
-
-  margin-bottom: 6px;
 }
 
 label {

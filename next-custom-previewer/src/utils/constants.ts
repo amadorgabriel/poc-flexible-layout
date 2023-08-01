@@ -1,5 +1,7 @@
+import { GridItemProps } from "@/@types/Grid.types";
+
 export const initialContainerBlock = {
-  name: "Bloco Principal",
+  name: "Container Principal",
   dimensions: {
     width: 500,
     height: 480,
@@ -18,3 +20,9 @@ export const initialContainerBlock = {
   },
   isBlocked: true,
 };
+
+export const initialGridLayout: GridItemProps[] = [
+  { i: "a", x: 0, y: 0, w: 1, h: 2, minW: 1, minH: 1, hidden: false },
+  { i: "b", x: 1, y: 0, w: 3, h: 2, minW: 1, minH: 1, hidden: false },
+  { i: "c", x: 4, y: 0, w: 1, h: 2, minW: 1, minH: 1, hidden: false },
+];

@@ -1,32 +1,15 @@
 import { useState, useEffect } from "react";
 import { useBlockContext } from "@/contexts/BlockContext";
 import { Responsive, WidthProvider } from "react-grid-layout";
+import { GridItemProps } from "@/@types/Grid.types";
+
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
-
-export interface GridItemProps {
-  // A string corresponding to the component key
-  i: string;
-
-  // These are all in grid units, not pixels
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  minW?: number;
-  maxW?: number;
-  minH?: number;
-  maxH?: number;
-
-  static?: boolean;
-  isBounded?: boolean;
-  isDraggable?: boolean;
-  isResizable?: boolean;
-  resizeHandles?: Array<"s" | "w" | "e" | "n" | "sw" | "nw" | "se" | "ne">;
-}
 
 // GridItemWidth = 110px
 export const Grid = () => {
@@ -36,13 +19,25 @@ export const Grid = () => {
     containerBlock.cols.amount
   );
 
-  const layouts: Record<string, GridItemProps[]> = {
+  const [layouts, setLayouts] = useState<Record<string, GridItemProps[]>>({
     lg: [
-      { i: "a", x: 0, y: 0, w: 1, h: 2, minW: 1, minH: 1 },
-      { i: "b", x: 1, y: 0, w: 3, h: 2, minW: 1, minH: 1 },
-      { i: "c", x: 4, y: 0, w: 1, h: 2, minW: 1, minH: 1 },
+      { i: "a", x: 0, y: 0, w: 1, h: 2, minW: 1, minH: 1, hidden: false },
+      { i: "b", x: 1, y: 0, w: 3, h: 2, minW: 1, minH: 1, hidden: false },
+      { i: "c", x: 4, y: 0, w: 1, h: 2, minW: 1, minH: 1, hidden: false },
     ],
-  };
+  });
+
+  function handleToggleVisibility(id: string) {
+    const newState = layouts.lg.map((item) => {
+      if (item.i === id) {
+        item.hidden = !item.hidden;
+      }
+
+      return item;
+    });
+
+    setLayouts({ lg: newState });
+  }
 
   useEffect(() => {
     if (
@@ -72,10 +67,34 @@ export const Grid = () => {
       //---
       style={{ background: "#ffca" }}
     >
-      {layouts.lg.map((item, index) => (
-        <div key={index} style={{ backgroundColor: "#ccc" }} data-grid={item}>
-          <span className="text">{item.i}</span>
-        </div>
+      {layouts.lg.map((item, index) => !item.hidden && (
+         (
+          <div key={index} style={{ backgroundColor: "#ccc" }} data-grid={item}>
+            <span className="text">{item.i}</span>
+            <span
+              className="remove-grid-item"
+              onClick={() => handleToggleVisibility(item.i)}
+            >
+              <button>
+                {item.hidden ? (
+                  <VisibilityOffOutlinedIcon
+                    sx={{
+                      fontSize: 20,
+                      margin: 0.5,
+                    }}
+                  />
+                ) : (
+                  <VisibilityOutlinedIcon
+                    sx={{
+                      fontSize: 20,
+                      margin: 0.5,
+                    }}
+                  />
+                )}
+              </button>
+            </span>
+          </div>
+        )
       ))}
     </ResponsiveGridLayout>
   );

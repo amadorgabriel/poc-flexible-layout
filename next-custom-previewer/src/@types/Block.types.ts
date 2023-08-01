@@ -1,5 +1,3 @@
-import { read } from "fs";
-
 export type Position = {
   x: number;
   y: number;

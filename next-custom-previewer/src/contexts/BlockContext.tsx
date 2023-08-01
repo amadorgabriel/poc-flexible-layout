@@ -1,14 +1,17 @@
-import { initialContainerBlock } from "@/utils/constants";
+import { initialContainerBlock, initialGridLayout } from "@/utils/constants";
 import { ContainerBlock } from "@/@types/Block.types";
 import { createContext, useContext, useState } from "react";
+import { GridItemProps } from "@/@types/Grid.types";
 
 interface BlockContextProps {
   children: React.ReactNode;
 }
 
 interface BlockContextProviderProps {
+  gridLayout: GridItemProps[];
   containerBlock: ContainerBlock;
-  setBlockContainer: (blockContainer: ContainerBlock) => void;
+  setGridLayout: (layout: GridItemProps[]) => void;
+  setBlockContainer: (container: ContainerBlock) => void;
   dispatchWindowResizeEvent: () => void;
 }
 
@@ -19,7 +22,10 @@ export const BlockContextProvider = ({ children }: BlockContextProps) => {
     ...initialContainerBlock,
   });
 
-  function validateDimentions(value: ContainerBlock): boolean {
+  const [gridLayout, setGridLayout] =
+    useState<GridItemProps[]>(initialGridLayout);
+
+  function validateDimensions(value: ContainerBlock): boolean {
     let validated = false;
 
     // Changed width
@@ -49,13 +55,9 @@ export const BlockContextProvider = ({ children }: BlockContextProps) => {
 
   function handleUpdateContainer(value: ContainerBlock) {
     // validity dimentions constaints
-    const validated = validateDimentions(value);
+    const validated = validateDimensions(value);
 
     if (!validated) return;
-
-    console.log(value);
-    console.log(blockContainer);
-    console.log(validated);
 
     setBlockContainer(value);
   }
@@ -70,6 +72,8 @@ export const BlockContextProvider = ({ children }: BlockContextProps) => {
       value={{
         containerBlock: blockContainer,
         setBlockContainer: handleUpdateContainer,
+        gridLayout: gridLayout,
+        setGridLayout: setGridLayout,
         dispatchWindowResizeEvent,
       }}
     >

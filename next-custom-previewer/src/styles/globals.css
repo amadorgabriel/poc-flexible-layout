@@ -1,4 +1,7 @@
 @import url(./Input.styles.css);
+@import url(./Accordion.styles.css);
+@import url(./Aside.styles.css);
+@import url(./Preview.styles.css);
 
 :root {
   --card-background-color: rgb(255, 255, 255);
@@ -31,8 +34,16 @@ h2 {
 h1,
 h2,
 h3,
+h4,
+h5,
+small,
+button,
 p {
   color: #393939;
+}
+
+hr {
+  margin-bottom: 0.5rem;
 }
 
 main {
@@ -51,3 +62,4 @@ main {
   margin: 10px 0;
   padding: 10px;
 }
+
