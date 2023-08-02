@@ -3,18 +3,18 @@ import { Form, useFormikContext } from "formik";
 import { FormikValuesProps } from "@/pages/_app";
 
 import { Input } from "@/components/_commons/Input";
-import { useBlockContext } from "@/contexts/BlockContext";
 import { Accordion } from "@/components/_commons/Accordion";
+import { useContainerContext } from "@/contexts/ContainerContext";
 
 export const EditorAside = () => {
-  const { containerBlock, setBlockContainer, gridLayout } = useBlockContext();
+  const { container, setContainer, gridLayout } = useContainerContext();
   const { values, setFieldValue, errors, touched } =
     useFormikContext<FormikValuesProps>();
 
   return (
     <div>
       <Form onSubmit={() => {}}>
-        <Accordion title={containerBlock.name}>
+        <Accordion title={container.name}>
           {/* <fieldset>
             <label htmlFor="isBlocked">Bloqueado:</label>
             <input
@@ -23,8 +23,8 @@ export const EditorAside = () => {
               checked={values.isBlocked}
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setFieldValue("isBlocked", e.target.checked);
-                setBlockContainer({
-                  ...containerBlock,
+                setContainer({
+                  ...Container,
                   isBlocked: e.target.checked,
                 });
               }}
@@ -33,7 +33,7 @@ export const EditorAside = () => {
 
           <Input.Text
             id="width"
-            label="Largura"
+            label="Largura (px)"
             type="number"
             placeholder="Insira um valor"
             value={values.width}
@@ -45,10 +45,10 @@ export const EditorAside = () => {
               setFieldValue("width", Number(e.target.value));
             }}
             onEnter={() => {
-              setBlockContainer({
-                ...containerBlock,
+              setContainer({
+                ...container,
                 dimensions: {
-                  ...containerBlock.dimensions,
+                  ...container.dimensions,
                   width: values.width,
                 },
               });
@@ -56,7 +56,7 @@ export const EditorAside = () => {
           />
 
           <Input.Text
-            label="Altura"
+            label="Altura (px)"
             id="height"
             type="number"
             placeholder="Insira um valor"
@@ -69,15 +69,17 @@ export const EditorAside = () => {
               setFieldValue("height", Number(e.target.value));
             }}
             onEnter={() => {
-              setBlockContainer({
-                ...containerBlock,
+              setContainer({
+                ...container,
                 dimensions: {
-                  ...containerBlock.dimensions,
+                  ...container.dimensions,
                   height: values.height,
                 },
               });
             }}
           />
+
+          <h4>Grid Interno</h4>
 
           <Input.Text
             label="Colunas"
@@ -90,9 +92,10 @@ export const EditorAside = () => {
               setFieldValue("colsAmount", Number(e.target.value));
             }}
             onEnter={() => {
-              setBlockContainer({
-                ...containerBlock,
+              setContainer({
+                ...container,
                 cols: {
+                  ...container.cols,
                   amount: values.colsAmount,
                 },
               });
@@ -105,17 +108,67 @@ export const EditorAside = () => {
             errorMessage={errors.colsAmount}
           />
 
+          <Input.Text
+            label="Espaçamento entre linhas (px)"
+            id="rowGap"
+            type="number"
+            min={1}
+            placeholder="Insira um valor"
+            value={values.rowGap}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setFieldValue("rowGap", Number(e.target.value));
+            }}
+            onEnter={() => {
+              setContainer({
+                ...container,
+                cols: {
+                  ...container.cols,
+                  rowGap: values.rowGap,
+                },
+              });
+            }}
+            className={
+              errors.rowGap && touched.rowGap ? "input-error" : undefined
+            }
+            errorMessage={errors.rowGap}
+          />
+
+          <Input.Text
+            label="Espaçamento entre colunas (px)"
+            id="colGap"
+            type="number"
+            min={1}
+            placeholder="Insira um valor"
+            value={values.colGap}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              setFieldValue("colGap", Number(e.target.value));
+            }}
+            onEnter={() => {
+              setContainer({
+                ...container,
+                cols: {
+                  ...container.cols,
+                  colGap: values.colGap,
+                },
+              });
+            }}
+            className={
+              errors.colGap && touched.colGap ? "input-error" : undefined
+            }
+            errorMessage={errors.colGap}
+          />
+
           <hr />
 
           <div className="aside-footer">
             <div>
               <b>Dimensões</b>
               <p>
-                Largura: {containerBlock.dimensions.width}
+                Largura: {container.dimensions.width}
                 px
               </p>
               <p>
-                Altura: {containerBlock.dimensions.height}
+                Altura: {container.dimensions.height}
                 px
               </p>
             </div>
@@ -123,11 +176,11 @@ export const EditorAside = () => {
             <div>
               <b>Posição</b>
               <p>
-                Pos. X: {containerBlock.position.x}
+                Pos. X: {container.position.x}
                 px
               </p>
               <p>
-                Pos. Y: {containerBlock.position.y}
+                Pos. Y: {container.position.y}
                 px
               </p>
             </div>

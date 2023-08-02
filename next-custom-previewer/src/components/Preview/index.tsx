@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container } from "./Container";
-import { useBlockContext } from "@/contexts/BlockContext";
+import { useContainerContext } from "@/contexts/ContainerContext";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
 type Position = {
@@ -11,20 +11,20 @@ type Position = {
 export const Preview = () => {
   const [flag, setFlag] = useState(false);
 
-  const { containerBlock, setBlockContainer } = useBlockContext();
+  const { container, setContainer } = useContainerContext();
 
   const [currentPosition, setCurrentPosition] = useState<Position>({
-    xRate: containerBlock.position.x,
-    yRate: containerBlock.position.y,
+    xRate: container.position.x,
+    yRate: container.position.y,
   });
 
   const onDrag = (e: DraggableEvent, data: DraggableData) => {
-    if (containerBlock.isBlocked) return;
+    if (container.isBlocked) return;
 
     setCurrentPosition({ xRate: data.lastX, yRate: data.lastY });
 
-    setBlockContainer({
-      ...containerBlock,
+    setContainer({
+      ...container,
 
       position: {
         x: Number(data.lastX),
@@ -37,14 +37,14 @@ export const Preview = () => {
     <div className="preview-container">
       <Draggable
         onDrag={onDrag}
-        axis={containerBlock.isBlocked ? "none" : "both"}
+        axis={container.isBlocked ? "none" : "both"}
         bounds="parent"
         defaultPosition={{
-          x: containerBlock.position.x,
-          y: containerBlock.position.y,
+          x: container.position.x,
+          y: container.position.y,
         }}
         position={
-          containerBlock.isBlocked
+          container.isBlocked
             ? {
                 x: currentPosition.xRate,
                 y: currentPosition.yRate,

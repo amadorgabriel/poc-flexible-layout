@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { NumberSize, Resizable } from "re-resizable";
 
 import { ResizeHandle } from "./ResizeHandle.component";
-import { useBlockContext } from "@/contexts/BlockContext";
+import { useContainerContext } from "@/contexts/ContainerContext";
 
 import { Size } from "@/@types/Block.types";
 
@@ -16,12 +16,12 @@ type Nullish<T> = { [P in keyof T]?: T[P] | null };
 
 export const Container = ({ flag }: ContainerProps) => {
   const { setFieldValue } = useFormikContext();
-  const { containerBlock, setBlockContainer, dispatchWindowResizeEvent } =
-    useBlockContext();
+  const { container, setContainer, dispatchWindowResizeEvent } =
+    useContainerContext();
 
   const [size, setSize] = useState<Size>({
-    width: containerBlock.dimensions.width,
-    height: containerBlock.dimensions.height,
+    width: container.dimensions.width,
+    height: container.dimensions.height,
   });
 
   const handleResizeStart = (
@@ -55,11 +55,11 @@ export const Container = ({ flag }: ContainerProps) => {
     setFieldValue("width", width);
     setFieldValue("height", height);
 
-    setBlockContainer({
-      ...containerBlock,
+    setContainer({
+      ...container,
 
       dimensions: {
-        ...containerBlock.dimensions,
+        ...container.dimensions,
         width: Number(width),
         height: Number(height),
       },
@@ -70,8 +70,8 @@ export const Container = ({ flag }: ContainerProps) => {
   useEffect(() => {
     let key: keyof Size = "width";
     let newState: Nullish<Size> = {
-      height: containerBlock.dimensions.height,
-      width: containerBlock.dimensions.width,
+      height: container.dimensions.height,
+      width: container.dimensions.width,
     };
 
     // size was updated
@@ -83,7 +83,7 @@ export const Container = ({ flag }: ContainerProps) => {
         [key]: Number(newState[key]),
       });
     }
-  }, [containerBlock, size]);
+  }, [container, size]);
 
   // update grid size when form is submitted
   useEffect(() => {
@@ -105,10 +105,10 @@ export const Container = ({ flag }: ContainerProps) => {
         width: size.width,
         height: size.height,
       }}
-      minWidth={containerBlock.dimensions.minHeight}
-      maxWidth={containerBlock.dimensions.maxWidth}
-      minHeight={containerBlock.dimensions.minHeight}
-      maxHeight={containerBlock.dimensions.maxHeight}
+      minWidth={container.dimensions.minHeight}
+      maxWidth={container.dimensions.maxWidth}
+      minHeight={container.dimensions.minHeight}
+      maxHeight={container.dimensions.maxHeight}
       onResizeStart={handleResizeStart}
       onResizeStop={(e, direction, ref, d) =>
         handleResizeStop(e, direction, ref, d)

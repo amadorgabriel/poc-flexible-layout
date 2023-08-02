@@ -1,6 +1,7 @@
+import { Container } from "@/@types/Block.types";
 import { GridItemProps } from "@/@types/Grid.types";
 
-export const initialContainerBlock = {
+export const initialContainer: Container = {
   name: "Container Principal",
   dimensions: {
     width: 500,
@@ -17,6 +18,8 @@ export const initialContainerBlock = {
   cols: {
     amount: 1,
     minCols: 1,
+    colGap: 10,
+    rowGap: 10,
   },
   isBlocked: true,
 };

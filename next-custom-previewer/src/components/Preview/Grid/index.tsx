@@ -3,7 +3,7 @@ import { Responsive, WidthProvider } from "react-grid-layout";
 
 import { GridItemProps } from "@/@types/Grid.types";
 import { initialGridLayout } from "@/utils/constants";
-import { useBlockContext } from "@/contexts/BlockContext";
+import { useContainerContext } from "@/contexts/ContainerContext";
 
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
@@ -15,10 +15,10 @@ const ResponsiveGridLayout = WidthProvider(Responsive);
 
 // GridItemWidth = 110px
 export const Grid = () => {
-  const { containerBlock } = useBlockContext();
+  const { container } = useContainerContext();
 
   const [columnsAmount, setColumnsAmount] = useState<number>(
-    containerBlock.cols.amount
+    container.cols.amount
   );
 
   const [layouts, setLayouts] = useState<Record<string, GridItemProps[]>>({
@@ -39,12 +39,12 @@ export const Grid = () => {
 
   useEffect(() => {
     if (
-      containerBlock.cols.amount !== columnsAmount &&
-      !!containerBlock.cols.amount
+      container.cols.amount !== columnsAmount &&
+      !!container.cols.amount
     ) {
-      setColumnsAmount(containerBlock.cols.amount);
+      setColumnsAmount(container.cols.amount);
     }
-  }, [containerBlock, setColumnsAmount, columnsAmount]);
+  }, [container, setColumnsAmount, columnsAmount]);
 
   return (
     <ResponsiveGridLayout
@@ -63,8 +63,9 @@ export const Grid = () => {
       compactType={"vertical"}
       preventCollision={false}
       //---
-      rowHeight={146}
-      maxRows={3}
+      // rowHeight={146}
+      // maxRows={3}
+      margin={[container.cols.colGap, container.cols.rowGap]}
       style={{ background: "#ffca" }}
     >
       {layouts.lg.map(

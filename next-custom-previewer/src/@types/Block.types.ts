@@ -8,7 +8,7 @@ export type Size = {
   height: number;
 };
 
-export type ContainerBlock = {
+export type Container = {
   name: string;
   position: Position;
   dimensions: {
@@ -21,6 +21,9 @@ export type ContainerBlock = {
   };
   cols: {
     amount: number;
+    rowGap: number; // px
+    colGap: number; // px
+    minCols: number;
   };
   isBlocked?: boolean;
 };
