@@ -1,5 +1,5 @@
 import React from "react";
-import { EditorAside } from "./EditorAside";
+import { EditorAside } from "./Editor";
 
 interface AsideProps {
   title: string;

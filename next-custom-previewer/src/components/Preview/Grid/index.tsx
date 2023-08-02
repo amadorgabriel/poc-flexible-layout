@@ -63,8 +63,8 @@ export const Grid = () => {
       compactType={"vertical"}
       preventCollision={false}
       //---
-      // rowHeight={146}
-      // maxRows={3}
+      rowHeight={146}
+      maxRows={3}
       style={{ background: "#ffca" }}
     >
       {layouts.lg.map(

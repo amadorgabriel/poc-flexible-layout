@@ -26,15 +26,15 @@ export const BlockContextProvider = ({ children }: BlockContextProps) => {
     useState<GridItemProps[]>(initialGridLayout);
 
   function validateDimensions(value: ContainerBlock): boolean {
-    let validated = false;
+    let validated = true;
 
     // Changed width
     if (blockContainer.dimensions.width !== value.dimensions.width) {
       if (
-        value.dimensions.width >= value.dimensions.minWidth &&
-        value.dimensions.width <= value.dimensions.maxWidth
+        !(value.dimensions.width >= value.dimensions.minWidth) ||
+        !(value.dimensions.width <= value.dimensions.maxWidth)
       ) {
-        validated = true;
+        validated = false;
       }
 
       return validated;
@@ -43,10 +43,10 @@ export const BlockContextProvider = ({ children }: BlockContextProps) => {
     // Changed height
     if (blockContainer.dimensions.height !== value.dimensions.height) {
       if (
-        value.dimensions.height >= initialContainerBlock.dimensions.minHeight &&
-        value.dimensions.height <= initialContainerBlock.dimensions.maxHeight
+        !(value.dimensions.height >= initialContainerBlock.dimensions.minHeight) ||
+        !(value.dimensions.height <= initialContainerBlock.dimensions.maxHeight)
       ) {
-        validated = true;
+        validated = false;
       }
     }
 

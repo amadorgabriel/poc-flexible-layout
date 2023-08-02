@@ -21,7 +21,6 @@ export type ContainerBlock = {
   };
   cols: {
     amount: number;
-    readonly minCols: number;
   };
   isBlocked?: boolean;
 };

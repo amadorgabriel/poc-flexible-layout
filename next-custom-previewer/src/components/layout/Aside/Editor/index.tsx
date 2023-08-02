@@ -81,7 +81,7 @@ export const EditorAside = () => {
 
           <Input.Text
             label="Colunas"
-            id="columnAmount"
+            id="colsAmount"
             type="number"
             min={1}
             placeholder="Insira um valor"
@@ -93,11 +93,16 @@ export const EditorAside = () => {
               setBlockContainer({
                 ...containerBlock,
                 cols: {
-                  ...containerBlock.cols,
                   amount: values.colsAmount,
                 },
               });
             }}
+            className={
+              errors.colsAmount && touched.colsAmount
+                ? "input-error"
+                : undefined
+            }
+            errorMessage={errors.colsAmount}
           />
 
           <hr />

@@ -29,6 +29,7 @@ export default function App({ Component, pageProps }: AppProps) {
     height: Yup.number()
       .min(minHeight, `O tamanho minímo é de ${minHeight}px.`)
       .max(maxHeight, `O tamanho máximo é de ${maxHeight}px.`),
+    colsAmount: Yup.number().min(1, "O minímo permitido é 1 coluna"),
   });
 
   return (
