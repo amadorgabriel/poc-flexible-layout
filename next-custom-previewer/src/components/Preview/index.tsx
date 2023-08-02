@@ -34,7 +34,7 @@ export const Preview = () => {
   };
 
   return (
-    <div className="previewContainer">
+    <div className="preview-container">
       <Draggable
         onDrag={onDrag}
         axis={containerBlock.isBlocked ? "none" : "both"}

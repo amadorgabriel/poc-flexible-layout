@@ -49,16 +49,16 @@ export const Accordion = ({
   );
 
   return (
-    <div className="accordionItem">
+    <div className="accordion-item">
       <div
         tabIndex={0}
-        className="accordionTitle"
+        className="accordion-title"
         style={isOpen ? { borderRadius: "4px 4px 0 0" } : undefined}
         onClick={() => setIsOpen(!isOpen)}
       >
         <div>{title}</div>
 
-        <div className="options">
+        <div className="accordion-options">
           <button>{arrowIcon}</button>
 
           {lockIcon && <button>{lockIcon}</button>}
@@ -66,7 +66,7 @@ export const Accordion = ({
         </div>
       </div>
 
-      {isOpen && <div className="accordionContent">{children}</div>}
+      {isOpen && <div className="accordion-content">{children}</div>}
     </div>
   );
 };

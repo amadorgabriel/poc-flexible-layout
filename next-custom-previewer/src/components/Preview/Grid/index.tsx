@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { useBlockContext } from "@/contexts/BlockContext";
 import { Responsive, WidthProvider } from "react-grid-layout";
+
 import { GridItemProps } from "@/@types/Grid.types";
+import { initialGridLayout } from "@/utils/constants";
+import { useBlockContext } from "@/contexts/BlockContext";
 
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
@@ -20,11 +22,7 @@ export const Grid = () => {
   );
 
   const [layouts, setLayouts] = useState<Record<string, GridItemProps[]>>({
-    lg: [
-      { i: "a", x: 0, y: 0, w: 1, h: 2, minW: 1, minH: 1, hidden: false },
-      { i: "b", x: 1, y: 0, w: 3, h: 2, minW: 1, minH: 1, hidden: false },
-      { i: "c", x: 4, y: 0, w: 1, h: 2, minW: 1, minH: 1, hidden: false },
-    ],
+    lg: initialGridLayout,
   });
 
   function handleToggleVisibility(id: string) {
@@ -50,6 +48,7 @@ export const Grid = () => {
 
   return (
     <ResponsiveGridLayout
+      className="grid-layout"
       layouts={layouts}
       breakpoints={{ lg: 12000, md: 12000, sm: 12000, xs: 12000, xxs: 12000 }}
       cols={{
@@ -61,41 +60,47 @@ export const Grid = () => {
       }}
       //---
       isBounded
-      rowHeight={30}
       compactType={"vertical"}
       preventCollision={false}
       //---
+      // rowHeight={146}
+      // maxRows={3}
       style={{ background: "#ffca" }}
     >
-      {layouts.lg.map((item, index) => !item.hidden && (
-         (
-          <div key={index} style={{ backgroundColor: "#ccc" }} data-grid={item}>
-            <span className="text">{item.i}</span>
-            <span
-              className="remove-grid-item"
-              onClick={() => handleToggleVisibility(item.i)}
+      {layouts.lg.map(
+        (item, index) =>
+          !item.hidden && (
+            <div
+              key={index}
+              style={{ backgroundColor: "#ccc" }}
+              data-grid={item}
             >
-              <button>
-                {item.hidden ? (
-                  <VisibilityOffOutlinedIcon
-                    sx={{
-                      fontSize: 20,
-                      margin: 0.5,
-                    }}
-                  />
-                ) : (
-                  <VisibilityOutlinedIcon
-                    sx={{
-                      fontSize: 20,
-                      margin: 0.5,
-                    }}
-                  />
-                )}
-              </button>
-            </span>
-          </div>
-        )
-      ))}
+              <span className="text">{item.i}</span>
+              <span
+                className="grid-item-visibility"
+                onClick={() => handleToggleVisibility(item.i)}
+              >
+                <button>
+                  {item.hidden ? (
+                    <VisibilityOffOutlinedIcon
+                      sx={{
+                        fontSize: 20,
+                        margin: 0.5,
+                      }}
+                    />
+                  ) : (
+                    <VisibilityOutlinedIcon
+                      sx={{
+                        fontSize: 20,
+                        margin: 0.5,
+                      }}
+                    />
+                  )}
+                </button>
+              </span>
+            </div>
+          )
+      )}
     </ResponsiveGridLayout>
   );
 };

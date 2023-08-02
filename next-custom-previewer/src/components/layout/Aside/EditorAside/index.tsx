@@ -12,8 +12,8 @@ export const EditorAside = () => {
     useFormikContext<FormikValuesProps>();
 
   return (
-    <div className="asideContent">
-      <Form onSubmit={() => {}} className="subContent">
+    <div>
+      <Form onSubmit={() => {}}>
         <Accordion title={containerBlock.name}>
           {/* <fieldset>
             <label htmlFor="isBlocked">Bloqueado:</label>
@@ -102,31 +102,29 @@ export const EditorAside = () => {
 
           <hr />
 
-          <div className="properties">
-            <div className="subContent">
-              <div style={{ marginBottom: "0.75rem" }}>
-                <b>Dimensões</b>
-                <p>
-                  Largura: {containerBlock.dimensions.width}
-                  px
-                </p>
-                <p>
-                  Altura: {containerBlock.dimensions.height}
-                  px
-                </p>
-              </div>
+          <div className="aside-footer">
+            <div>
+              <b>Dimensões</b>
+              <p>
+                Largura: {containerBlock.dimensions.width}
+                px
+              </p>
+              <p>
+                Altura: {containerBlock.dimensions.height}
+                px
+              </p>
+            </div>
 
-              <div>
-                <b>Posição</b>
-                <p>
-                  Pos. X: {containerBlock.position.x}
-                  px
-                </p>
-                <p>
-                  Pos. Y: {containerBlock.position.y}
-                  px
-                </p>
-              </div>
+            <div>
+              <b>Posição</b>
+              <p>
+                Pos. X: {containerBlock.position.x}
+                px
+              </p>
+              <p>
+                Pos. Y: {containerBlock.position.y}
+                px
+              </p>
             </div>
           </div>
         </Accordion>
@@ -134,7 +132,7 @@ export const EditorAside = () => {
         <h4>Grupos de Conteúdo</h4>
         <div className="content-groups">
           {gridLayout.map((grid, index) => (
-            <Accordion title="name" key={index}>
+            <Accordion title={`Grupo ${grid.i}`} key={index}>
               <p>{grid.i}</p>
             </Accordion>
           ))}

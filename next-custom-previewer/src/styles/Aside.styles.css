@@ -1,20 +1,27 @@
-.asideContainer {
+.aside-container {
   width: 100%;
   height: 100%;
   padding: 2rem;
   background-color: var(--card-background-color);
 }
 
-.asideContainer h2 {
+.aside-container h2 {
   margin-bottom: 1rem;
 }
 
-.asideContainer h4 {
+.aside-container h4 {
   margin: 2rem 0 1rem 0;
 }
 
-.subContent {
+.aside-content {
   width: 100%;
+}
+
+.aside-footer {
+  display: flex;
+  margin-top: 0.75rem;
+  gap: 1.5rem;
+  padding: 0 0.5rem;
 }
 
 .content-groups > div {

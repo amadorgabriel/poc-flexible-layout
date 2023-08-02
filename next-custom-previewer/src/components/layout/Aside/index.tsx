@@ -8,10 +8,10 @@ interface AsideProps {
 
 const Wrapper = ({ title, children }: AsideProps) => {
   return (
-    <aside className="asideContainer">
+    <aside className="aside-container">
       <h2>{title}</h2>
 
-      <div className="asideContent">{children}</div>
+      <div className="aside-content">{children}</div>
     </aside>
   );
 };

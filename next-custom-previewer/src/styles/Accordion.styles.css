@@ -1,8 +1,8 @@
-.accordionItem {
+.accordion-item {
   font-size: 12px;
 }
 
-.accordionTitle {
+.accordion-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,17 +15,17 @@
   border: 2px solid #ccc;
 }
 
-.accordionTitle:hover {
+.accordion-title:hover {
   border-color: rgb(255, 0, 204, 0.4);
 }
 
-.accordionTitle .options {
+.accordion-title .accordion-options {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.accordionTitle .options button {
+.accordion-title .accordion-options button {
   border: 0;
   padding: 4px 8px;
   margin-left: 2px;
@@ -34,13 +34,13 @@
   cursor: pointer;
 }
 
-.accordionTitle .options button:hover {
+.accordion-title .accordion-options button:hover {
   background-color: #eeeeee;
 }
 
-.accordionContent {
+.accordion-content {
   border-radius: 0 0 4px 4px;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem;
   background-color: #f3f3f3;
 
   border: 2px solid #dfdfdf;
