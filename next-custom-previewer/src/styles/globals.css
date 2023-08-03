@@ -1,7 +1,8 @@
 @import url(./Input.styles.css);
 @import url(./Accordion.styles.css);
 @import url(./Aside.styles.css);
-@import url(./Preview.styles.css);
+@import url(./Canvas.styles.css);
+@import url(./StaticContainer.styles.css);
 
 :root {
   --card-background-color: rgb(255, 255, 255);

@@ -1,0 +1,61 @@
+.canvas {
+  height: calc(100vh - 40px);
+  position: relative;
+  margin: 20px;
+  border: 2px dashed #bab8b8;
+  background-image: radial-gradient(#c4c4c4 1px, transparent 0px);
+  background-size: 10px 10px;
+}
+
+.grid-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: 2px dashed #b4b4b4;
+}
+
+.grid-item-static {
+  background: repeating-radial-gradient(
+    100000px 10000px at 103000px 54000px,
+    #b4b4b4 0 0.0001%,
+    transparent 0 0.002%
+  );
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+.grid-item-options {
+  top: 0px;
+  right: -45px;
+  opacity: 0;
+  cursor: pointer;
+
+  transition: 0.2s ease-out;
+  position: absolute;
+}
+
+.react-grid-item:hover .grid-item-options {
+  opacity: 1;
+}
+
+.grid-item-options button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  line-height: 1;
+  margin: 0 0.5rem 0.5rem 0;
+  padding: 2px;
+
+  border: 0;
+  border-radius: 2px;
+  cursor: pointer;
+  background-color: #bebebe;
+
+  transition: 0.2s ease;
+}
+
+.grid-item-options button:hover {
+  background-color: #a1a1a1;
+}

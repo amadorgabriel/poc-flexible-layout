@@ -1,12 +1,12 @@
 import { Aside } from "./Aside";
+import { Canvas } from "../Canvas";
 import { Allotment } from "allotment";
-import { Preview } from "@/components/Preview/index";
 
 export const Layout = () => {
   return (
     <Allotment minSize={100}>
       <Allotment.Pane>
-        <Preview />
+        <Canvas />
       </Allotment.Pane>
 
       <Allotment.Pane maxSize={400} minSize={320}>

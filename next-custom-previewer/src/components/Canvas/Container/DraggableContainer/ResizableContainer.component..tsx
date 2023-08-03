@@ -1,4 +1,4 @@
-import { Grid } from "../Grid";
+import { Grid } from "../../Grid";
 import { useFormikContext } from "formik";
 import { useState, useEffect } from "react";
 import { NumberSize, Resizable } from "re-resizable";
@@ -8,13 +8,13 @@ import { useContainerContext } from "@/contexts/ContainerContext";
 
 import { Size } from "@/@types/Block.types";
 
-interface ContainerProps {
+interface ResizableContainerProps {
   flag: boolean;
 }
 
 type Nullish<T> = { [P in keyof T]?: T[P] | null };
 
-export const Container = ({ flag }: ContainerProps) => {
+export const ResizableContainer = ({ flag }: ResizableContainerProps) => {
   const { setFieldValue } = useFormikContext();
   const { container, setContainer, dispatchWindowResizeEvent } =
     useContainerContext();
