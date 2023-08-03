@@ -1,9 +1,12 @@
-import { useState, useEffect } from "react";
-import { Responsive, WidthProvider } from "react-grid-layout";
+import { useState, useEffect, useRef } from "react";
+import {
+  Responsive,
+  ResponsiveProps,
+  WidthProvider,
+  WidthProviderProps,
+} from "react-grid-layout";
 
-import { GridItemProps } from "@/@types/Grid.types";
-import { initialGridLayout } from "@/utils/constants";
-import { useContainerContext } from "@/contexts/ContainerContext";
+import { useLabelContext } from "@/core/contexts/LabelContext";
 
 import Rotate90DegreesCwIcon from "@mui/icons-material/Rotate90DegreesCw";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -12,27 +15,41 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
+import { ContentGroupItem } from "@/core/types/_common/ContentGroup.types";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 // GridItemWidth = 110px
 export const Grid = () => {
-  const { container } = useContainerContext();
+  const { container, setContainer, contentGroup } = useLabelContext();
+  const gridRef = useRef<any>(null);
 
   const [columnsAmount, setColumnsAmount] = useState<number>(
     container.cols.amount
   );
 
-  const [layouts, setLayouts] = useState<Record<string, GridItemProps[]>>({
-    lg: initialGridLayout,
+  const [layouts, setLayouts] = useState<Record<string, ContentGroupItem[]>>({
+    lg: contentGroup.groups,
   });
-
-  const [rowHeight, setRowHeight] = useState<number | undefined>(110);
 
   const iconSettingSx = {
     fontSize: 14,
     margin: 0.5,
   };
+
+  function updateContainerDimensions() {
+    const gridHeight = gridRef.current?.elementRef.current.clientHeight;
+    const gridWidth = gridRef.current?.elementRef.current.clientWidth;
+
+    setContainer({
+      ...container,
+      dimensions: {
+        ...container.dimensions,
+        width: gridWidth,
+        height: gridHeight,
+      },
+    });
+  }
 
   function handleRemove(id: string) {
     const newState = layouts.lg.map((item) => {
@@ -46,18 +63,12 @@ export const Grid = () => {
     setLayouts({ lg: newState });
   }
 
-  function handleUpdateLayout(layout: GridItemProps[]) {
-    calcRowHeight(layout);
-
-    setLayouts({ lg: layout });
-  }
-
   //   matrizColumns: [
   //     y0: [1, 0]
   //     y1: [1, 1] // rowQty = 2
   //     y2: [1, 0]
   // ]
-  function calcRowHeight(layout: GridItemProps[]) {
+  function calcRowHeight(layout: ContentGroupItem[]) {
     let rowsQty = 1;
     const containerH = container.dimensions.height;
 
@@ -74,11 +85,15 @@ export const Grid = () => {
 
     const sumBetweenYGaps = (rowsQty + 1) * container.cols.rowGap;
     const rowHeight = (containerH - sumBetweenYGaps) / rowsQty;
-
-    setRowHeight(rowHeight);
   }
 
-  // handle cols update
+  function handleUpdateLayout(layout: ContentGroupItem[]) {
+    updateContainerDimensions();
+
+    setLayouts({ lg: layout });
+  }
+
+  // update cols amount
   useEffect(() => {
     if (container.cols.amount !== columnsAmount && !!container.cols.amount) {
       setColumnsAmount(container.cols.amount);
@@ -87,9 +102,11 @@ export const Grid = () => {
 
   return (
     <ResponsiveGridLayout
+      ref={gridRef}
       layouts={layouts}
-      autoSize
-      breakpoints={{ lg: 12000, md: 12000, sm: 12000, xs: 12000, xxs: 12000 }}
+      isBounded
+      compactType={"vertical"}
+      preventCollision={false}
       cols={{
         lg: columnsAmount,
         md: columnsAmount,
@@ -97,21 +114,18 @@ export const Grid = () => {
         xs: columnsAmount,
         xxs: columnsAmount,
       }}
-      //---
-      isBounded
-      compactType={"vertical"}
-      preventCollision={false}
-      //---
-      rowHeight={rowHeight}
-      // maxRows={6}
-      onResize={(layout) => {
-        calcRowHeight(layout as GridItemProps[]);
-      }}
-      onLayoutChange={(layout) => {
-        handleUpdateLayout(layout as GridItemProps[]);
-        calcRowHeight(layout as GridItemProps[]);
-      }}
       margin={[container.cols.colGap, container.cols.rowGap]}
+      breakpoints={{ lg: 12000, md: 12000, sm: 12000, xs: 12000, xxs: 12000 }}
+      //---
+      // rowHeight={rowHeight}
+      // maxRows={6}
+      onResize={updateContainerDimensions}
+      onResizeStop={updateContainerDimensions}
+      onDrag={updateContainerDimensions}
+      onDragStop={updateContainerDimensions}
+      onLayoutChange={(layout) => {
+        handleUpdateLayout(layout as ContentGroupItem[]);
+      }}
     >
       {layouts.lg.map(
         (item, index) =>

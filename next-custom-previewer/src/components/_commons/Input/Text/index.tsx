@@ -1,5 +1,5 @@
-import { InputHTMLAttributes, KeyboardEvent, useRef } from "react";
 import { generateUUID } from "@/utils/generate-uuid";
+import { InputHTMLAttributes, KeyboardEvent, useRef } from "react";
 
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;

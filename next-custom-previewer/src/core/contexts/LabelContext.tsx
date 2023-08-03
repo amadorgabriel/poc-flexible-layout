@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from "react";
 import { Label } from "../types/Label.types";
 import { labels } from "../mock/label.mock";
-import { LabelContainerSchema } from "../types/_common/LabelContainerSchema.types";
 import { ContentGroup } from "../types/_common/ContentGroup.types";
+import { LabelContainerSchema } from "../types/_common/LabelContainerSchema.types";
 
 interface LabelContextProps {
   children: React.ReactNode;
@@ -14,8 +14,6 @@ interface LabelContextProviderProps {
 
   contentGroup: ContentGroup;
   setContentGroup: (layout: ContentGroup) => void;
-
-  dispatchWindowResizeEvent: () => void;
 }
 
 const LabelContext = createContext({} as LabelContextProviderProps);
@@ -29,8 +27,9 @@ export const LabelProvider = ({ children }: LabelContextProps) => {
     label.layoutSchema.contentGroup
   );
 
-
-  function validateDimensions(value: LabelContainerSchema): boolean {
+  function checkContainerDimensionsRestrictions(
+    value: LabelContainerSchema
+  ): boolean {
     let validated = true;
 
     // Changed width
@@ -60,16 +59,11 @@ export const LabelProvider = ({ children }: LabelContextProps) => {
 
   function handleUpdateContainer(value: LabelContainerSchema) {
     // validity dimentions constaints
-    const validated = validateDimensions(value);
+    const valid = checkContainerDimensionsRestrictions(value);
 
-    if (!validated) return;
+    if (!valid) return;
 
     setContainer(value);
-  }
-
-  // Update grid layout
-  function dispatchWindowResizeEvent() {
-    window.dispatchEvent(new Event("resize"));
   }
 
   return (
@@ -79,7 +73,6 @@ export const LabelProvider = ({ children }: LabelContextProps) => {
         setContainer: handleUpdateContainer,
         contentGroup: contentGroup,
         setContentGroup: setContentGroup,
-        dispatchWindowResizeEvent,
       }}
     >
       {children}

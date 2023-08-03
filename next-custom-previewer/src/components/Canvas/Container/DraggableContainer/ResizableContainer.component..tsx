@@ -1,12 +1,17 @@
+// Will be deleted later!!!
+
 import { Grid } from "../../Grid";
 import { useFormikContext } from "formik";
 import { useState, useEffect } from "react";
 import { NumberSize, Resizable } from "re-resizable";
 
 import { ResizeHandle } from "./ResizeHandle.component";
-import { useContainerContext } from "@/contexts/ContainerContext";
+import { useLabelContext } from "@/core/contexts/LabelContext";
 
-import { Size } from "@/@types/Block.types";
+type Size = {
+  width: number;
+  height: number;
+};
 
 interface ResizableContainerProps {
   flag: boolean;
@@ -16,8 +21,7 @@ type Nullish<T> = { [P in keyof T]?: T[P] | null };
 
 export const ResizableContainer = ({ flag }: ResizableContainerProps) => {
   const { setFieldValue } = useFormikContext();
-  const { container, setContainer, dispatchWindowResizeEvent } =
-    useContainerContext();
+  const { container, setContainer } = useLabelContext();
 
   const [size, setSize] = useState<Size>({
     width: container.dimensions.width,
@@ -85,11 +89,6 @@ export const ResizableContainer = ({ flag }: ResizableContainerProps) => {
     }
   }, [container, size]);
 
-  // update grid size when form is submitted
-  useEffect(() => {
-    dispatchWindowResizeEvent();
-  }, [size, dispatchWindowResizeEvent]);
-
   return (
     <Resizable
       style={{
@@ -113,9 +112,6 @@ export const ResizableContainer = ({ flag }: ResizableContainerProps) => {
       onResizeStop={(e, direction, ref, d) =>
         handleResizeStop(e, direction, ref, d)
       }
-      onResize={() => {
-        dispatchWindowResizeEvent();
-      }}
       handleStyles={{
         top: flag
           ? {

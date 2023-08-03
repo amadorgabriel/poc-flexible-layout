@@ -1,9 +1,8 @@
 import * as Yup from "yup";
 import { Formik } from "formik";
 import type { AppProps } from "next/app";
-
-import { initialContainer } from "@/utils/constants";
-import { ContainerProvider } from "@/contexts/ContainerContext";
+import { labels } from "@/core/mock/label.mock";
+import { LabelProvider, } from "@/core/contexts/LabelContext";
 
 import "@/styles/globals.css";
 
@@ -19,13 +18,15 @@ export interface FormikValuesProps {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
-  const minWidth = initialContainer.dimensions.minWidth;
-  const maxWidth = initialContainer.dimensions.maxWidth;
-  const minHeight = initialContainer.dimensions.minHeight;
-  const maxHeight = initialContainer.dimensions.maxHeight;
-  const minCols = initialContainer.cols.minCols;
+  const container = labels[0].layoutSchema.container;
 
-  const initialValuesSchema = Yup.object().shape({
+  const minWidth = container.dimensions.minWidth;
+  const maxWidth = container.dimensions.maxWidth;
+  const minHeight = container.dimensions.minHeight;
+  const maxHeight = container.dimensions.maxHeight;
+  const minCols = container.cols.minCols;
+
+  const initialFormikSchema = Yup.object().shape({
     width: Yup.number()
       .positive()
       .min(minWidth, `O tamanho minímo é de ${minWidth}px.`)
@@ -40,21 +41,21 @@ export default function App({ Component, pageProps }: AppProps) {
   });
 
   return (
-    <ContainerProvider>
+    <LabelProvider>
       <Formik
-        validationSchema={initialValuesSchema}
+        validationSchema={initialFormikSchema}
         initialValues={{
-          width: initialContainer.dimensions.width,
-          height: initialContainer.dimensions.height,
-          isBlocked: initialContainer.isBlocked,
-          colsAmount: initialContainer.cols.amount,
-          colGap: initialContainer.cols.colGap,
-          rowGap: initialContainer.cols.rowGap,
+          width: container.dimensions.width,
+          height: container.dimensions.height,
+          isBlocked: container.isBlocked,
+          colsAmount: container.cols.amount,
+          colGap: container.cols.colGap,
+          rowGap: container.cols.rowGap,
         }}
         onSubmit={() => {}}
       >
         <Component {...pageProps} />
       </Formik>
-    </ContainerProvider>
+    </LabelProvider>
   );
 }

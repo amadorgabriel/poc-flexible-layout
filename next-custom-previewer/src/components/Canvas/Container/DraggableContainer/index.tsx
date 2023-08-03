@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Draggable, { DraggableData, DraggableEvent } from "react-draggable";
 
-import { useContainerContext } from "@/contexts/ContainerContext";
+import { useLabelContext } from "@/core/contexts/LabelContext";
 import { ResizableContainer } from "./ResizableContainer.component.";
 
 export type Position = {
@@ -12,7 +12,7 @@ export type Position = {
 export const DraggableContainer = () => {
   const [flag, setFlag] = useState(false);
 
-  const { container, setContainer } = useContainerContext();
+  const { container, setContainer } = useLabelContext();
 
   const [currentPosition, setCurrentPosition] = useState<Position>({
     xRate: container.position.x,

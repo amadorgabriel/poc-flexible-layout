@@ -2,14 +2,12 @@
   background: #9bc4e2;
   border: 1px solid black;
 
-  /* max-width: 600px;
-  min-width: 200px; */
-  max-height: 600px;
-  min-height: 200px;
+  position: sticky;
+  top: 15%;
+  left: 30%;
+}
 
-  /* width: 300px; */
-
-  /* position: absolute;
-  left: 25%;
-  top: 25%; */
+.static-container .react-grid-layout {
+  height: inherit;
+  width: inherit;
 }
