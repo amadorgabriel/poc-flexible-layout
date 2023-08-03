@@ -1,10 +1,15 @@
 import ReactGridLayout from "react-grid-layout";
 
-export interface GridItemProps extends ReactGridLayout.Layout {
-  // A string corresponding to the component key
+export type ContentGroup = {
+  id: number
+  groups: ContentGroupItem[]
+}
+
+export interface ContentGroupItem extends ReactGridLayout.Layout {
+  // Component key
   i: string;
 
-  // These are all in grid units, not pixels
+  // In grid units, not pixels
   x: number;
   y: number;
   w: number;

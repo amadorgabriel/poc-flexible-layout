@@ -1,16 +1,10 @@
-export type Position = {
-  x: number;
-  y: number;
-};
-
-export type Size = {
-  width: number;
-  height: number;
-};
-
-export type Container = {
+export type LabelContainerSchema = {
+  id: number
   name: string;
-  position: Position;
+  position: {
+    x: number;
+    y: number;
+  };
   dimensions: {
     width: number;
     height: number;
