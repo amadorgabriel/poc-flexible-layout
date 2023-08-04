@@ -1,28 +1,33 @@
 import { useState } from "react";
+import { useLabelContext } from "@/core/contexts/LabelContext";
 
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 
-import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
+import PushPinIcon from "@mui/icons-material/PushPin";
 
 import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import ArrowDropUpOutlinedIcon from "@mui/icons-material/ArrowDropUpOutlined";
 
 interface AccordionProps {
+  id?: number;
   title: string;
   children: React.ReactNode;
+  fixed?: boolean;
 
-  lockable?: boolean;
   hideable?: boolean;
 }
 
 export const Accordion = ({
+  id,
   title,
   children,
-  lockable = false,
+  fixed = false,
   hideable = false,
 }: AccordionProps) => {
+  const { contentGroup, setContentGroup } = useLabelContext();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const iconSettingSx = {
@@ -36,32 +41,55 @@ export const Accordion = ({
     <ArrowDropDownOutlinedIcon sx={iconSettingSx} />
   );
 
-  const lockIcon = isOpen ? (
-    <LockOpenOutlinedIcon sx={iconSettingSx} />
+  const fixedIcon = fixed ? (
+    <PushPinIcon sx={iconSettingSx} />
   ) : (
-    <LockOutlinedIcon sx={iconSettingSx} />
+    <PushPinOutlinedIcon sx={iconSettingSx} />
   );
 
   const visibleIcon = isOpen ? (
-    <VisibilityOffOutlinedIcon sx={iconSettingSx} />
+    <VisibilityOutlinedIcon sx={iconSettingSx} />
   ) : (
     <VisibilityOutlinedIcon sx={iconSettingSx} />
   );
+
+  function handleToggleFixedGroup() {
+    if (typeof id === "undefined") return;
+
+    let groups = contentGroup.groups;
+
+    groups[id] = {
+      ...contentGroup.groups[id],
+      static: !fixed,
+    };
+
+    setContentGroup({
+      ...contentGroup,
+      groups,
+    });
+  }
 
   return (
     <div className="accordion-item">
       <div
         tabIndex={0}
-        className="accordion-title"
+        className="accordion-header"
         style={isOpen ? { borderRadius: "4px 4px 0 0" } : undefined}
-        onClick={() => setIsOpen(!isOpen)}
       >
-        <div>{title}</div>
+        <div
+          className="accordion-options accordion-title"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <button>{arrowIcon}</button>
+          <div>{title}</div>
+        </div>
 
         <div className="accordion-options">
-          <button>{arrowIcon}</button>
-
-          {lockIcon && <button>{lockIcon}</button>}
+          {fixedIcon && (
+            <button onClick={() => handleToggleFixedGroup()}>
+              {fixedIcon}
+            </button>
+          )}
           {visibleIcon && <button>{visibleIcon}</button>}
         </div>
       </div>

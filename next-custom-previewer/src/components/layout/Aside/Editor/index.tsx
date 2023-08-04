@@ -190,7 +190,12 @@ export const EditorAside = () => {
         <h4>Grupos de Conteúdo</h4>
         <div className="content-groups">
           {contentGroup.groups.map((grid, index) => (
-            <Accordion title={`Grupo ${grid.i}`} key={index}>
+            <Accordion
+              id={index}
+              title={grid.elements.groupName}
+              fixed={grid.static}
+              key={index}
+            >
               <p>{grid.i}</p>
             </Accordion>
           ))}

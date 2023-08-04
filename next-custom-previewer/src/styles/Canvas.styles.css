@@ -11,18 +11,23 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: grab;
 
   border: 2px dashed #b4b4b4;
+  background-color: #c4dfb8;
+}
+
+.grid-item-grabbing {
+  cursor: grabbing;
 }
 
 .grid-item-static {
   background: repeating-radial-gradient(
     100000px 10000px at 103000px 54000px,
     #b4b4b4 0 0.0001%,
-    transparent 0 0.002%
+    #c4dfb8 0 0.002%
   );
   cursor: not-allowed !important;
-  pointer-events: none;
 }
 
 .grid-item-options {
@@ -37,6 +42,14 @@
 
 .react-grid-item:hover .grid-item-options {
   opacity: 1;
+}
+
+.grid-item-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .grid-item-options button {
@@ -59,3 +72,5 @@
 .grid-item-options button:hover {
   background-color: #a1a1a1;
 }
+
+

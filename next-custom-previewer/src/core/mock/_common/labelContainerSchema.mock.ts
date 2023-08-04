@@ -17,7 +17,7 @@ export const labelContainerSchemas: Record<number, LabelContainerSchema> = {
       y: 20,
     },
     cols: {
-      amount: 2,
+      amount: 1,
       minCols: 1,
       colGap: 10,
       rowGap: 10,

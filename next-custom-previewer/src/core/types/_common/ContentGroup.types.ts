@@ -1,9 +1,10 @@
+import { StaticImageData } from "next/image";
 import ReactGridLayout from "react-grid-layout";
 
 export type ContentGroup = {
-  id: number
-  groups: ContentGroupItem[]
-}
+  id: number;
+  groups: ContentGroupItem[];
+};
 
 export interface ContentGroupItem extends ReactGridLayout.Layout {
   // Component key
@@ -26,8 +27,17 @@ export interface ContentGroupItem extends ReactGridLayout.Layout {
   isResizable?: boolean;
   resizeHandles?: Array<"s" | "w" | "e" | "n" | "sw" | "nw" | "se" | "ne">;
 
-  content: {
-    text: string | null;
-    imageUrl: string | null;
+  elements: {
+    // margin: number
+    // padding: number
+    groupName: string
+    groupings: GroupingElements[];
   };
 }
+
+// padding: number
+// margin: number
+type GroupingElements = {
+  text?: string | null;
+  image?: StaticImageData;
+};

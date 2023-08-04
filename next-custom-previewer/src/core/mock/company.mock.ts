@@ -3,7 +3,7 @@ import { Company } from "../types/Company.types";
 export const companies: Record<number, Company> = {
   0: {
     id: 0,
-    name: "Etiqueta Certa",
+    name: "Etiqueta Certa Treinamentos e Sistemas LTDA",
     prefix: "Fabricado Por:",
     nif: "22.949.494/0001-98",
     nifPrefix: "CNPJ",

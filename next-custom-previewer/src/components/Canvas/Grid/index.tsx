@@ -1,36 +1,36 @@
+import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import {
-  Responsive,
-  ResponsiveProps,
-  WidthProvider,
-  WidthProviderProps,
-} from "react-grid-layout";
-
+import { Responsive, WidthProvider } from "react-grid-layout";
 import { useLabelContext } from "@/core/contexts/LabelContext";
+import { ContentGroupItem } from "@/core/types/_common/ContentGroup.types";
 
 import Rotate90DegreesCwIcon from "@mui/icons-material/Rotate90DegreesCw";
+
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+
+import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
+import PushPinIcon from "@mui/icons-material/PushPin";
 
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
-import { ContentGroupItem } from "@/core/types/_common/ContentGroup.types";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
 // GridItemWidth = 110px
 export const Grid = () => {
-  const { container, setContainer, contentGroup } = useLabelContext();
   const gridRef = useRef<any>(null);
 
+  const { container, setContainer, contentGroup, setContentGroup } = useLabelContext();
   const [columnsAmount, setColumnsAmount] = useState<number>(
     container.cols.amount
   );
-
-  const [layouts, setLayouts] = useState<Record<string, ContentGroupItem[]>>({
+  const [contentGroups, setContentGroups] = useState<
+    Record<string, ContentGroupItem[]>
+  >({
     lg: contentGroup.groups,
   });
+  const [isGrabbing, setIsGrabbing] = useState(false);
 
   const iconSettingSx = {
     fontSize: 14,
@@ -51,23 +51,6 @@ export const Grid = () => {
     });
   }
 
-  function handleRemove(id: string) {
-    const newState = layouts.lg.map((item) => {
-      if (item.i === id) {
-        item.hidden = !item.hidden;
-      }
-
-      return item;
-    });
-
-    setLayouts({ lg: newState });
-  }
-
-  //   matrizColumns: [
-  //     y0: [1, 0]
-  //     y1: [1, 1] // rowQty = 2
-  //     y2: [1, 0]
-  // ]
   function calcRowHeight(layout: ContentGroupItem[]) {
     let rowsQty = 1;
     const containerH = container.dimensions.height;
@@ -87,23 +70,54 @@ export const Grid = () => {
     const rowHeight = (containerH - sumBetweenYGaps) / rowsQty;
   }
 
+  function handleHideGroup(id: string) {
+    const newState = contentGroups.lg.map((item) => {
+      if (item.i === id) {
+        item.hidden = !item.hidden;
+      }
+
+      return item;
+    });
+
+    setContentGroups({ lg: newState });
+  }
+
+  function handleToggleFixedGroup(id: number, currValue: boolean) {
+    let groups = contentGroup.groups;
+
+    groups[id] = {
+      ...contentGroup.groups[id],
+      static: !currValue,
+    };
+
+    setContentGroup({
+      ...contentGroup,
+      groups,
+    });
+  }
+
   function handleUpdateLayout(layout: ContentGroupItem[]) {
     updateContainerDimensions();
 
-    setLayouts({ lg: layout });
+    setContentGroups({ lg: [...contentGroup.groups] });
   }
 
-  // update cols amount
+  // update when cols changes
   useEffect(() => {
     if (container.cols.amount !== columnsAmount && !!container.cols.amount) {
       setColumnsAmount(container.cols.amount);
     }
   }, [container, setColumnsAmount, columnsAmount]);
 
+  // update when contentGroup changes
+  useEffect(() => {
+    setContentGroups({ lg: [...contentGroup.groups] });
+  }, [contentGroup]);
+
   return (
     <ResponsiveGridLayout
       ref={gridRef}
-      layouts={layouts}
+      layouts={contentGroups}
       isBounded
       compactType={"vertical"}
       preventCollision={false}
@@ -121,27 +135,53 @@ export const Grid = () => {
       // maxRows={6}
       onResize={updateContainerDimensions}
       onResizeStop={updateContainerDimensions}
-      onDrag={updateContainerDimensions}
-      onDragStop={updateContainerDimensions}
+      onDrag={() => {
+        setIsGrabbing(true);
+        updateContainerDimensions();
+      }}
+      onDragStop={() => {
+        setIsGrabbing(false);
+        updateContainerDimensions();
+      }}
       onLayoutChange={(layout) => {
         handleUpdateLayout(layout as ContentGroupItem[]);
       }}
     >
-      {layouts.lg.map(
-        (item, index) =>
-          !item.hidden && (
-            <div
-              className={`grid-item 
-              
-              ${item.static ? "grid-item-static" : undefined}`}
-              key={index}
-              data-grid={item}
-            >
-              <span className="text">{item.i}</span>
+      {contentGroups.lg.map((groupItem, index) => {
+        const groups = groupItem.elements?.groupings;
 
-              <span className="grid-item-options">
+        return (
+          !groupItem.hidden && (
+            <div
+              key={index}
+              data-grid={groupItem}
+              className={`grid-item ${
+                groupItem.static ? "grid-item-static" : undefined
+              }
+              ${isGrabbing ? "grid-item-grabbing" : undefined}
+              `}
+            >
+              <div className="grid-item-content">
+                {groups?.map((element, i) => {
+                  return (
+                    <span key={i}>
+                      {element.text && <p>{element.text}</p>}
+                      {element.image && (
+                        <Image
+                          src={element.image.src}
+                          alt="generic-alt"
+                          width={100}
+                          height={100}
+                        />
+                      )}
+                    </span>
+                  );
+                })}
+              </div>
+
+              <div className="grid-item-options">
                 <button>
-                  {item.hidden ? (
+                  {groupItem.hidden ? (
                     <VisibilityOffOutlinedIcon sx={iconSettingSx} />
                   ) : (
                     <VisibilityOutlinedIcon sx={iconSettingSx} />
@@ -152,13 +192,18 @@ export const Grid = () => {
                   <Rotate90DegreesCwIcon sx={iconSettingSx} />
                 </button>
 
-                <button onClick={() => handleRemove(item.i)}>
-                  <DeleteForeverIcon sx={iconSettingSx} />
+                <button onClick={() => handleToggleFixedGroup(index, groupItem.static)}>
+                  {groupItem.static ? (
+                    <PushPinIcon sx={iconSettingSx} />
+                  ) : (
+                    <PushPinOutlinedIcon sx={iconSettingSx} />
+                  )}
                 </button>
-              </span>
+              </div>
             </div>
           )
-      )}
+        );
+      })}
     </ResponsiveGridLayout>
   );
 };
