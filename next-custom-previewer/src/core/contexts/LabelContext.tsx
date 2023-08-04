@@ -27,6 +27,10 @@ export const LabelProvider = ({ children }: LabelContextProps) => {
     label.layoutSchema.contentGroup
   );
 
+  function handleUpdateContentGroup(value: ContentGroup) {
+    setContentGroup(value);
+  }
+
   function checkContainerDimensionsRestrictions(
     value: LabelContainerSchema
   ): boolean {
@@ -72,7 +76,7 @@ export const LabelProvider = ({ children }: LabelContextProps) => {
         container: container,
         setContainer: handleUpdateContainer,
         contentGroup: contentGroup,
-        setContentGroup: setContentGroup,
+        setContentGroup: handleUpdateContentGroup,
       }}
     >
       {children}

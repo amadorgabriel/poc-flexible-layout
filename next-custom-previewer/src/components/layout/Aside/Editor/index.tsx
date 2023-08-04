@@ -192,9 +192,10 @@ export const EditorAside = () => {
           {contentGroup.groups.map((grid, index) => (
             <Accordion
               id={index}
+              key={index}
               title={grid.elements.groupName}
               fixed={grid.static}
-              key={index}
+              hidden={grid.hidden}
             >
               <p>{grid.i}</p>
             </Accordion>

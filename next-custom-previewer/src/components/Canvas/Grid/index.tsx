@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import { useLabelContext } from "@/core/contexts/LabelContext";
 import { ContentGroupItem } from "@/core/types/_common/ContentGroup.types";
@@ -7,7 +7,6 @@ import { ContentGroupItem } from "@/core/types/_common/ContentGroup.types";
 import Rotate90DegreesCwIcon from "@mui/icons-material/Rotate90DegreesCw";
 
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import PushPinIcon from "@mui/icons-material/PushPin";
@@ -17,11 +16,11 @@ import "react-resizable/css/styles.css";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-// GridItemWidth = 110px
 export const Grid = () => {
   const gridRef = useRef<any>(null);
 
-  const { container, setContainer, contentGroup, setContentGroup } = useLabelContext();
+  const { container, setContainer, contentGroup, setContentGroup } =
+    useLabelContext();
   const [columnsAmount, setColumnsAmount] = useState<number>(
     container.cols.amount
   );
@@ -70,19 +69,23 @@ export const Grid = () => {
     const rowHeight = (containerH - sumBetweenYGaps) / rowsQty;
   }
 
-  function handleHideGroup(id: string) {
-    const newState = contentGroups.lg.map((item) => {
-      if (item.i === id) {
-        item.hidden = !item.hidden;
-      }
+  function handleHideGroup(id: number) {
+    if (typeof id === "undefined") return;
 
-      return item;
+    let groups = contentGroup.groups;
+
+    groups[id] = {
+      ...contentGroup.groups[id],
+      hidden: true,
+    };
+
+    setContentGroup({
+      ...contentGroup,
+      groups,
     });
-
-    setContentGroups({ lg: newState });
   }
 
-  function handleToggleFixedGroup(id: number, currValue: boolean) {
+  function handleToggleFixedGroup(id: number, currValue: boolean | undefined) {
     let groups = contentGroup.groups;
 
     groups[id] = {
@@ -109,7 +112,7 @@ export const Grid = () => {
     }
   }, [container, setColumnsAmount, columnsAmount]);
 
-  // update when contentGroup changes
+  // refresh when contentGroup changes
   useEffect(() => {
     setContentGroups({ lg: [...contentGroup.groups] });
   }, [contentGroup]);
@@ -161,7 +164,20 @@ export const Grid = () => {
               ${isGrabbing ? "grid-item-grabbing" : undefined}
               `}
             >
-              <div className="grid-item-content">
+              <div
+                className={`grid-item-content
+              ${
+                groupItem.rotateDegree === "90"
+                  ? "rotate-90"
+                  : groupItem.rotateDegree === "180"
+                  ? "rotate-180"
+                  : groupItem.rotateDegree === "270"
+                  ? "rotate-270"
+                  : groupItem.rotateDegree === "360"
+                  ? "rotate-360"
+                  : "rotate-0"
+              }`}
+              >
                 {groups?.map((element, i) => {
                   return (
                     <span key={i}>
@@ -180,19 +196,19 @@ export const Grid = () => {
               </div>
 
               <div className="grid-item-options">
-                <button>
-                  {groupItem.hidden ? (
-                    <VisibilityOffOutlinedIcon sx={iconSettingSx} />
-                  ) : (
-                    <VisibilityOutlinedIcon sx={iconSettingSx} />
-                  )}
+                <button onClick={() => handleHideGroup(index)}>
+                  <VisibilityOutlinedIcon sx={iconSettingSx} />
                 </button>
 
                 <button>
                   <Rotate90DegreesCwIcon sx={iconSettingSx} />
                 </button>
 
-                <button onClick={() => handleToggleFixedGroup(index, groupItem.static)}>
+                <button
+                  onClick={() =>
+                    handleToggleFixedGroup(index, groupItem.static)
+                  }
+                >
                   {groupItem.static ? (
                     <PushPinIcon sx={iconSettingSx} />
                   ) : (

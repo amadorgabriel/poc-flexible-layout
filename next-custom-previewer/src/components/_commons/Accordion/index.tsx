@@ -10,13 +10,15 @@ import PushPinIcon from "@mui/icons-material/PushPin";
 import ArrowDropDownOutlinedIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import ArrowDropUpOutlinedIcon from "@mui/icons-material/ArrowDropUpOutlined";
 
+import Rotate90DegreesCwIcon from "@mui/icons-material/Rotate90DegreesCw";
+import { RotateDegreeType } from "@/core/types/_common/ContentGroup.types";
+
 interface AccordionProps {
   id?: number;
   title: string;
   children: React.ReactNode;
   fixed?: boolean;
-
-  hideable?: boolean;
+  hidden?: boolean;
 }
 
 export const Accordion = ({
@@ -24,7 +26,7 @@ export const Accordion = ({
   title,
   children,
   fixed = false,
-  hideable = false,
+  hidden = false,
 }: AccordionProps) => {
   const { contentGroup, setContentGroup } = useLabelContext();
 
@@ -47,11 +49,47 @@ export const Accordion = ({
     <PushPinOutlinedIcon sx={iconSettingSx} />
   );
 
-  const visibleIcon = isOpen ? (
-    <VisibilityOutlinedIcon sx={iconSettingSx} />
+  const visibleIcon = hidden ? (
+    <VisibilityOffOutlinedIcon sx={iconSettingSx} />
   ) : (
     <VisibilityOutlinedIcon sx={iconSettingSx} />
   );
+
+  const rotateIcon = <Rotate90DegreesCwIcon sx={iconSettingSx} />;
+
+  function handleRotateGroup() {
+    if (typeof id === "undefined") return;
+
+    let groups = contentGroup.groups;
+    const currValue = Number(contentGroup.groups[id].rotateDegree ?? 0);
+    const nexValue = currValue + 90 === 360 ? 0 : currValue + 90;
+
+    groups[id] = {
+      ...contentGroup.groups[id],
+      rotateDegree: String(nexValue) as RotateDegreeType,
+    };
+
+    setContentGroup({
+      ...contentGroup,
+      groups,
+    });
+  }
+
+  function handleToggleVisibilityGroup() {
+    if (typeof id === "undefined") return;
+
+    let groups = contentGroup.groups;
+
+    groups[id] = {
+      ...contentGroup.groups[id],
+      hidden: !hidden,
+    };
+
+    setContentGroup({
+      ...contentGroup,
+      groups,
+    });
+  }
 
   function handleToggleFixedGroup() {
     if (typeof id === "undefined") return;
@@ -86,11 +124,14 @@ export const Accordion = ({
 
         <div className="accordion-options">
           {fixedIcon && (
-            <button onClick={() => handleToggleFixedGroup()}>
-              {fixedIcon}
-            </button>
+            <button onClick={handleToggleFixedGroup}>{fixedIcon}</button>
           )}
-          {visibleIcon && <button>{visibleIcon}</button>}
+          {visibleIcon && (
+            <button onClick={handleToggleVisibilityGroup}>{visibleIcon}</button>
+          )}
+          {rotateIcon && (
+            <button onClick={handleRotateGroup}>{rotateIcon}</button>
+          )}
         </div>
       </div>
 

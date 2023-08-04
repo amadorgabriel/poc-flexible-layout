@@ -59,6 +59,7 @@ export const contentGroups: Record<number, ContentGroup> = {
         minW: 1,
         minH: 1,
         hidden: false,
+        rotateDegree: "90",
         elements: {
           groupName: "Empresa",
           groupings: [
