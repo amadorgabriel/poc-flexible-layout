@@ -1,5 +1,7 @@
 import { Company } from "../types/Company.types";
 
+import logoEtiquetaCerta from "@/assets/img/label0/logo.png";
+
 export const companies: Record<number, Company> = {
   0: {
     id: 0,
@@ -7,20 +9,19 @@ export const companies: Record<number, Company> = {
     prefix: "Fabricado Por:",
     nif: "22.949.494/0001-98",
     nifPrefix: "CNPJ",
-    logoUrl:
-      "data:image/png;base64,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",
+    logoImage: logoEtiquetaCerta,
     contryName: "Brasil",
     contryNamePrefix: "Feito no:",
   },
-  1: {
-    id: 1,
-    name: "Wabro",
-    prefix: "Importado Por:",
-    nif: "30-70801382-6",
-    nifPrefix: "CUIT",
-    logoUrl:
-      "https://www.tiendawabro.com.ar/arquivos/wabro_logo.png?v=637307917730600000",
-    contryName: "Argentina",
-    contryNamePrefix: "Feito na:",
-  },
+  // 1: {
+  //   id: 1,
+  //   name: "Wabro",
+  //   prefix: "Importado Por:",
+  //   nif: "30-70801382-6",
+  //   nifPrefix: "CUIT",
+  //   logoImage:
+  //     "https://www.tiendawabro.com.ar/arquivos/wabro_logo.png?v=637307917730600000",
+  //   contryName: "Argentina",
+  //   contryNamePrefix: "Feito na:",
+  // },
 };

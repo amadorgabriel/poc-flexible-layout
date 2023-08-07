@@ -1,3 +1,4 @@
+import { StaticImageData } from "next/image";
 import { Company } from "./Company.types";
 import { ContentGroup } from "./_common/ContentGroup.types";
 import { LabelContainerSchema } from "./_common/LabelContainerSchema.types";
@@ -11,6 +12,12 @@ export type Label = {
   description: string;
 
   companies: Company[];
+
+  compositions: string[];
+
+  size: "PP" | "P" | "M" | "G" | "GG";
+
+  conservationSymbols: StaticImageData[];
 
   //regras de diagramação
   layoutSchema: {

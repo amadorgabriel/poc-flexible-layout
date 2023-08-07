@@ -24,7 +24,7 @@ export const contentGroups: Record<number, ContentGroup> = {
           groupName: "Logo",
           groupings: [
             {
-              image: logoEtiquetaCerta,
+              image: companies[0].logoImage,
             },
           ],
         },

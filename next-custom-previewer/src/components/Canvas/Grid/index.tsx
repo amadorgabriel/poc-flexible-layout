@@ -50,12 +50,11 @@ export const Grid = () => {
     });
   }
 
-  function calcRowHeight(layout: ContentGroupItem[]) {
+  const rowHeight = () => {
     let rowsQty = 1;
-    const containerH = container.dimensions.height;
 
-    layout.map((contentGroup, i) => {
-      const currRowQty = contentGroup.y + contentGroup.h;
+    contentGroup.groups.map((item, i) => {
+      const currRowQty = item.y + item.h;
 
       if (i === 0) {
         rowsQty = currRowQty;
@@ -66,8 +65,10 @@ export const Grid = () => {
     });
 
     const sumBetweenYGaps = (rowsQty + 1) * container.cols.rowGap;
-    const rowHeight = (containerH - sumBetweenYGaps) / rowsQty;
-  }
+    const rowHeight = (container.dimensions.height - sumBetweenYGaps) / rowsQty;
+
+    return rowHeight;
+  };
 
   function handleHideGroup(id: number) {
     if (typeof id === "undefined") return;
@@ -153,6 +154,11 @@ export const Grid = () => {
       {contentGroups.lg.map((groupItem, index) => {
         const groups = groupItem.elements?.groupings;
 
+        const gridItemWidth =
+          groupItem.rotateDegree === "90" || groupItem.rotateDegree === "270"
+            ? `${rowHeight()}px`
+            : "100%";
+
         return (
           !groupItem.hidden && (
             <div
@@ -161,22 +167,11 @@ export const Grid = () => {
               className={`grid-item ${
                 groupItem.static ? "grid-item-static" : undefined
               }
-              ${isGrabbing ? "grid-item-grabbing" : undefined}
-              `}
+              ${isGrabbing ? "grid-item-grabbing" : undefined}`}
             >
               <div
-                className={`grid-item-content
-              ${
-                groupItem.rotateDegree === "90"
-                  ? "rotate-90"
-                  : groupItem.rotateDegree === "180"
-                  ? "rotate-180"
-                  : groupItem.rotateDegree === "270"
-                  ? "rotate-270"
-                  : groupItem.rotateDegree === "360"
-                  ? "rotate-360"
-                  : "rotate-0"
-              }`}
+                style={{ width: gridItemWidth }}
+                className={`grid-item-content rotate-${groupItem.rotateDegree}`}
               >
                 {groups?.map((element, i) => {
                   return (
