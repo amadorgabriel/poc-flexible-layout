@@ -5,6 +5,8 @@
   border: 2px dashed #bab8b8;
   background-image: radial-gradient(#c4c4c4 1px, transparent 0px);
   background-size: 10px 10px;
+
+  font-size: 14px !important;
 }
 
 .grid-item {

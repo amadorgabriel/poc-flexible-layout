@@ -1,6 +1,8 @@
 import Head from "next/head";
+import { Allotment } from "allotment";
 import { Inter } from "next/font/google";
-import { Layout } from "@/components/Layout/index";
+import { Canvas } from "@/components/Canvas";
+import { Aside } from "@/components/_commons/Aside";
 
 import "allotment/dist/style.css";
 
@@ -17,7 +19,15 @@ export default function Home() {
       </Head>
 
       <main className={`$${inter.className}`}>
-        <Layout />
+        <Allotment minSize={100}>
+          <Allotment.Pane>
+            <Canvas />
+          </Allotment.Pane>
+
+          <Allotment.Pane maxSize={400} minSize={320}>
+            <Aside />
+          </Allotment.Pane>
+        </Allotment>
       </main>
     </>
   );

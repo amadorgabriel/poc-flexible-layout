@@ -1,15 +1,13 @@
 import Image from "next/image";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import { useLabelContext } from "@/core/contexts/LabelContext";
 import { ContentGroupItem } from "@/core/types/_common/ContentGroup.types";
 
-import Rotate90DegreesCwIcon from "@mui/icons-material/Rotate90DegreesCw";
-
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-
-import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import PushPinIcon from "@mui/icons-material/PushPin";
+import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
+import Rotate90DegreesCwIcon from "@mui/icons-material/Rotate90DegreesCw";
+import VisibilityOffOutlined from "@mui/icons-material/VisibilityOffOutlined";
 
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
@@ -113,7 +111,7 @@ export const Grid = () => {
     }
   }, [container, setColumnsAmount, columnsAmount]);
 
-  // refresh when contentGroup changes
+  // update when contentGroup changes
   useEffect(() => {
     setContentGroups({ lg: [...contentGroup.groups] });
   }, [contentGroup]);
@@ -192,7 +190,7 @@ export const Grid = () => {
 
               <div className="grid-item-options">
                 <button onClick={() => handleHideGroup(index)}>
-                  <VisibilityOutlinedIcon sx={iconSettingSx} />
+                  <VisibilityOffOutlined sx={iconSettingSx} />
                 </button>
 
                 <button>

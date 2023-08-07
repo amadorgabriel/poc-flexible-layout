@@ -5,8 +5,9 @@ import { FormikValuesProps } from "@/pages/_app";
 import { Input } from "@/components/_commons/Input";
 import { Accordion } from "@/components/_commons/Accordion";
 import { useLabelContext } from "@/core/contexts/LabelContext";
+import { ContentGroupAccordion } from "@/components/EditorAside/ContentGroupAccordion";
 
-export const EditorAside = () => {
+export const EditorPanel = () => {
   const { container, setContainer, contentGroup } = useLabelContext();
   const { values, setFieldValue, errors, touched } =
     useFormikContext<FormikValuesProps>();
@@ -190,15 +191,16 @@ export const EditorAside = () => {
         <h4>Grupos de Conteúdo</h4>
         <div className="content-groups">
           {contentGroup.groups.map((grid, index) => (
-            <Accordion
-              id={index}
+            <ContentGroupAccordion
               key={index}
+              contentGroupId={index}
               title={grid.elements.groupName}
-              fixed={grid.static}
-              hidden={grid.hidden}
+              pinable
+              hideable
+              rotatable
             >
               <p>{grid.i}</p>
-            </Accordion>
+            </ContentGroupAccordion>
           ))}
         </div>
       </Form>
