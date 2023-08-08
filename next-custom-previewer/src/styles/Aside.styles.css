@@ -28,3 +28,7 @@
 .content-groups > div {
   margin-bottom: 0.5rem;
 }
+
+.content-group-hidden {
+  opacity: 0.5;
+}

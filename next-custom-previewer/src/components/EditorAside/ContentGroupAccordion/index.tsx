@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ButtonHTMLAttributes, useState } from "react";
 import { useLabelContext } from "@/core/contexts/LabelContext";
 import { RotateDegreeType } from "@/core/types/_common/ContentGroup.types";
 import { Accordion, AccordionProps } from "@/components/_commons/Accordion";
@@ -60,16 +60,16 @@ export const ContentGroupAccordion = ({
   function handleRotate() {
     let groups = contentGroup.groups;
 
-    const nexDegree = String(
+    const nextDegree = String(
       Number(rotateDeg) + 90 === 360 ? 0 : Number(rotateDeg) + 90
     ) as RotateDegreeType;
 
     groups[contentGroupId] = {
       ...contentGroup.groups[contentGroupId],
-      rotateDegree: nexDegree,
+      rotateDegree: nextDegree,
     };
 
-    setRotateDeg(nexDegree);
+    setRotateDeg(nextDegree);
 
     setContentGroup({
       ...contentGroup,
@@ -110,31 +110,38 @@ export const ContentGroupAccordion = ({
   }
 
   function getContentGroupButtons() {
-    const buttons = [];
+    const buttons = [] as ButtonHTMLAttributes<HTMLButtonElement>[];
 
     pinable &&
       buttons.push({
         onClick: handleTogglePin,
         children: pinIcon,
+        title: isPinned ? "Desafixar" : "Fixar",
       });
 
     rotatable &&
       buttons.push({
         onClick: handleRotate,
         children: rotateIcon,
+        title: "Girar",
       });
 
     hideable &&
       buttons.push({
         onClick: handleToggleVisibility,
         children: visibleIcon,
+        title: isHidden ? "Mostrar" : "Esconder",
       });
 
     return buttons;
   }
 
   return (
-    <Accordion title={title} buttons={getContentGroupButtons()}>
+    <Accordion
+      title={title}
+      buttons={getContentGroupButtons()}
+      className={isHidden ? "content-group-hidden" : ""}
+    >
       {children}
     </Accordion>
   );

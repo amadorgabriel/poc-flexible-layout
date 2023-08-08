@@ -2,7 +2,10 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout";
 import { useLabelContext } from "@/core/contexts/LabelContext";
-import { ContentGroupItem } from "@/core/types/_common/ContentGroup.types";
+import {
+  ContentGroupItem,
+  RotateDegreeType,
+} from "@/core/types/_common/ContentGroup.types";
 
 import PushPinIcon from "@mui/icons-material/PushPin";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
@@ -14,25 +17,22 @@ import "react-resizable/css/styles.css";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
+type ContentGroupLayout = Record<string, ContentGroupItem[]>;
+
 export const Grid = () => {
   const gridRef = useRef<any>(null);
-
   const { container, setContainer, contentGroup, setContentGroup } =
     useLabelContext();
+
+  const [isGrabbing, setIsGrabbing] = useState(false);
   const [columnsAmount, setColumnsAmount] = useState<number>(
     container.cols.amount
   );
-  const [contentGroups, setContentGroups] = useState<
-    Record<string, ContentGroupItem[]>
-  >({
-    lg: contentGroup.groups,
-  });
-  const [isGrabbing, setIsGrabbing] = useState(false);
 
-  const iconSettingSx = {
-    fontSize: 14,
-    margin: 0.5,
-  };
+  const [visibleContentGroups, setVisibleContentGroups] =
+    useState<ContentGroupLayout>({
+      lg: contentGroup.groups,
+    });
 
   function updateContainerDimensions() {
     const gridHeight = gridRef.current?.elementRef.current.clientHeight;
@@ -68,13 +68,32 @@ export const Grid = () => {
     return rowHeight;
   };
 
-  function handleHideGroup(id: number) {
-    if (typeof id === "undefined") return;
+  function handleRotate(index: number) {
+    let groups = contentGroup.groups;
+    const currRotateDeg = contentGroup.groups[index].rotateDegree || "0";
+
+    const nextDegree = String(
+      Number(currRotateDeg) + 90 === 360 ? 0 : Number(currRotateDeg) + 90
+    ) as RotateDegreeType;
+
+    groups[index] = {
+      ...contentGroup.groups[index],
+      rotateDegree: nextDegree,
+    };
+
+    setContentGroup({
+      ...contentGroup,
+      groups,
+    });
+  }
+
+  function handleHide(index: number) {
+    if (typeof index === "undefined") return;
 
     let groups = contentGroup.groups;
 
-    groups[id] = {
-      ...contentGroup.groups[id],
+    groups[index] = {
+      ...contentGroup.groups[index],
       hidden: true,
     };
 
@@ -84,12 +103,12 @@ export const Grid = () => {
     });
   }
 
-  function handleToggleFixedGroup(id: number, currValue: boolean | undefined) {
+  function handleTogglePin(index: number) {
     let groups = contentGroup.groups;
 
-    groups[id] = {
-      ...contentGroup.groups[id],
-      static: !currValue,
+    groups[index] = {
+      ...contentGroup.groups[index],
+      static: !contentGroup.groups[index].static,
     };
 
     setContentGroup({
@@ -98,28 +117,24 @@ export const Grid = () => {
     });
   }
 
-  function handleUpdateLayout(layout: ContentGroupItem[]) {
-    updateContainerDimensions();
-
-    setContentGroups({ lg: [...contentGroup.groups] });
-  }
-
-  // update when cols changes
   useEffect(() => {
+    // update when cols changes
     if (container.cols.amount !== columnsAmount && !!container.cols.amount) {
       setColumnsAmount(container.cols.amount);
     }
   }, [container, setColumnsAmount, columnsAmount]);
 
-  // update when contentGroup changes
+  // update layout
   useEffect(() => {
-    setContentGroups({ lg: [...contentGroup.groups] });
+    setVisibleContentGroups({ lg: [...contentGroup.groups] });
+
+    // update container dimensions
   }, [contentGroup]);
 
   return (
     <ResponsiveGridLayout
       ref={gridRef}
-      layouts={contentGroups}
+      layouts={visibleContentGroups}
       isBounded
       compactType={"vertical"}
       preventCollision={false}
@@ -146,10 +161,16 @@ export const Grid = () => {
         updateContainerDimensions();
       }}
       onLayoutChange={(layout) => {
-        handleUpdateLayout(layout as ContentGroupItem[]);
+        updateContainerDimensions();
+
+        setVisibleContentGroups({
+          lg: [...contentGroup.groups],
+        });
       }}
     >
-      {contentGroups.lg.map((groupItem, index) => {
+      {visibleContentGroups.lg.map((groupItem, index) => {
+        if (groupItem.hidden) return;
+
         const groups = groupItem.elements?.groupings;
 
         const gridItemWidth =
@@ -158,61 +179,68 @@ export const Grid = () => {
             : "100%";
 
         return (
-          !groupItem.hidden && (
-            <div
-              key={index}
-              data-grid={groupItem}
-              className={`grid-item ${
-                groupItem.static ? "grid-item-static" : undefined
-              }
+          <div
+            key={index}
+            data-grid={groupItem}
+            className={`grid-item ${
+              groupItem.static ? "grid-item-static" : undefined
+            }
               ${isGrabbing ? "grid-item-grabbing" : undefined}`}
+          >
+            <div
+              style={{ width: gridItemWidth }}
+              className={`grid-item-content rotate-${groupItem.rotateDegree}`}
             >
-              <div
-                style={{ width: gridItemWidth }}
-                className={`grid-item-content rotate-${groupItem.rotateDegree}`}
-              >
-                {groups?.map((element, i) => {
-                  return (
-                    <span key={i}>
-                      {element.text && <p>{element.text}</p>}
-                      {element.image && (
-                        <Image
-                          src={element.image.src}
-                          alt="generic-alt"
-                          width={100}
-                          height={100}
-                        />
-                      )}
-                    </span>
-                  );
-                })}
-              </div>
-
-              <div className="grid-item-options">
-                <button onClick={() => handleHideGroup(index)}>
-                  <VisibilityOffOutlined sx={iconSettingSx} />
-                </button>
-
-                <button>
-                  <Rotate90DegreesCwIcon sx={iconSettingSx} />
-                </button>
-
-                <button
-                  onClick={() =>
-                    handleToggleFixedGroup(index, groupItem.static)
-                  }
-                >
-                  {groupItem.static ? (
-                    <PushPinIcon sx={iconSettingSx} />
-                  ) : (
-                    <PushPinOutlinedIcon sx={iconSettingSx} />
-                  )}
-                </button>
-              </div>
+              {groups?.map((element, i) => {
+                return (
+                  <span key={i}>
+                    {element.text && <p>{element.text}</p>}
+                    {element.image && (
+                      <Image
+                        src={element.image.src}
+                        alt="generic-alt"
+                        width={100}
+                        height={100}
+                      />
+                    )}
+                  </span>
+                );
+              })}
             </div>
-          )
+
+            <div className="grid-item-options">
+              <button onClick={() => handleHide(index)} title="Esconder">
+                <VisibilityOffOutlined sx={iconSettingSx} />
+              </button>
+
+              <button
+                title="Girar"
+                onClick={() => {
+                  handleRotate(index);
+                }}
+              >
+                <Rotate90DegreesCwIcon sx={iconSettingSx} />
+              </button>
+
+              <button
+                onClick={() => handleTogglePin(index)}
+                title={groupItem.static ? "Desafixar" : "Fixar"}
+              >
+                {groupItem.static ? (
+                  <PushPinIcon sx={iconSettingSx} />
+                ) : (
+                  <PushPinOutlinedIcon sx={iconSettingSx} />
+                )}
+              </button>
+            </div>
+          </div>
         );
       })}
     </ResponsiveGridLayout>
   );
+};
+
+const iconSettingSx = {
+  fontSize: 14,
+  margin: 0.5,
 };

@@ -7,9 +7,10 @@ export interface AccordionProps {
   title: string;
   buttons?: ButtonHTMLAttributes<HTMLButtonElement>[];
   children: ReactNode;
+  className?: string;
 }
 
-export const Accordion = ({ title, buttons, children }: AccordionProps) => {
+export const Accordion = ({ title, buttons, children, className }: AccordionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const iconSettingSx = {
@@ -24,7 +25,7 @@ export const Accordion = ({ title, buttons, children }: AccordionProps) => {
   );
 
   return (
-    <div className="accordion-item">
+    <div className={`accordion-item ${className}`}>
       <div
         tabIndex={0}
         className="accordion-header"

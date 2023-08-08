@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { Allotment } from "allotment";
 import { Inter } from "next/font/google";
-import { Canvas } from "@/components/Canvas";
 import { Aside } from "@/components/_commons/Aside";
+import { Canvas } from "@/components/_commons/Canvas";
 
 import "allotment/dist/style.css";
 
