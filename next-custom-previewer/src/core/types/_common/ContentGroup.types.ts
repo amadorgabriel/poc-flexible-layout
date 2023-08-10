@@ -1,46 +1,17 @@
 import { StaticImageData } from "next/image";
-import ReactGridLayout from "react-grid-layout";
 
 export type RotateDegreeType = "0" | "90" | "180" | "270" | "360";
 
-export type ContentGroup = {
-  id: number;
-  groups: ContentGroupItem[];
-};
-
-export interface ContentGroupItem extends ReactGridLayout.Layout {
-  // Component key
-  i: string;
-
-  // In grid units, not pixels
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  minW?: number;
-  maxW?: number;
-  minH?: number;
-  maxH?: number;
-  hidden?: boolean;
-
-  rotateDegree?: RotateDegreeType;
-  static?: boolean;
-  isBounded?: boolean;
-  isDraggable?: boolean;
-  isResizable?: boolean;
-  resizeHandles?: Array<"s" | "w" | "e" | "n" | "sw" | "nw" | "se" | "ne">;
-
+export interface ContentGroup {
+  hidden: boolean;
+  rotateDegree: RotateDegreeType;
   elements: {
-    // margin: number
-    // padding: number
     groupName: string;
-    groupings: GroupingElements[];
+    groupings: GroupElement[];
   };
 }
 
-// padding: number
-// margin: number
-type GroupingElements = {
+type GroupElement = {
   text?: string | null;
-  image?: StaticImageData;
+  image?: StaticImageData | null;
 };

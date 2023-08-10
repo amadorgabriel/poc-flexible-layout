@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import { Formik } from "formik";
 import type { AppProps } from "next/app";
-import { labels } from "@/core/mock/label.mock";
+import { labels } from "@/core/mock/labels.mock";
 import { LabelProvider, } from "@/core/contexts/LabelContext";
 
 import "@/styles/globals.css";
@@ -18,7 +18,7 @@ export interface FormikValuesProps {
 }
 
 export default function App({ Component, pageProps }: AppProps) {
-  const container = labels[0].layoutSchema.container;
+  const container = labels[0].diagramationRules.container;
 
   const minWidth = container.dimensions.minWidth;
   const maxWidth = container.dimensions.maxWidth;

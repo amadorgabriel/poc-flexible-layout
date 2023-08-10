@@ -24,16 +24,16 @@ export const ContentGroupAccordion = ({
   hideable = false,
   rotatable = false,
 }: ContentGroupAccordionProps) => {
-  const { contentGroup, setContentGroup } = useLabelContext();
+  const { contentGroups, setContentGroups, layout } = useLabelContext();
   const [isPinned, setIsPinned] = useState(
-    contentGroup.groups[contentGroupId].static
+    layout[contentGroupId].static
   );
   const [isHidden, setIsHidden] = useState(
-    contentGroup.groups[contentGroupId].hidden
+    contentGroups[contentGroupId].hidden
   );
   const [rotateDeg, setRotateDeg] = useState<RotateDegreeType>(() => {
     const defaultValue =
-      contentGroup.groups[contentGroupId].rotateDegree || "0";
+    contentGroups[contentGroupId].rotateDegree || "0";
 
     return defaultValue;
   });
@@ -58,55 +58,55 @@ export const ContentGroupAccordion = ({
   );
 
   function handleRotate() {
-    let groups = contentGroup.groups;
+    // let groups = contentGroup;
 
-    const nextDegree = String(
-      Number(rotateDeg) + 90 === 360 ? 0 : Number(rotateDeg) + 90
-    ) as RotateDegreeType;
+    // const nextDegree = String(
+    //   Number(rotateDeg) + 90 === 360 ? 0 : Number(rotateDeg) + 90
+    // ) as RotateDegreeType;
 
-    groups[contentGroupId] = {
-      ...contentGroup.groups[contentGroupId],
-      rotateDegree: nextDegree,
-    };
+    // groups[contentGroupId] = {
+    //   ...contentGroup.groups[contentGroupId],
+    //   rotateDegree: nextDegree,
+    // };
 
-    setRotateDeg(nextDegree);
+    // setRotateDeg(nextDegree);
 
-    setContentGroup({
-      ...contentGroup,
-      groups,
-    });
+    // setContentGroup({
+    //   ...contentGroup,
+    //   groups,
+    // });
   }
 
   function handleToggleVisibility() {
-    let groups = contentGroup.groups;
+    // let groups = contentGroup.groups;
 
-    groups[contentGroupId] = {
-      ...contentGroup.groups[contentGroupId],
-      hidden: !isHidden,
-    };
+    // groups[contentGroupId] = {
+    //   ...contentGroup.groups[contentGroupId],
+    //   hidden: !isHidden,
+    // };
 
-    setIsHidden(!isHidden);
+    // setIsHidden(!isHidden);
 
-    setContentGroup({
-      ...contentGroup,
-      groups,
-    });
+    // setContentGroup({
+    //   ...contentGroup,
+    //   groups,
+    // });
   }
 
   function handleTogglePin() {
-    let groups = contentGroup.groups;
+    // let groups = contentGroup.groups;
 
-    groups[contentGroupId] = {
-      ...contentGroup.groups[contentGroupId],
-      static: !isPinned,
-    };
+    // groups[contentGroupId] = {
+    //   ...contentGroup.groups[contentGroupId],
+    //   static: !isPinned,
+    // };
 
-    setIsPinned(!isPinned);
+    // setIsPinned(!isPinned);
 
-    setContentGroup({
-      ...contentGroup,
-      groups,
-    });
+    // setContentGroup({
+    //   ...contentGroup,
+    //   groups,
+    // });
   }
 
   function getContentGroupButtons() {

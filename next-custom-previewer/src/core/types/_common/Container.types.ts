@@ -1,4 +1,4 @@
-export type LabelContainerSchema = {
+export type Container = {
   id: number
   name: string;
   position: {
@@ -15,8 +15,8 @@ export type LabelContainerSchema = {
   };
   cols: {
     amount: number;
-    rowGap: number; // px
-    colGap: number; // px
+    rowGap: number; 
+    colGap: number; 
     minCols: number;
   };
   isBlocked?: boolean;

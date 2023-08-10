@@ -1,39 +1,43 @@
-import { createContext, useContext, useState } from "react";
+import { Layout } from "react-grid-layout";
 import { Label } from "../types/Label.types";
-import { labels } from "../mock/label.mock";
+import { labels } from "../mock/labels.mock";
+import { Container } from "../types/_common/Container.types";
+import { createContext, useContext, useState } from "react";
 import { ContentGroup } from "../types/_common/ContentGroup.types";
-import { LabelContainerSchema } from "../types/_common/LabelContainerSchema.types";
 
 interface LabelContextProps {
   children: React.ReactNode;
 }
 
 interface LabelContextProviderProps {
-  container: LabelContainerSchema;
-  setContainer: (container: LabelContainerSchema) => void;
+  container: Container;
+  setContainer: (container: Container) => void;
 
-  contentGroup: ContentGroup;
-  setContentGroup: (layout: ContentGroup) => void;
+  contentGroups: ContentGroup[];
+  setContentGroups: (contentGroups: ContentGroup[]) => void;
+
+  layout: Layout[];
+  setLayout: (layout: Layout[]) => void;
 }
 
 const LabelContext = createContext({} as LabelContextProviderProps);
 
 export const LabelProvider = ({ children }: LabelContextProps) => {
-  const [label, setLabel] = useState<Label>(labels[0]);
-  const [container, setContainer] = useState<LabelContainerSchema>(
-    label.layoutSchema.container
-  );
-  const [contentGroup, setContentGroup] = useState<ContentGroup>(
-    label.layoutSchema.contentGroup
+  const [currLabel, setCurrLabel] = useState<Label>(labels[0]);
+
+  const [container, setContainer] = useState<Container>(
+    currLabel.diagramationRules.container
   );
 
-  function handleUpdateContentGroup(value: ContentGroup) {
-    setContentGroup(value);
-  }
+  const [contentGroups, setContentGroups] = useState<ContentGroup[]>(
+    currLabel.diagramationRules.contentGroups
+  );
 
-  function checkContainerDimensionsRestrictions(
-    value: LabelContainerSchema
-  ): boolean {
+  const [layout, setLayout] = useState<Layout[]>(
+    currLabel.diagramationRules.layout
+  );
+
+  function validateContainerDimensions(value: Container): boolean {
     let validated = true;
 
     // Changed width
@@ -61,22 +65,33 @@ export const LabelProvider = ({ children }: LabelContextProps) => {
     return validated;
   }
 
-  function handleUpdateContainer(value: LabelContainerSchema) {
-    // validity dimentions constaints
-    const valid = checkContainerDimensionsRestrictions(value);
+  function handleUpdateContainer(value: Container) {
+    const valid = validateContainerDimensions(value);
 
     if (!valid) return;
 
-    setContainer(value);
+    setContainer({ ...value });
+  }
+
+  function handleUpdateContentGroups(value: ContentGroup[]) {
+    setContentGroups(value);
+  }
+
+  function handleUpdateLayout(value: Layout[]) {
+    setLayout(value)
   }
 
   return (
     <LabelContext.Provider
       value={{
-        container: container,
+        container,
         setContainer: handleUpdateContainer,
-        contentGroup: contentGroup,
-        setContentGroup: handleUpdateContentGroup,
+
+        contentGroups,
+        setContentGroups: handleUpdateContentGroups,
+
+        layout,
+        setLayout: handleUpdateLayout,
       }}
     >
       {children}

@@ -1,11 +1,8 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
-import { Responsive, WidthProvider } from "react-grid-layout";
+import { Layout, Responsive, WidthProvider } from "react-grid-layout";
 import { useLabelContext } from "@/core/contexts/LabelContext";
-import {
-  ContentGroupItem,
-  RotateDegreeType,
-} from "@/core/types/_common/ContentGroup.types";
+import { RotateDegreeType } from "@/core/types/_common/ContentGroup.types";
 
 import PushPinIcon from "@mui/icons-material/PushPin";
 import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
@@ -17,22 +14,23 @@ import "react-resizable/css/styles.css";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-type ContentGroupLayout = Record<string, ContentGroupItem[]>;
-
 export const Grid = () => {
+  // Encontrar tipo do ResponsiveGridLayout
   const gridRef = useRef<any>(null);
-  const { container, setContainer, contentGroup, setContentGroup } =
-    useLabelContext();
+  const {
+    container,
+    setContainer,
+    contentGroups,
+    setContentGroups,
+    layout,
+    setLayout,
+  } = useLabelContext();
+  const [updateComponent, forceUpdate] = useState(false);
 
   const [isGrabbing, setIsGrabbing] = useState(false);
   const [columnsAmount, setColumnsAmount] = useState<number>(
     container.cols.amount
   );
-
-  const [visibleContentGroups, setVisibleContentGroups] =
-    useState<ContentGroupLayout>({
-      lg: contentGroup.groups,
-    });
 
   function updateContainerDimensions() {
     const gridHeight = gridRef.current?.elementRef.current.clientHeight;
@@ -48,10 +46,10 @@ export const Grid = () => {
     });
   }
 
-  const rowHeight = () => {
+  const getRowHeight = () => {
     let rowsQty = 1;
 
-    contentGroup.groups.map((item, i) => {
+    layout.map((item, i) => {
       const currRowQty = item.y + item.h;
 
       if (i === 0) {
@@ -63,59 +61,84 @@ export const Grid = () => {
     });
 
     const sumBetweenYGaps = (rowsQty + 1) * container.cols.rowGap;
-    const rowHeight = (container.dimensions.height - sumBetweenYGaps) / rowsQty;
+    const currRowHeight =
+      (container.dimensions.height - sumBetweenYGaps) / rowsQty;
 
-    return rowHeight;
+    return currRowHeight;
   };
 
-  function handleRotate(index: number) {
-    let groups = contentGroup.groups;
-    const currRotateDeg = contentGroup.groups[index].rotateDegree || "0";
+  function handleHide(contentGroupIndex: number) {
+    const newContentGroups = contentGroups.map((group, index) => {
+      if (contentGroupIndex === index) {
+        return {
+          ...group,
+          hidden: true,
+        };
+      }
 
-    const nextDegree = String(
-      Number(currRotateDeg) + 90 === 360 ? 0 : Number(currRotateDeg) + 90
+      return group;
+    });
+
+    setContentGroups(newContentGroups);
+  }
+
+  function handleRotate(contentGroupIndex: number) {
+    let newContentGroups = contentGroups;
+
+    const currRotateDegree =
+      contentGroups[contentGroupIndex].rotateDegree || "0";
+
+    const nextDegree =
+      Number(currRotateDegree) + 90 === 360 ? 0 : Number(currRotateDegree) + 90;
+
+    newContentGroups[contentGroupIndex].rotateDegree = String(
+      nextDegree
     ) as RotateDegreeType;
 
-    groups[index] = {
-      ...contentGroup.groups[index],
-      rotateDegree: nextDegree,
-    };
+    setContentGroups(newContentGroups);
+    
+    forceUpdate((prev) => !prev);
 
-    setContentGroup({
-      ...contentGroup,
-      groups,
-    });
   }
 
-  function handleHide(index: number) {
-    if (typeof index === "undefined") return;
+  function handleTogglePin(layoutIndex: number) {
+    const newLayout = layout.map((currLayout, index) => {
+      if (layoutIndex === index) {
+        return {
+          ...currLayout,
+          static: !currLayout.static,
+        };
+      }
 
-    let groups = contentGroup.groups;
-
-    groups[index] = {
-      ...contentGroup.groups[index],
-      hidden: true,
-    };
-
-    setContentGroup({
-      ...contentGroup,
-      groups,
+      return currLayout;
     });
+
+    setLayout(newLayout);
   }
 
-  function handleTogglePin(index: number) {
-    let groups = contentGroup.groups;
+  // function sanitizeLayoutSchema(contentGroup: ContentGroupItem[]): Layouts {
+  //   const layouts: Layout[] = contentGroup?.map((group) => {
+  //     return {
+  //       i: group.i,
+  //       y: group.y,
+  //       x: group.x,
+  //       w: group.w,
+  //       h: group.h,
+  //       minW: group.minW,
+  //       maxW: group.maxW,
+  //       minH: group.minH,
+  //       maxH: group.maxH,
+  //       moved: group.moved,
+  //       static: group.static,
+  //       isDraggable: group.isDraggable,
+  //       isResizable: group.isResizable,
+  //       resizeHandles: group.resizeHandles,
+  //       isBounded: group.isBounded,
+  //     };
+  //   });
 
-    groups[index] = {
-      ...contentGroup.groups[index],
-      static: !contentGroup.groups[index].static,
-    };
-
-    setContentGroup({
-      ...contentGroup,
-      groups,
-    });
-  }
+  //   return { lg: layouts };
+  // }
 
   useEffect(() => {
     // update when cols changes
@@ -126,15 +149,15 @@ export const Grid = () => {
 
   // update layout
   useEffect(() => {
-    setVisibleContentGroups({ lg: [...contentGroup.groups] });
+    forceUpdate((prev) => !prev);
 
     // update container dimensions
-  }, [contentGroup]);
+  }, [updateComponent, container, layout]);
 
   return (
     <ResponsiveGridLayout
       ref={gridRef}
-      layouts={visibleContentGroups}
+      layouts={{ lg: layout }}
       isBounded
       compactType={"vertical"}
       preventCollision={false}
@@ -160,36 +183,47 @@ export const Grid = () => {
         setIsGrabbing(false);
         updateContainerDimensions();
       }}
-      onLayoutChange={(layout) => {
-        updateContainerDimensions();
+      onLayoutChange={(currLayout, allLayouts) => {
+        console.log("test");
 
-        setVisibleContentGroups({
-          lg: [...contentGroup.groups],
-        });
+        // const layout = [
+        //   ...currLayout,
+        //   ...layoutSchema.lg,
+        // ] as ContentGroupItem[];
+
+        // setLayoutSchema({
+        //   lg: layout,
+        // });
+
+        // setLayoutSchema({
+        //   lg: { ...(layout as ContentGroupItem[]) },
+        // });
       }}
     >
-      {visibleContentGroups.lg.map((groupItem, index) => {
-        if (groupItem.hidden) return;
+      {contentGroups.map((group, index) => {
+        if (group.hidden) return;
 
-        const groups = groupItem.elements?.groupings;
+        const groups = group.elements?.groupings;
 
         const gridItemWidth =
-          groupItem.rotateDegree === "90" || groupItem.rotateDegree === "270"
-            ? `${rowHeight()}px`
+          group.rotateDegree === "90" || group.rotateDegree === "270"
+            ? `${getRowHeight()}px`
             : "100%";
 
         return (
           <div
             key={index}
-            data-grid={groupItem}
+            data-grid={group}
             className={`grid-item ${
-              groupItem.static ? "grid-item-static" : undefined
+              layout[index].static ? "grid-item-static" : undefined
             }
               ${isGrabbing ? "grid-item-grabbing" : undefined}`}
           >
             <div
               style={{ width: gridItemWidth }}
-              className={`grid-item-content rotate-${groupItem.rotateDegree}`}
+              className={`grid-item-content rotate-${
+                group.rotateDegree || "0"
+              }`}
             >
               {groups?.map((element, i) => {
                 return (
@@ -224,9 +258,9 @@ export const Grid = () => {
 
               <button
                 onClick={() => handleTogglePin(index)}
-                title={groupItem.static ? "Desafixar" : "Fixar"}
+                title={layout[index].static ? "Desafixar" : "Fixar"}
               >
-                {groupItem.static ? (
+                {layout[index].static ? (
                   <PushPinIcon sx={iconSettingSx} />
                 ) : (
                   <PushPinOutlinedIcon sx={iconSettingSx} />

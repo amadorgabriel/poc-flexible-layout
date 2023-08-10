@@ -1,7 +1,8 @@
-import { StaticImageData } from "next/image";
 import { Company } from "./Company.types";
+import { Layout } from "react-grid-layout";
+import { StaticImageData } from "next/image";
+import { Container } from "./_common/Container.types";
 import { ContentGroup } from "./_common/ContentGroup.types";
-import { LabelContainerSchema } from "./_common/LabelContainerSchema.types";
 
 // legislation: null;
 // labelTemplate?: LabelModel;
@@ -9,19 +10,18 @@ import { LabelContainerSchema } from "./_common/LabelContainerSchema.types";
 export type Label = {
   id: number;
   name: string;
-  description: string;
+  color?: string;
+  size: string;
 
-  companies: Company[];
-
+  company: Company;
   compositions: string[];
-
-  size: "PP" | "P" | "M" | "G" | "GG";
-
+  responsibleNifs?: Array<string[]>;
   conservationSymbols: StaticImageData[];
 
   //regras de diagramação
-  layoutSchema: {
-    container: LabelContainerSchema;
-    contentGroup: ContentGroup;
+  diagramationRules: {
+    layout: Layout[];
+    container: Container;
+    contentGroups: ContentGroup[];
   };
 };
