@@ -1,6 +1,5 @@
 import { ButtonHTMLAttributes, useState } from "react";
 import { useLabelContext } from "@/core/contexts/LabelContext";
-import { RotateDegreeType } from "@/core/types/_common/ContentGroup.types";
 import { Accordion, AccordionProps } from "@/components/_commons/Accordion";
 
 import PushPinIcon from "@mui/icons-material/PushPin";
@@ -24,20 +23,6 @@ export const ContentGroupAccordion = ({
   hideable = false,
   rotatable = false,
 }: ContentGroupAccordionProps) => {
-  const { contentGroups, setContentGroups, layout } = useLabelContext();
-  const [isPinned, setIsPinned] = useState(
-    layout[contentGroupId].static
-  );
-  const [isHidden, setIsHidden] = useState(
-    contentGroups[contentGroupId].hidden
-  );
-  const [rotateDeg, setRotateDeg] = useState<RotateDegreeType>(() => {
-    const defaultValue =
-    contentGroups[contentGroupId].rotateDegree || "0";
-
-    return defaultValue;
-  });
-
   const iconSettingSx = {
     fontSize: 14,
     margin: 0.5,
@@ -45,93 +30,29 @@ export const ContentGroupAccordion = ({
 
   const rotateIcon = <Rotate90DegreesCwIcon sx={iconSettingSx} />;
 
-  const pinIcon = isPinned ? (
-    <PushPinIcon sx={iconSettingSx} />
-  ) : (
-    <PushPinOutlinedIcon sx={iconSettingSx} />
-  );
-
-  const visibleIcon = isHidden ? (
-    <VisibilityOffOutlinedIcon sx={iconSettingSx} />
-  ) : (
-    <VisibilityOutlinedIcon sx={iconSettingSx} />
-  );
-
-  function handleRotate() {
-    // let groups = contentGroup;
-
-    // const nextDegree = String(
-    //   Number(rotateDeg) + 90 === 360 ? 0 : Number(rotateDeg) + 90
-    // ) as RotateDegreeType;
-
-    // groups[contentGroupId] = {
-    //   ...contentGroup.groups[contentGroupId],
-    //   rotateDegree: nextDegree,
-    // };
-
-    // setRotateDeg(nextDegree);
-
-    // setContentGroup({
-    //   ...contentGroup,
-    //   groups,
-    // });
-  }
-
-  function handleToggleVisibility() {
-    // let groups = contentGroup.groups;
-
-    // groups[contentGroupId] = {
-    //   ...contentGroup.groups[contentGroupId],
-    //   hidden: !isHidden,
-    // };
-
-    // setIsHidden(!isHidden);
-
-    // setContentGroup({
-    //   ...contentGroup,
-    //   groups,
-    // });
-  }
-
-  function handleTogglePin() {
-    // let groups = contentGroup.groups;
-
-    // groups[contentGroupId] = {
-    //   ...contentGroup.groups[contentGroupId],
-    //   static: !isPinned,
-    // };
-
-    // setIsPinned(!isPinned);
-
-    // setContentGroup({
-    //   ...contentGroup,
-    //   groups,
-    // });
-  }
-
   function getContentGroupButtons() {
     const buttons = [] as ButtonHTMLAttributes<HTMLButtonElement>[];
 
-    pinable &&
-      buttons.push({
-        onClick: handleTogglePin,
-        children: pinIcon,
-        title: isPinned ? "Desafixar" : "Fixar",
-      });
+    // pinable &&
+    //   buttons.push({
+    //     onClick: () => {},
+    //     children: pinIcon,
+    //     title: isPinned ? "Desafixar" : "Fixar",
+    //   });
 
     rotatable &&
       buttons.push({
-        onClick: handleRotate,
+        onClick: () => {},
         children: rotateIcon,
         title: "Girar",
       });
 
-    hideable &&
-      buttons.push({
-        onClick: handleToggleVisibility,
-        children: visibleIcon,
-        title: isHidden ? "Mostrar" : "Esconder",
-      });
+    // hideable &&
+    //   buttons.push({
+    //     onClick: () => {},
+    //     children: visibleIcon,
+    //     title: isHidden ? "Mostrar" : "Esconder",
+    //   });
 
     return buttons;
   }
@@ -140,7 +61,6 @@ export const ContentGroupAccordion = ({
     <Accordion
       title={title}
       buttons={getContentGroupButtons()}
-      className={isHidden ? "content-group-hidden" : ""}
     >
       {children}
     </Accordion>
