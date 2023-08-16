@@ -5,6 +5,7 @@ import logoEtiquetaCerta from "@/assets/img/label0/logo.png";
 export const labels: Label[] = [
   {
     id: 0,
+    legislationsId: [0, 1],
     name: "Etiqueta Certa - Etiqueta",
     color: "Azul",
     company: {
@@ -13,7 +14,7 @@ export const labels: Label[] = [
     },
     compositions: ["96% Poliéster", "4% Elastano", "100% Algodão"],
     diagramation: {
-      pagesId: [0],
+      pagesId: [0, 1],
       contentGroupsId: [0, 1, 2],
     },
   },

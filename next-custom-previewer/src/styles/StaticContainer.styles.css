@@ -2,12 +2,80 @@
   background: #9bc4e2;
   border: 1px solid black;
 
-  position: sticky;
-  top: 15%;
-  left: 30%;
+  transition: 0.2s ease;
+  position: relative;
+}
+
+.static-container:not(:first-child)::after {
+  content: "";
+  width: 2px;
+  height: calc(100% + 50px);
+  position: absolute;
+  top: -25px;
+  left: -17px;
+  background-image: radial-gradient(circle, #a8a6a6 2px, transparent 2px);
+  background-size: 4px 12px;
+}
+
+.static-container::not(:first-child)::before {
+  content: "";
+  width: 100%;
+  height: calc(100% + 16px);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: #bab8b8;
+  z-index: -1;
 }
 
 .static-container .react-grid-layout {
   height: inherit;
   width: inherit;
+}
+
+.static-container:hover button {
+  display: flex;
+}
+
+.add-right-button {
+  display: none;
+  height: 100%;
+  width: 12px;
+
+  top: 0;
+  font-size: 18px;
+  position: absolute;
+}
+
+.add-right-button::before {
+  content: "";
+  height: 100%;
+  border: 6px solid transparent;
+  
+  position: absolute;
+  left: -6px;
+}
+
+.remove-top-button {
+  display: none;
+  height: 12px;
+  width: 100%;
+
+  padding: 8px;
+  line-height: 2;
+  font-size: 18px;
+
+  top: 0;
+  position: absolute;
+}
+
+.remove-top-button::after {
+  content: "";
+  width: 100%;
+  border-bottom: 10px solid transparent;
+
+  position: absolute;
+  bottom: -6px;
 }

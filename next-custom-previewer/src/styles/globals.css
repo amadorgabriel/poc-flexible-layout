@@ -55,6 +55,26 @@ main {
   width: 100vw;
 }
 
+button {
+  color: #393939;
+  background-color: #ccc;
+  padding: 4px 8px;
+  border: none;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  transition: 0.2s ease;
+
+  border-radius: 2px;
+}
+
+button:hover {
+  background-color: #b4b4b4;
+}
+
 .droppable-element {
   width: 200px;
   text-align: center;
@@ -63,4 +83,3 @@ main {
   margin: 10px 0;
   padding: 10px;
 }
-

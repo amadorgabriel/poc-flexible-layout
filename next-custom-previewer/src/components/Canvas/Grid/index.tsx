@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Page } from "@/core/types/Page.types";
-import { Responsive, WidthProvider } from "react-grid-layout";
+import { Layout, Responsive, WidthProvider } from "react-grid-layout";
 import { ContentGroup } from "@/core/types/ContentGroup.types";
 import { useState, useEffect, useRef, useCallback } from "react";
 
@@ -31,11 +31,18 @@ export const Grid = ({ page, contentGroups }: GridProps) => {
     return layout;
   };
 
+  const handleDropContentGroup = (newLayout: Layout[], layoutItem: Layout) => {
+    const droppedContentGroup = {
+      ...layoutItem,
+    };
+  };
+
   return (
     <ResponsiveGridLayout
       ref={gridRef}
       layouts={{ lg: getCurrPageLayout() }}
-      isBounded
+      // isBounded
+      isDroppable
       compactType={"vertical"}
       preventCollision={false}
       cols={{
@@ -51,6 +58,9 @@ export const Grid = ({ page, contentGroups }: GridProps) => {
       onDrag={() => {
         setIsGrabbing(true);
       }}
+      onDrop={(layout, layoutItem, event) => {
+        handleDropContentGroup(layout, layoutItem);
+      }}
       onDragStop={() => {
         setIsGrabbing(false);
       }}
@@ -62,6 +72,7 @@ export const Grid = ({ page, contentGroups }: GridProps) => {
         return (
           <div
             key={index}
+            draggable={!content.layout.static}
             data-grid={content.layout}
             className={`grid-item ${
               content.layout.static ? "grid-item-static" : undefined

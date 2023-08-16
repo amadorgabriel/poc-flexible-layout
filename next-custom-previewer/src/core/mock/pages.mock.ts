@@ -7,10 +7,34 @@ export const pages: Page[] = [
     name: "Página 1",
     dimensions: {
       width: 300,
-      height: 250
+      height: 250,
     },
     cols: {
-      amount: 1
+      amount: 1,
+    },
+  },
+  {
+    id: 1,
+    labelId: 0,
+    name: "Página 2",
+    dimensions: {
+      width: 300,
+      height: 250,
+    },
+    cols: {
+      amount: 1,
+    },
+  },
+  {
+    id: 2,
+    labelId: 1,
+    name: "Página 1",
+    dimensions: {
+      width: 300,
+      height: 250,
+    },
+    cols: {
+      amount: 1,
     },
   },
 ];

@@ -2,6 +2,8 @@ import { StaticImageData } from "next/image";
 
 export type Label = {
   id: number;
+  legislationsId: Array<number>;
+
   name: string;
   color: string;
   compositions: string[];

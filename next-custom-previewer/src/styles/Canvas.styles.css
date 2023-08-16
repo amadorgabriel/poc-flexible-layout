@@ -1,4 +1,9 @@
 .canvas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 30px;
+
   height: calc(100vh - 40px);
   position: relative;
   margin: 20px;
@@ -7,6 +12,14 @@
   background-size: 10px 10px;
 
   font-size: 14px !important;
+}
+
+.canvas > .static-container {
+  margin-top: -200px;
+}
+
+.canvas > button {
+  transition: 0.2s ease;
 }
 
 .grid-item {

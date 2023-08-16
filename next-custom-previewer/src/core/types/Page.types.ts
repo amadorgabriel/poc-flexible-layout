@@ -5,6 +5,8 @@ export type Page = {
   dimensions: {
     width: number;
     height: number;
+    minW?: number;
+    maxW?: number;
   };
   cols: {
     amount: number;
