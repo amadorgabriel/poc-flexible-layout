@@ -1,18 +1,14 @@
 import Image from "next/image";
+import { useState, useRef } from "react";
 import { Page } from "@/core/types/Page.types";
-import { Layout, Responsive, WidthProvider } from "react-grid-layout";
 import { ContentGroup } from "@/core/types/ContentGroup.types";
-import { useState, useEffect, useRef, useCallback } from "react";
-
-import PushPinIcon from "@mui/icons-material/PushPin";
-import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
-import Rotate90DegreesCwIcon from "@mui/icons-material/Rotate90DegreesCw";
-import VisibilityOffOutlined from "@mui/icons-material/VisibilityOffOutlined";
+import { Layout, Responsive, WidthProvider } from "react-grid-layout";
 
 import "react-resizable/css/styles.css";
 import "react-grid-layout/css/styles.css";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
+const GLOBAL_BREAKPOINTS = 12000;
 
 interface GridProps {
   page: Page;
@@ -37,14 +33,35 @@ export const Grid = ({ page, contentGroups }: GridProps) => {
     };
   };
 
+  // const getRowHeight = () => {
+  //   let rowsQty = 1;
+
+  //   contentGroup.groups.map((item, i) => {
+  //     const currRowQty = item.y + item.h;
+
+  //     if (i === 0) {
+  //   });
+
+  //   const sumBetweenYGaps = (rowsQty + 1) * container.cols.rowGap;
+  //   const rowHeight = (container.dimensions.height - sumBetweenYGaps) / rowsQty;
+
+  //   return rowHeight;
+  // };
+
   return (
     <ResponsiveGridLayout
       ref={gridRef}
-      layouts={{ lg: getCurrPageLayout() }}
-      // isBounded
-      isDroppable
       compactType={"vertical"}
-      preventCollision={false}
+      layouts={{ lg: getCurrPageLayout() }}
+      isDroppable
+      rowHeight={30}
+      breakpoints={{
+        lg: GLOBAL_BREAKPOINTS,
+        md: GLOBAL_BREAKPOINTS,
+        sm: GLOBAL_BREAKPOINTS,
+        xs: GLOBAL_BREAKPOINTS,
+        xxs: GLOBAL_BREAKPOINTS,
+      }}
       cols={{
         lg: 1,
         md: 1,
@@ -52,19 +69,15 @@ export const Grid = ({ page, contentGroups }: GridProps) => {
         xs: 1,
         xxs: 1,
       }}
-      breakpoints={{ lg: 12000, md: 12000, sm: 12000, xs: 12000, xxs: 12000 }}
-      onResize={() => {}}
-      onResizeStop={() => {}}
       onDrag={() => {
         setIsGrabbing(true);
-      }}
-      onDrop={(layout, layoutItem, event) => {
-        handleDropContentGroup(layout, layoutItem);
       }}
       onDragStop={() => {
         setIsGrabbing(false);
       }}
-      onLayoutChange={() => {}}
+      onDrop={(layout, layoutItem, event) => {
+        handleDropContentGroup(layout, layoutItem);
+      }}
     >
       {contentGroups.map((content, index) => {
         const childs = content.children.elements;
@@ -79,9 +92,7 @@ export const Grid = ({ page, contentGroups }: GridProps) => {
             }
               ${isGrabbing ? "grid-item-grabbing" : undefined}`}
           >
-            <div
-              className={`grid-item-content rotate-${content.rotateDeg || "0"}`}
-            >
+            <div className={`grid-item-content`}>
               {childs?.map((element, i) => {
                 return (
                   <span key={i}>

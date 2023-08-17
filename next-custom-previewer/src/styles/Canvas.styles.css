@@ -1,12 +1,10 @@
 .canvas {
   position: relative;
-  
   height: 100vh;
-  font-size: 14px !important;
-  margin-bottom: 16px;
-  
-  border: 1px solid black;
+  width: 100%;
+
   background: #f0f0f0;
+  font-size: 14px !important;
 }
 
 .infinite-viewer {
@@ -19,26 +17,23 @@
 
 .viewport {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  column-gap: 30px;
-  height: 100%;
-
-  margin-top: -100px;
+  position: absolute;
 }
 
 .viewport > button {
   transition: 0.2s ease;
 }
 
+.infinite-viewer-scroll-thumb {
+  background-color: #9f9f9f !important;
+}
+
 .grid-item {
+  cursor: grab;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: grab;
-
-  border: 2px dashed #b4b4b4;
-  background-color: #c4dfb8;
+  background-color: #c4dfb886;
 }
 
 .grid-item-grabbing {
@@ -49,7 +44,7 @@
   background: repeating-radial-gradient(
     100000px 10000px at 103000px 54000px,
     #b4b4b4 0 0.0001%,
-    #c4dfb8 0 0.002%
+    #c4dfb886 0 0.002%
   );
   cursor: not-allowed !important;
 }

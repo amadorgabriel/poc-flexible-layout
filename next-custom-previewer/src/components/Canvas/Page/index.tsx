@@ -13,8 +13,7 @@ interface PageProps {
 }
 
 export const Page = ({ page, pageContentGroups, hasAddBtn }: PageProps) => {
-  const { pages, setPages, setContentGroups } =
-    useLabelContext();
+  const { pages, setPages, setContentGroups } = useLabelContext();
 
   const pageW = page.dimensions.width;
   const pageH = page.dimensions.height;
@@ -49,6 +48,11 @@ export const Page = ({ page, pageContentGroups, hasAddBtn }: PageProps) => {
         height: pageH,
       }}
     >
+      <span className="scissor-dashed">
+        {/* <p>✂</p> */}
+        <hr></hr>
+      </span>
+
       <Grid page={page} contentGroups={pageContentGroups} />
 
       <button

@@ -1,22 +1,42 @@
-import React, { ChangeEvent } from "react";
-import { Form, useFormikContext } from "formik";
-import { FormikValuesProps } from "@/pages/_app";
+import React from "react";
+import { Form } from "formik";
 
-import { Input } from "@/components/_commons/Input";
-import { Accordion } from "@/components/_commons/Accordion";
 import { useLabelContext } from "@/core/contexts/LabelContext";
 import { ContentGroupAccordion } from "@/components/EditorAside/ContentGroupAccordion";
 
 export const Aside = () => {
-  const { pages, contentGroups } = useLabelContext();
-  const { values, setFieldValue, errors, touched } =
-    useFormikContext<FormikValuesProps>();
+  const { contentGroups } = useLabelContext();
 
   return (
     <aside className="aside-container">
       <h2>Editor</h2>
 
       <div className="aside-content">
+        <section className="aside-section">
+          <h4>Legislação selecionada:</h4>
+
+          <div>
+            <button>Brasil</button>
+            <button>Mercosul</button>
+          </div>
+        </section>
+
+        {/* Legenda */}
+        <section className="aside-section">
+          <h4>Legenda:</h4>
+
+          <div>
+            <span>
+              <span className="color-square green-square" />
+              <p>Grupo de conteúdo</p>
+            </span>
+            <span>
+              <span className="color-square white-square" />
+              <p>Página da etiqueta</p>
+            </span>
+          </div>
+        </section>
+
         <Form onSubmit={() => {}}>
           {/* <Accordion title={container.name}>
             <Input.Text

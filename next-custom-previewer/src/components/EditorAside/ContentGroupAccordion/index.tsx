@@ -1,12 +1,7 @@
 import { ButtonHTMLAttributes, useState } from "react";
-import { useLabelContext } from "@/core/contexts/LabelContext";
 import { Accordion, AccordionProps } from "@/components/_commons/Accordion";
 
-import PushPinIcon from "@mui/icons-material/PushPin";
-import PushPinOutlinedIcon from "@mui/icons-material/PushPinOutlined";
 import Rotate90DegreesCwIcon from "@mui/icons-material/Rotate90DegreesCw";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 
 interface ContentGroupAccordionProps extends AccordionProps {
   contentGroupId: number;
@@ -58,10 +53,7 @@ export const ContentGroupAccordion = ({
   }
 
   return (
-    <Accordion
-      title={title}
-      buttons={getContentGroupButtons()}
-    >
+    <Accordion title={title} buttons={getContentGroupButtons()}>
       {children}
     </Accordion>
   );

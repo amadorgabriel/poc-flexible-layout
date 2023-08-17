@@ -17,6 +17,44 @@
   width: 100%;
 }
 
+.aside-content .aside-section,
+.aside-content .aside-section div {
+  display: block;
+  width: 100%;
+}
+
+.aside-content .aside-section div > span{ 
+  width: 100%;
+  margin-bottom: 8px;
+
+  display: flex;
+  align-items: center;
+}
+
+.aside-content .green-square {
+  width: 20px;
+  height: 20px;
+
+  margin-right: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+
+  color: #c4dfb886;
+  background-color: #c4dfb886 ;
+}
+
+.aside-content .white-square {
+  width: 20px;
+  height: 20px;
+
+  margin-right: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+
+  color: whitesmoke;
+  background-color: whitesmoke;
+}
+
 .aside-footer {
   display: flex;
   margin-top: 0.75rem;
