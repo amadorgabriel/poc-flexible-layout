@@ -1,33 +1,9 @@
 .static-container {
-  background: #9bc4e2;
-  border: 1px solid black;
-
-  transition: 0.2s ease;
   position: relative;
-}
-
-.static-container:not(:first-child)::after {
-  content: "";
-  width: 2px;
-  height: calc(100% + 50px);
-  position: absolute;
-  top: -25px;
-  left: -17px;
-  background-image: radial-gradient(circle, #a8a6a6 2px, transparent 2px);
-  background-size: 4px 12px;
-}
-
-.static-container::not(:first-child)::before {
-  content: "";
-  width: 100%;
-  height: calc(100% + 16px);
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  background-color: #bab8b8;
-  z-index: -1;
+  
+  transition: 0.2s ease;
+  border: 1px solid black;
+  background: #9bc4e2;
 }
 
 .static-container .react-grid-layout {
@@ -53,7 +29,7 @@
   content: "";
   height: 100%;
   border: 6px solid transparent;
-  
+
   position: absolute;
   left: -6px;
 }
