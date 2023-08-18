@@ -49,11 +49,10 @@ export const Page = ({ page, pageContentGroups, hasAddBtn }: PageProps) => {
       }}
     >
       <span className="scissor-dashed">
-        {/* <p>✂</p> */}
         <hr></hr>
       </span>
 
-      <Grid page={page} contentGroups={pageContentGroups} />
+      <Grid page={page} pageContentGroups={pageContentGroups} />
 
       <button
         style={{

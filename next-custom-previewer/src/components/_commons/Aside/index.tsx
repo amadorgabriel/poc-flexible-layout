@@ -1,46 +1,65 @@
 import React from "react";
 import { Form } from "formik";
-
+import FormatShapesIcon from "@mui/icons-material/FormatShapes";
 import { useLabelContext } from "@/core/contexts/LabelContext";
-import { ContentGroupAccordion } from "@/components/EditorAside/ContentGroupAccordion";
+import { ContentGroupAccordion } from "@/components/Aside/ContentGroupAccordion";
 
 export const Aside = () => {
   const { contentGroups } = useLabelContext();
 
   return (
     <aside className="aside-container">
-      <h2>Editor</h2>
+      <header>
+        <FormatShapesIcon />
+        <h2>Editor</h2>
+      </header>
 
-      <div className="aside-content">
-        <section className="aside-section">
-          <h4>Legislação selecionada:</h4>
+      <hr></hr>
 
-          <div>
-            <button>Brasil</button>
-            <button>Mercosul</button>
-          </div>
-        </section>
+      <main className="aside-content">
+        <section>
+          {/* Legislação */}
+          <section className="aside-section aside-legislation">
+            <h4>Vizualizar legislação:</h4>
 
-        {/* Legenda */}
-        <section className="aside-section">
-          <h4>Legenda:</h4>
+            <div>
+              <button className="active">Brasil</button>
+              <button>Mercosul</button>
+              <button>Argentina</button>
+            </div>
+          </section>
 
-          <div>
-            <span>
-              <span className="color-square green-square" />
-              <p>Grupo de conteúdo</p>
-            </span>
-            <span>
-              <span className="color-square white-square" />
-              <p>Página da etiqueta</p>
-            </span>
-          </div>
+          {/* Legislação */}
+          <section className="aside-section aside-legislation">
+            <h4>Modo de vizualização da etiqueta:</h4>
+
+            <div>
+              <button>Única</button>
+              <button className="active">Múltipla</button>
+            </div>
+          </section>
+
+          {/* Legenda */}
+          <section className="aside-section">
+            <h4>Legenda:</h4>
+
+            <div>
+              <span>
+                <span className="color-square green-square" />
+                <p>Grupo de conteúdo</p>
+              </span>
+              <span>
+                <span className="color-square white-square" />
+                <p>Página da etiqueta</p>
+              </span>
+            </div>
+          </section>
         </section>
 
         <Form onSubmit={() => {}}>
           {/* <Accordion title={container.name}>
             <Input.Text
-              id="width"
+            id="width"
               label="Largura (px)"
               type="number"
               placeholder="Insira um valor"
@@ -200,7 +219,7 @@ export const Aside = () => {
             ))}
           </div>
         </Form>
-      </div>
+      </main>
     </aside>
   );
 };

@@ -5,6 +5,26 @@
   background-color: var(--card-background-color);
 }
 
+.aside-container header {
+  display: flex;
+  gap: 10px;
+}
+.aside-container header h2{
+  margin-bottom: 10px;
+}
+
+.aside-container main {
+  border: 0;
+  box-shadow: none;
+}
+
+.aside-container hr {
+  color: transparent;
+  border: 0;
+  border-bottom: 1px solid #e8e8e8;
+  margin-bottom: 0px;
+}
+
 .aside-container h2 {
   margin-bottom: 1rem;
 }
@@ -17,18 +37,52 @@
   width: 100%;
 }
 
+.aside-content > section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.aside-content > section h4 {
+  margin-top: 1.12rem;
+}
+
 .aside-content .aside-section,
 .aside-content .aside-section div {
   display: block;
   width: 100%;
 }
 
-.aside-content .aside-section div > span{ 
+.aside-content .aside-section div > span {
   width: 100%;
   margin-bottom: 8px;
 
   display: flex;
   align-items: center;
+}
+
+.aside-content .aside-legislation div {
+  display: flex;
+  gap: 10px;
+}
+
+.aside-content .aside-legislation button {
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 2px;
+
+  background-color: transparent;
+  border: 2px solid rgba(196, 196, 196, 0.4);
+  background-color: rgba(183, 183, 183, 0.1);
+}
+.aside-content .aside-legislation button:hover {
+  background-color: rgb(255, 0, 204, 0.1);
+  border: 2px solid rgb(255, 0, 204, 0.4);
+}
+
+.aside-content .aside-legislation button.active {
+  background-color: rgb(255, 0, 204, 0.1);
+  border: 2px solid rgb(255, 0, 204, 0.4);
+  border-color: rgb(255, 0, 204, 0.4);
 }
 
 .aside-content .green-square {
@@ -40,7 +94,7 @@
   border: 1px solid #ccc;
 
   color: #c4dfb886;
-  background-color: #c4dfb886 ;
+  background-color: #c4dfb886;
 }
 
 .aside-content .white-square {
