@@ -1,59 +1,129 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
 
-import { BasicCanvas } from "./Basic";
 import { AdvancedCanvas } from "./Advanced";
-import { IEditorMode } from "@/presentation/context/EditorContext/index.types";
+import { LabelAside } from "../Aside";
+import { ZoomIn, ZoomOut } from "lucide-react";
+import { BasicGrid } from "./Basic/Label/Grid";
+import { Container, LabelData } from "@/core/types";
+import { createGridItemsFromData } from "@/core/data/adapters/label.adapter";
+import { TaskAside } from "../Aside/TaskAside";
+
+const labelData: LabelData = {
+  empresa: {
+    nome: "Etiqueta Certa",
+    cnpj: "22.949.494/0001-98",
+    origem: {
+      portugues: "Feito no Brasil",
+      ingles: "Made in Brazil",
+      espanhol: "Hecho en Brasil",
+      frances: "Fabriqué en Brésil",
+    },
+  },
+  codigo: "34/0",
+  composicao: {
+    tecido: {
+      portugues: "100% Algodão",
+      ingles: "100% Cotton",
+      espanhol: "100% Algodón",
+      frances: "100% Coton",
+    },
+    forro: {
+      portugues: "100% Poliéster",
+      ingles: "100% Polyester",
+      espanhol: "100% Poliéster",
+      frances: "100% Polyester",
+    },
+  },
+  instrucoes_de_lavagem: {
+    lavagem: "Machine wash, warm, 40 °C (105 °F), normal cycle",
+    alvejante: "Do not bleach",
+    secagem: ["Tumble dry, low", "Line dry in the shade"],
+    passar: "Iron, low",
+    limpeza_a_seco: "Do not dryclean",
+  },
+};
 
 const Canvas = () => {
-  const { mode, onChangeMode } = useEditor();
+  const { mode } = useEditor();
 
-  const _onChangeMode = (value: IEditorMode) => {
-    onChangeMode(value);
+  const [zoom, setZoom] = useState(100);
+  const [containers, setContainers] = useState<Container[]>([
+    {
+      id: "1",
+      settings: {
+        width: 10,
+        height: 15,
+        itemSpacing: 0.5,
+        lineHeight: 1,
+        margin: 0,
+      },
+      items: createGridItemsFromData(labelData),
+    },
+  ]);
+
+  const handleZoomIn = () => {
+    setZoom((prev) => Math.min(prev + 10, 150));
+  };
+
+  const handleZoomOut = () => {
+    setZoom((prev) => Math.max(prev - 10, 50));
   };
 
   return (
-    <div className="h-screen grid gap-4 grid-cols-5 p-4">
-      <div className="col-span-4 flex items-center justify-center">
-        {mode === "basic" ? <BasicCanvas /> : <AdvancedCanvas />}
+    <div className="relative w-full h-full">
+      <div className="col-span-4 flex items-center justify-center w-full h-full">
+        <div
+          className="p-8 transition-transform duration-200"
+          style={{
+            transform: `scale(${zoom / 100})`,
+            transformOrigin: "top left",
+          }}
+        >
+          {mode === "basic" ? (
+            containers.map((container) => (
+              <BasicGrid
+                key={container.id}
+                id={container.id}
+                settings={container.settings}
+                items={container.items}
+              />
+            ))
+          ) : (
+            <AdvancedCanvas />
+          )}
+        </div>
       </div>
 
-      <aside className="col-span-1 border border-slate-300 p-4 rounded-md bg-slate-100 space-y-2 shadow">
-        <section>
-          <h4 className="font-bold">Modo de edição:</h4>
+      <div className="fixed top-4 left-4 flex space-x-2 z-50">
+        <TaskAside />
+      </div>
 
-          <form className="flex flex-col items-start">
-            <fieldset id="mode">
-              <div className="space-x-1">
-                <input
-                  type="radio"
-                  name="mode"
-                  id="basic"
-                  value="basic"
-                  onChange={(e) =>
-                    _onChangeMode(e.target.checked ? "basic" : "advanced")
-                  }
-                />
-                <label htmlFor="basic">Básico</label>
-              </div>
+      <div className="fixed top-4 right-4 flex space-x-2 z-50">
+        <LabelAside />
+      </div>
 
-              <div className="space-x-1">
-                <input
-                  type="radio"
-                  name="mode"
-                  id="advanced"
-                  value="advanced"
-                  onChange={(e) =>
-                    onChangeMode(e.target.checked ? "advanced" : "basic")
-                  }
-                />
-                <label htmlFor="advanced">Avançado</label>
-              </div>
-            </fieldset>
-          </form>
-        </section>
-      </aside>
+      <div className="fixed bottom-4 right-4 flex space-x-2 z-50">
+        <button
+          onClick={handleZoomOut}
+          className="p-2 border border-slate-800 cursor-pointer bg-white rounded-sm shadow-lg hover:bg-gray-50"
+        >
+          <ZoomOut className="w-5 h-5" />
+        </button>
+        <button
+          onClick={handleZoomIn}
+          className="p-2 border border-slate-800 cursor-pointer bg-white rounded-sm shadow-lg hover:bg-gray-50"
+        >
+          <ZoomIn className="w-5 h-5" />
+        </button>
+
+        <div className="flex items-center justify-center px-3 bg-white rounded-sm shadow-lg border border-slate-800">
+          {zoom}%
+        </div>
+      </div>
     </div>
   );
 };
