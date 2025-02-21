@@ -59,7 +59,7 @@ const Canvas = () => {
         height: 15,
         itemSpacing: 0.5,
         lineHeight: 1,
-        margin: 0,
+        margin: 0.25,
       },
       items: createGridItemsFromData(labelData),
     },

@@ -2,9 +2,7 @@
 
 import GridLayout from "react-grid-layout";
 import { GridItem } from "@/core/types";
-
-import "react-resizable/css/styles.css";
-import "react-grid-layout/css/styles.css";
+import { useEffect, useRef, useState } from "react";
 
 interface ContainerSettings {
   width: number;
@@ -20,12 +18,39 @@ interface BasicGridProps {
   items: GridItem[];
 }
 
+const ROW_HEIGHT: number = 30;
+const CM2PX: number = 37.8;
+
 export const BasicGrid = ({ settings, items }: BasicGridProps) => {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  const [containerSize, setContainerSize] = useState({
+    width: settings.width,
+    height: settings.height,
+  });
+
   const containerStyle = {
-    width: `${settings.width}cm`,
-    height: `${settings.height}cm`,
-    padding: `${settings.margin}cm`,
+    width: `${containerSize.width}cm`,
+    height: `${containerSize.height}cm`,
   };
+
+  const updateContainerSize = () => {
+    if (!gridRef?.current?.clientHeight || !gridRef?.current?.clientHeight) {
+      return;
+    }
+
+    console.log(gridRef);
+
+    // width: gridRef.current?.clientWidth / CM2PX + settings.margin,
+    setContainerSize((prevState) => ({
+      width: prevState.width,
+      height: gridRef.current?.clientHeight! / CM2PX + settings.margin,
+    }));
+  };
+
+  useEffect(() => {
+    updateContainerSize();
+  }, []);
 
   return (
     <div className="relative flex">
@@ -34,14 +59,15 @@ export const BasicGrid = ({ settings, items }: BasicGridProps) => {
         style={containerStyle}
       >
         <GridLayout
+          innerRef={gridRef}
           className="layout"
           layout={items}
           cols={1}
-          rowHeight={30}
-          width={settings.width * 37.8}
-          onLayoutChange={() => {}}
-          margin={[settings.itemSpacing * 37.8, settings.itemSpacing * 37.8]}
-          containerPadding={[settings.margin * 37.8, settings.margin * 37.8]}
+          rowHeight={ROW_HEIGHT}
+          width={containerSize.width * CM2PX}
+          onLayoutChange={updateContainerSize}
+          // margin={[settings.itemSpacing * CM2PX, settings.itemSpacing * CM2PX]}
+          // containerPadding={[settings.margin * CM2PX, settings.margin * CM2PX]}
         >
           {items.map((item) => {
             return (
@@ -50,8 +76,10 @@ export const BasicGrid = ({ settings, items }: BasicGridProps) => {
                 className="bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                 style={{ lineHeight: `${settings.lineHeight}cm` }}
               >
-                <div className="flex items-center p-3">
-                  <span className="text-gray-800">{item.content}</span>
+                <div className="flex items-center">
+                  <span className="text-gray-800 select-none">
+                    {item.content}
+                  </span>
                 </div>
               </div>
             );
