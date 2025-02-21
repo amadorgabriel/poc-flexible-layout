@@ -98,67 +98,25 @@ export function createGridItemsFromData(data: LabelData): GridItem[] {
   });
   yPosition += 2;
 
-  // Care instructions
+  const careInstructionsContent = [
+    data.instrucoes_de_lavagem.lavagem,
+    data.instrucoes_de_lavagem.alvejante,
+    data.instrucoes_de_lavagem.limpeza_a_seco,
+    data.instrucoes_de_lavagem.passar,
+    data.instrucoes_de_lavagem.secagem.join(" "),
+  ].join("/");
+
   items.push({
-    i: "wash",
+    i: "care-instructions",
     x: 0,
     y: yPosition,
     w: 1,
     minW: 1,
     maxW: 1,
-    h: 1,
-    content: data.instrucoes_de_lavagem.lavagem,
+    h: 3,
+    content: careInstructionsContent,
   });
-  yPosition++;
-
-  items.push({
-    i: "bleach",
-    x: 0,
-    y: yPosition,
-    w: 1,
-    minW: 1,
-    maxW: 1,
-    h: 1,
-    content: data.instrucoes_de_lavagem.alvejante,
-  });
-  yPosition++;
-
-  data.instrucoes_de_lavagem.secagem.forEach((instruction, index) => {
-    items.push({
-      i: `dry-${index}`,
-      x: 0,
-      y: yPosition,
-      w: 1,
-      minW: 1,
-      maxW: 1,
-      h: 1,
-      content: instruction,
-    });
-    yPosition++;
-  });
-
-  items.push({
-    i: "iron",
-    x: 0,
-    y: yPosition,
-    w: 1,
-    minW: 1,
-    maxW: 1,
-    h: 1,
-    content: data.instrucoes_de_lavagem.passar,
-  });
-  yPosition++;
-
-  items.push({
-    i: "dry-clean",
-    x: 0,
-    y: yPosition,
-    w: 1,
-    minW: 1,
-    maxW: 1,
-    h: 1,
-    content: data.instrucoes_de_lavagem.limpeza_a_seco,
-  });
+  yPosition += 3;
 
   return items;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
 
@@ -11,6 +11,7 @@ import { BasicGrid } from "./Basic/Label/Grid";
 import { Container, LabelData } from "@/core/types";
 import { createGridItemsFromData } from "@/core/data/adapters/label.adapter";
 import { TaskAside } from "../Aside/TaskAside";
+import FloatingMenu from "../FloatingMenu";
 
 const labelData: LabelData = {
   empresa: {
@@ -57,7 +58,7 @@ const Canvas = () => {
       settings: {
         width: 10,
         height: 15,
-        itemSpacing: 0.5,
+        itemSpacing: 0.25,
         lineHeight: 1,
         margin: 0.25,
       },
@@ -71,6 +72,19 @@ const Canvas = () => {
 
   const handleZoomOut = () => {
     setZoom((prev) => Math.max(prev - 10, 50));
+  };
+
+  const handleSettingsChange = (
+    containerId: string,
+    newSettings: Container["settings"]
+  ) => {
+    setContainers(
+      containers.map((container) =>
+        container.id === containerId
+          ? { ...container, settings: newSettings }
+          : container
+      )
+    );
   };
 
   return (
@@ -96,6 +110,15 @@ const Canvas = () => {
             <AdvancedCanvas />
           )}
         </div>
+      </div>
+
+      <div className="fixed  bottom-18 right-4 ">
+        <FloatingMenu
+          settings={containers[0].settings}
+          onSettingsChange={(settings) =>
+            handleSettingsChange(containers[0].id, settings)
+          }
+        />
       </div>
 
       <div className="fixed top-4 left-4 flex space-x-2 z-50">

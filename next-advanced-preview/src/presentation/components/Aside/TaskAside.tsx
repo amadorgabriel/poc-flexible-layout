@@ -1,4 +1,4 @@
-import { List } from "lucide-react";
+import { Zap } from "lucide-react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
 
@@ -7,13 +7,13 @@ export const TaskAside = () => {
 
   return (
     <aside className="border border-slate-600 p-4 rounded-md bg-white space-y-2 h-full w-[400px]">
-      <h2 className="text-xl font-bold flex">
-        <List className="mr-2" />
+      <h3 className="text-sm font-medium flex items-center">
+        <Zap className="mr-2" size={14} />
         Funcionalidades:
-      </h2>
+      </h3>
 
       <section>
-        <h4 className="font-bold">Página:</h4>
+        <label className="text-xs text-gray-600">Página:</label>
 
         {mode === "basic" ? (
           <form className="flex flex-col items-start">
@@ -23,6 +23,7 @@ export const TaskAside = () => {
                 name="mode"
                 id="pa-1"
                 value="pa-1"
+                checked
                 onChange={() => {}}
               />
               <label htmlFor="pa-1">Manipular dimensões da página</label>
@@ -45,7 +46,7 @@ export const TaskAside = () => {
       </section>
 
       <section>
-        <h4 className="font-bold">Item:</h4>
+        <label className="text-xs text-gray-600">Item:</label>
 
         {mode === "basic" ? (
           <form className="flex flex-col items-start">

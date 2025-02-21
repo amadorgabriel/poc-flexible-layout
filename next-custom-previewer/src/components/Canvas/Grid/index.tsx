@@ -30,9 +30,6 @@ export const Grid = ({ page, pageContentGroups }: GridProps) => {
   };
 
   const handleDropContentGroup = (newLayout: Layout[], layoutItem: Layout) => {
-    console.log(newLayout);
-    console.log(layoutItem);
-
     const droppedContentGroup = {
       ...layoutItem,
     };

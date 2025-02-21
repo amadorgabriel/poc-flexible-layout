@@ -12,17 +12,17 @@ export const LabelAside = () => {
 
   return (
     <aside className="border border-slate-600 p-4 rounded-md bg-white space-y-2 h-full w-[300px]">
-      <h2 className="text-xl font-bold flex">
-        <Settings className="mr-2" />
-        Funcionalidades:
-      </h2>
+      <h3 className="text-sm font-medium flex items-center">
+        <Settings className="mr-2" size={14} />
+        Configurações:
+      </h3>
 
       <section>
-        <h4 className="font-bold">Modo de edição:</h4>
+        <h4 className="block text-xs text-gray-600 mb-1">Modo de edição:</h4>
 
         <form className="flex flex-col items-start">
           <fieldset id="mode">
-            <div className="space-x-1">
+            <div className="flex items-center space-x-1">
               <input
                 type="radio"
                 name="mode"
@@ -33,8 +33,8 @@ export const LabelAside = () => {
                   _onChangeMode(e.target.checked ? "basic" : "advanced")
                 }
               />
-              <label htmlFor="basic">Básico</label>
-            </div>
+              <label className="text-xs text-gray-600">Básico</label>
+              </div>
 
             <div className="space-x-1">
               <input
@@ -47,8 +47,8 @@ export const LabelAside = () => {
                   onChangeMode(e.target.checked ? "advanced" : "basic")
                 }
               />
-              <label htmlFor="advanced">Avançado</label>
-            </div>
+              <label className="text-xs text-gray-600">Avançado</label>
+              </div>
           </fieldset>
         </form>
       </section>

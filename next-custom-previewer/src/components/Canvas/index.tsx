@@ -7,7 +7,7 @@ const MAX_ZOOM_IN = 3;
 const MAX_ZOOM_OUT = 0.2;
 
 export const Canvas = () => {
-  const [, updateState] = useState<any>(null);
+  const [state, updateState] = useState<any>(null);
 
   const forceUpdate = useCallback(() => updateState({}), []);
 
@@ -17,21 +17,23 @@ export const Canvas = () => {
 
   return (
     <div className="canvas">
-      <CustomInfiniteViewer />
+      <CustomInfiniteViewer center={state !== null} />
     </div>
   );
 };
 
-const CustomInfiniteViewer = () => {
+const CustomInfiniteViewer = ({ center }: { center: boolean }) => {
   const { pages, contentGroups } = useLabelContext();
 
   const infiniteViewerRef = useRef<InfiniteViewer>(null);
 
-  infiniteViewerRef.current?.scrollCenter();
+  useEffect(() => {
+    infiniteViewerRef.current?.scrollCenter();
+  }, [center]);
 
   return (
     <InfiniteViewer
-      className="infinite-viewer"
+      className={`infinite-viewer`}
       ref={infiniteViewerRef}
       useAutoZoom
       zoomRange={[MAX_ZOOM_OUT, MAX_ZOOM_IN]}
@@ -39,6 +41,7 @@ const CustomInfiniteViewer = () => {
       wheelScale={0.005}
       threshold={0}
       zoom={1}
+      // useMouseDrag
     >
       <div className="viewport">
         {pages.map((page, index) => {

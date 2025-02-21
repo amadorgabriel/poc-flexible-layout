@@ -2,7 +2,7 @@
 
 import GridLayout from "react-grid-layout";
 import { GridItem } from "@/core/types";
-import { useEffect, useRef, useState } from "react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
 
 interface ContainerSettings {
   width: number;
@@ -18,7 +18,7 @@ interface BasicGridProps {
   items: GridItem[];
 }
 
-const ROW_HEIGHT: number = 30;
+const ROW_HEIGHT: number = 37.8;
 const CM2PX: number = 37.8;
 
 export const BasicGrid = ({ settings, items }: BasicGridProps) => {
@@ -29,9 +29,11 @@ export const BasicGrid = ({ settings, items }: BasicGridProps) => {
     height: settings.height,
   });
 
-  const containerStyle = {
+  const containerStyle: CSSProperties = {
     width: `${containerSize.width}cm`,
     height: `${containerSize.height}cm`,
+    minWidth: `${containerSize.width}cm !important`,
+    minHeight: `${containerSize.height}cm !important`,
   };
 
   const updateContainerSize = () => {
@@ -39,18 +41,23 @@ export const BasicGrid = ({ settings, items }: BasicGridProps) => {
       return;
     }
 
-    console.log(gridRef);
-
     // width: gridRef.current?.clientWidth / CM2PX + settings.margin,
     setContainerSize((prevState) => ({
       width: prevState.width,
-      height: gridRef.current?.clientHeight! / CM2PX + settings.margin,
+      height: gridRef.current?.clientHeight! / CM2PX,
     }));
   };
 
   useEffect(() => {
+    setContainerSize({
+      width: settings.width,
+      height: settings.height,
+    });
+  }, [settings]);
+
+  useEffect(() => {
     updateContainerSize();
-  }, []);
+  }, [gridRef, settings, items]);
 
   return (
     <div className="relative flex">
@@ -66,8 +73,8 @@ export const BasicGrid = ({ settings, items }: BasicGridProps) => {
           rowHeight={ROW_HEIGHT}
           width={containerSize.width * CM2PX}
           onLayoutChange={updateContainerSize}
-          // margin={[settings.itemSpacing * CM2PX, settings.itemSpacing * CM2PX]}
-          // containerPadding={[settings.margin * CM2PX, settings.margin * CM2PX]}
+          margin={[settings.itemSpacing * CM2PX, settings.itemSpacing * CM2PX]}
+          containerPadding={[settings.margin * CM2PX, settings.margin * CM2PX]}
         >
           {items.map((item) => {
             return (
