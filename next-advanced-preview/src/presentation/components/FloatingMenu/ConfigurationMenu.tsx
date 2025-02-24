@@ -3,7 +3,7 @@ import { Settings } from "lucide-react";
 import { useEditor } from "@/presentation/context/EditorContext";
 import { IEditorMode } from "@/presentation/context/EditorContext/index.types";
 
-export const LabelAside = () => {
+export const ConfigurationMenu = () => {
   const { mode, onChangeMode } = useEditor();
 
   const _onChangeMode = (value: IEditorMode) => {
@@ -33,8 +33,10 @@ export const LabelAside = () => {
                   _onChangeMode(e.target.checked ? "basic" : "advanced")
                 }
               />
-              <label className="text-xs text-gray-600">Básico</label>
-              </div>
+              <label className="text-xs text-gray-600" htmlFor="basic">
+                Básico
+              </label>
+            </div>
 
             <div className="space-x-1">
               <input
@@ -47,8 +49,10 @@ export const LabelAside = () => {
                   onChangeMode(e.target.checked ? "advanced" : "basic")
                 }
               />
-              <label className="text-xs text-gray-600">Avançado</label>
-              </div>
+              <label className="text-xs text-gray-600" htmlFor="advanced">
+                Avançado
+              </label>
+            </div>
           </fieldset>
         </form>
       </section>

@@ -1,58 +1,24 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
 
-import { AdvancedCanvas } from "./Advanced";
-import { LabelAside } from "../Aside";
-import { ZoomIn, ZoomOut } from "lucide-react";
-import { BasicGrid } from "./Basic/Label/Grid";
-import { Container, LabelData } from "@/core/types";
+import { AdvancedLabel } from "../Label/Advanced";
+import { Container, GridItem } from "@/core/types";
 import { createGridItemsFromData } from "@/core/data/adapters/label.adapter";
-import { TaskAside } from "../Aside/TaskAside";
-import FloatingMenu from "../FloatingMenu";
+import { FeaturesMenu } from "../FloatingMenu/FeaturesMenu";
+import PageLayoutMenu from "../FloatingMenu/PageLayoutMenu";
+import { ConfigurationMenu } from "../FloatingMenu/ConfigurationMenu";
+import { VizualizationMenu } from "../FloatingMenu/VizualizationMenu";
+import { labelData } from "@/core/data/label.const";
+import { BasicLabel } from "../Label/Basic";
 
-const labelData: LabelData = {
-  empresa: {
-    nome: "Etiqueta Certa",
-    cnpj: "22.949.494/0001-98",
-    origem: {
-      portugues: "Feito no Brasil",
-      ingles: "Made in Brazil",
-      espanhol: "Hecho en Brasil",
-      frances: "Fabriqué en Brésil",
-    },
-  },
-  codigo: "34/0",
-  composicao: {
-    tecido: {
-      portugues: "100% Algodão",
-      ingles: "100% Cotton",
-      espanhol: "100% Algodón",
-      frances: "100% Coton",
-    },
-    forro: {
-      portugues: "100% Poliéster",
-      ingles: "100% Polyester",
-      espanhol: "100% Poliéster",
-      frances: "100% Polyester",
-    },
-  },
-  instrucoes_de_lavagem: {
-    lavagem: "Machine wash, warm, 40 °C (105 °F), normal cycle",
-    alvejante: "Do not bleach",
-    secagem: ["Tumble dry, low", "Line dry in the shade"],
-    passar: "Iron, low",
-    limpeza_a_seco: "Do not dryclean",
-  },
-};
-
-const Canvas = () => {
+export const Canvas = () => {
   const { mode } = useEditor();
 
   const [zoom, setZoom] = useState(100);
-  const [containers, setContainers] = useState<Container[]>([
+  const [containers, setContainers] = useState<Container<GridItem>[]>([
     {
       id: "1",
       settings: {
@@ -76,7 +42,7 @@ const Canvas = () => {
 
   const handleSettingsChange = (
     containerId: string,
-    newSettings: Container["settings"]
+    newSettings: Container<any>["settings"]
   ) => {
     setContainers(
       containers.map((container) =>
@@ -97,23 +63,27 @@ const Canvas = () => {
             transformOrigin: "top left",
           }}
         >
-          {mode === "basic" ? (
-            containers.map((container) => (
-              <BasicGrid
-                key={container.id}
-                id={container.id}
-                settings={container.settings}
-                items={container.items}
-              />
-            ))
-          ) : (
-            <AdvancedCanvas />
-          )}
+          {mode === "basic"
+            ? containers.map((container) => (
+                <BasicLabel
+                  key={container.id}
+                  id={container.id}
+                  settings={container.settings}
+                  items={container.items}
+                />
+              ))
+            : containers.map((container) => (
+                <AdvancedLabel
+                  key={container.id}
+                  settings={container.settings}
+                  items={labelData}
+                />
+              ))}
         </div>
       </div>
 
       <div className="fixed  bottom-18 right-4 ">
-        <FloatingMenu
+        <PageLayoutMenu
           settings={containers[0].settings}
           onSettingsChange={(settings) =>
             handleSettingsChange(containers[0].id, settings)
@@ -122,33 +92,20 @@ const Canvas = () => {
       </div>
 
       <div className="fixed top-4 left-4 flex space-x-2 z-50">
-        <TaskAside />
+        <FeaturesMenu />
       </div>
 
       <div className="fixed top-4 right-4 flex space-x-2 z-50">
-        <LabelAside />
+        <ConfigurationMenu />
       </div>
 
       <div className="fixed bottom-4 right-4 flex space-x-2 z-50">
-        <button
-          onClick={handleZoomOut}
-          className="p-2 border border-slate-800 cursor-pointer bg-white rounded-sm shadow-lg hover:bg-gray-50"
-        >
-          <ZoomOut className="w-5 h-5" />
-        </button>
-        <button
-          onClick={handleZoomIn}
-          className="p-2 border border-slate-800 cursor-pointer bg-white rounded-sm shadow-lg hover:bg-gray-50"
-        >
-          <ZoomIn className="w-5 h-5" />
-        </button>
-
-        <div className="flex items-center justify-center px-3 bg-white rounded-sm shadow-lg border border-slate-800">
-          {zoom}%
-        </div>
+        <VizualizationMenu
+          zoom={zoom}
+          handleZoomIn={handleZoomIn}
+          handleZoomOut={handleZoomOut}
+        />
       </div>
     </div>
   );
 };
-
-export default Canvas;

@@ -1,4 +1,5 @@
-import { GridItem, LabelData } from "@/core/types";
+import { LabelData } from "@/core/domain/Label";
+import { GridItem } from "@/core/types";
 
 export function createGridItemsFromData(data: LabelData): GridItem[] {
   const items: GridItem[] = [];

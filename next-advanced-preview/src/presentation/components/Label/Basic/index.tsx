@@ -1,27 +1,13 @@
 "use client";
 
 import GridLayout from "react-grid-layout";
-import { GridItem } from "@/core/types";
 import { CSSProperties, useEffect, useRef, useState } from "react";
-
-interface ContainerSettings {
-  width: number;
-  height: number;
-  itemSpacing: number;
-  lineHeight: number;
-  margin: number;
-}
-
-interface BasicGridProps {
-  id: string;
-  settings: ContainerSettings;
-  items: GridItem[];
-}
+import { ContainertLabel } from "../../Canvas/index.types";
 
 const ROW_HEIGHT: number = 37.8;
 const CM2PX: number = 37.8;
 
-export const BasicGrid = ({ settings, items }: BasicGridProps) => {
+export const BasicLabel = ({ settings, items }: ContainertLabel) => {
   const gridRef = useRef<HTMLDivElement>(null);
 
   const [containerSize, setContainerSize] = useState({

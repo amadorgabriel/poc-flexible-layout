@@ -2,7 +2,7 @@ import { Zap } from "lucide-react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
 
-export const TaskAside = () => {
+export const FeaturesMenu = () => {
   const { mode } = useEditor();
 
   return (

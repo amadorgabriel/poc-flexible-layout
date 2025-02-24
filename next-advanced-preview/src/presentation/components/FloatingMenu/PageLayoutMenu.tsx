@@ -9,12 +9,12 @@ interface ContainerSettings {
   margin: number;
 }
 
-interface FloatingMenuProps {
+interface PageLayoutMenuProps {
   settings: ContainerSettings;
   onSettingsChange: (settings: ContainerSettings) => void;
 }
 
-const FloatingMenu: React.FC<FloatingMenuProps> = ({
+const PageLayoutMenu: React.FC<PageLayoutMenuProps> = ({
   settings,
   onSettingsChange,
 }) => {
@@ -98,4 +98,4 @@ const FloatingMenu: React.FC<FloatingMenuProps> = ({
   );
 };
 
-export default FloatingMenu;
+export default PageLayoutMenu;

@@ -1,40 +1,3 @@
-import ReactGridLayout from "react-grid-layout";
-
-export interface LabelData {
-  empresa: {
-    nome: string;
-    cnpj: string;
-    origem: {
-      portugues: string;
-      ingles: string;
-      espanhol: string;
-      frances: string;
-    };
-  };
-  codigo: string;
-  composicao: {
-    tecido: {
-      portugues: string;
-      ingles: string;
-      espanhol: string;
-      frances: string;
-    };
-    forro: {
-      portugues: string;
-      ingles: string;
-      espanhol: string;
-      frances: string;
-    };
-  };
-  instrucoes_de_lavagem: {
-    lavagem: string;
-    alvejante: string;
-    secagem: string[];
-    passar: string;
-    limpeza_a_seco: string;
-  };
-}
-
 export interface GridItem {
   i: string;
   x: number;
@@ -48,7 +11,7 @@ export interface GridItem {
   isDraggable?: boolean;
 }
 
-export interface Container {
+export interface Container<T> {
   id: string;
   settings: {
     width: number;
@@ -57,5 +20,5 @@ export interface Container {
     lineHeight: number;
     margin: number;
   };
-  items: GridItem[];
+  items: T[];
 }
