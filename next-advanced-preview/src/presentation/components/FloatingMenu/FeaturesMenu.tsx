@@ -3,7 +3,7 @@ import { Zap } from "lucide-react";
 import { useEditor } from "@/presentation/context/EditorContext";
 
 export const FeaturesMenu = () => {
-  const { mode } = useEditor();
+  const { editionMode } = useEditor();
 
   return (
     <aside className="border border-slate-600 p-4 rounded-md bg-white space-y-2 h-full w-[400px]">
@@ -15,7 +15,7 @@ export const FeaturesMenu = () => {
       <section>
         <label className="text-xs text-gray-600">Página:</label>
 
-        {mode === "basic" ? (
+        {editionMode === "basic" ? (
           <form className="flex flex-col items-start">
             <div className="space-x-1">
               <input
@@ -48,7 +48,7 @@ export const FeaturesMenu = () => {
       <section>
         <label className="text-xs text-gray-600">Item:</label>
 
-        {mode === "basic" ? (
+        {editionMode === "basic" ? (
           <form className="flex flex-col items-start">
             <div className="space-x-1">
               <input

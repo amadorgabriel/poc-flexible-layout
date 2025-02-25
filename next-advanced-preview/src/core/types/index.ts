@@ -1,3 +1,5 @@
+import { EditorPageSettings } from "@/presentation/context/EditorContext/index.types";
+
 export interface GridItem {
   i: string;
   x: number;
@@ -13,12 +15,6 @@ export interface GridItem {
 
 export interface Container<T> {
   id: string;
-  settings: {
-    width: number;
-    height: number;
-    itemSpacing: number;
-    lineHeight: number;
-    margin: number;
-  };
+  settings: EditorPageSettings;
   items: T[];
 }

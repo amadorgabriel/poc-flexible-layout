@@ -1,14 +1,9 @@
 import { Settings } from "lucide-react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
-import { IEditorMode } from "@/presentation/context/EditorContext/index.types";
 
 export const ConfigurationMenu = () => {
-  const { mode, onChangeMode } = useEditor();
-
-  const _onChangeMode = (value: IEditorMode) => {
-    onChangeMode(value);
-  };
+  const { editionMode, onChangeEditionMode } = useEditor();
 
   return (
     <aside className="border border-slate-600 p-4 rounded-md bg-white space-y-2 h-full w-[300px]">
@@ -28,9 +23,9 @@ export const ConfigurationMenu = () => {
                 name="mode"
                 id="basic"
                 value="basic"
-                checked={mode === "basic"}
+                checked={editionMode === "basic"}
                 onChange={(e) =>
-                  _onChangeMode(e.target.checked ? "basic" : "advanced")
+                  onChangeEditionMode(e.target.checked ? "basic" : "advanced")
                 }
               />
               <label className="text-xs text-gray-600" htmlFor="basic">
@@ -43,10 +38,10 @@ export const ConfigurationMenu = () => {
                 type="radio"
                 name="mode"
                 id="advanced"
-                checked={mode === "advanced"}
+                checked={editionMode === "advanced"}
                 value="advanced"
                 onChange={(e) =>
-                  onChangeMode(e.target.checked ? "advanced" : "basic")
+                  onChangeEditionMode(e.target.checked ? "advanced" : "basic")
                 }
               />
               <label className="text-xs text-gray-600" htmlFor="advanced">

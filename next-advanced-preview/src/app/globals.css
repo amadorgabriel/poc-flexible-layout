@@ -4,6 +4,9 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 @layer base {
@@ -44,11 +47,10 @@ body {
 
 .react-grid-item.react-grid-placeholder {
   background: rgba(0, 0, 0, 0.1);
-  border: 2px dashed #666;
+  border: 1px dashed #666;
   opacity: 0.5;
   transition-duration: 100ms;
   z-index: 2;
-  border-radius: 0.5rem;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -58,11 +60,16 @@ body {
 
 .react-grid-item > .react-resizable-handle {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 10px;
+  height: 10px;
   bottom: 0;
   right: 0;
   cursor: se-resize;
+  opacity: 0;
+}
+
+.react-grid-item:hover > .react-resizable-handle {
+  opacity: 1;
 }
 
 .react-grid-item > .react-resizable-handle::after {
@@ -70,8 +77,8 @@ body {
   position: absolute;
   right: 3px;
   bottom: 3px;
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid rgba(0, 0, 0, 0.4);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+  width: 4px !important;
+  height: 4px !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
 }

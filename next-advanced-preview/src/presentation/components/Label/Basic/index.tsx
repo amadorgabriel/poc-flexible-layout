@@ -1,14 +1,27 @@
 "use client";
 
-import GridLayout from "react-grid-layout";
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import { ContainertLabel } from "../../Canvas/index.types";
 
-const ROW_HEIGHT: number = 37.8;
-const CM2PX: number = 37.8;
+import GridLayout from "react-grid-layout";
 
-export const BasicLabel = ({ settings, items }: ContainertLabel) => {
+import { GridItem } from "@/core/types";
+import { mergeRefs } from "@/core/utils/mergeRef.const";
+import { useEditor } from "@/presentation/context/EditorContext";
+import { EditorPageSettings } from "@/presentation/context/EditorContext/index.types";
+
+const CM2PX: number = 37.8; //1mm
+const CM2MM: number = CM2PX / 10; //1mm
+const ROW_HEIGHT: number = CM2MM * 2; //2mm
+
+export interface ContainertLabelProps {
+  id: string;
+  settings: EditorPageSettings;
+  items: GridItem[];
+}
+
+export const BasicLabel = ({ settings, items }: ContainertLabelProps) => {
   const gridRef = useRef<HTMLDivElement>(null);
+  const { printRef } = useEditor();
 
   const [containerSize, setContainerSize] = useState({
     width: settings.width,
@@ -16,10 +29,15 @@ export const BasicLabel = ({ settings, items }: ContainertLabel) => {
   });
 
   const containerStyle: CSSProperties = {
-    width: `${containerSize.width}cm`,
-    height: `${containerSize.height}cm`,
-    minWidth: `${containerSize.width}cm !important`,
-    minHeight: `${containerSize.height}cm !important`,
+    width: `${containerSize.width}mm`,
+    height: `${containerSize.height}mm`,
+    minWidth: `${containerSize.width}mm !important`,
+    minHeight: `${containerSize.height}mm !important`,
+  };
+
+  const itemStyle: CSSProperties = {
+    fontSize: `${settings.fontSize}mm`,
+    lineHeight: `${settings.lineHeight}mm`,
   };
 
   const updateContainerSize = () => {
@@ -27,10 +45,10 @@ export const BasicLabel = ({ settings, items }: ContainertLabel) => {
       return;
     }
 
-    // width: gridRef.current?.clientWidth / CM2PX + settings.margin,
     setContainerSize((prevState) => ({
-      width: prevState.width,
-      height: gridRef.current?.clientHeight! / CM2PX,
+      // width: prevState.width,
+      width: gridRef.current?.clientWidth! / CM2MM,
+      height: gridRef.current?.clientHeight! / CM2MM,
     }));
   };
 
@@ -43,31 +61,34 @@ export const BasicLabel = ({ settings, items }: ContainertLabel) => {
 
   useEffect(() => {
     updateContainerSize();
-  }, [gridRef, settings, items]);
+  }, [gridRef]);
 
   return (
     <div className="relative flex">
       <div
-        className={`bg-white rounded-lg shadow-lg overflow-hidden`}
+        className={`bg-white shadow-lg overflow-hidden`}
         style={containerStyle}
       >
         <GridLayout
-          innerRef={gridRef}
+          innerRef={mergeRefs(gridRef, printRef)}
           className="layout"
+          style={{
+            // backgroundColor: "red",
+          }}
           layout={items}
           cols={1}
           rowHeight={ROW_HEIGHT}
-          width={containerSize.width * CM2PX}
+          width={containerSize.width * CM2MM}
           onLayoutChange={updateContainerSize}
-          margin={[settings.itemSpacing * CM2PX, settings.itemSpacing * CM2PX]}
-          containerPadding={[settings.margin * CM2PX, settings.margin * CM2PX]}
+          margin={[settings.itemSpacing * CM2MM, settings.itemSpacing * CM2MM]}
+          containerPadding={[settings.margin * CM2MM, settings.margin * CM2MM]}
         >
           {items.map((item) => {
             return (
               <div
                 key={item.i}
-                className="bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                style={{ lineHeight: `${settings.lineHeight}cm` }}
+                className="hover:bg-gray-200 transition-colors"
+                style={itemStyle}
               >
                 <div className="flex items-center">
                   <span className="text-gray-800 select-none">

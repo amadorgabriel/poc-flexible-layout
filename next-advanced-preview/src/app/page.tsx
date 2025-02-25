@@ -5,7 +5,7 @@ import { EditorProvider } from "@/presentation/context/EditorContext";
 
 export default function Home() {
   return (
-    <EditorProvider initialMode="advanced">
+    <EditorProvider initialMode="basic" initialZoom={100}>
       <main className="h-screen">
         <Canvas />
       </main>

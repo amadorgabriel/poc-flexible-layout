@@ -1,26 +1,19 @@
+import { useEditor } from "@/presentation/context/EditorContext";
 import { ZoomIn, ZoomOut } from "lucide-react";
 
-interface VizualizationMenuProps {
-  zoom: number;
-  handleZoomIn: () => void;
-  handleZoomOut: () => void;
-}
+export const VizualizationMenu = () => {
+  const { zoom, onZoomIn, onZoonOut } = useEditor();
 
-export const VizualizationMenu = ({
-  zoom,
-  handleZoomIn,
-  handleZoomOut,
-}: VizualizationMenuProps) => {
   return (
     <>
       <button
-        onClick={handleZoomOut}
+        onClick={onZoonOut}
         className="p-2 border border-slate-800 cursor-pointer bg-white rounded-sm shadow-lg hover:bg-gray-50"
       >
         <ZoomOut className="w-5 h-5" />
       </button>
       <button
-        onClick={handleZoomIn}
+        onClick={onZoomIn}
         className="p-2 border border-slate-800 cursor-pointer bg-white rounded-sm shadow-lg hover:bg-gray-50"
       >
         <ZoomIn className="w-5 h-5" />
