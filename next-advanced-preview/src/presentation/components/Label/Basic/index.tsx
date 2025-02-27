@@ -4,10 +4,10 @@ import { CSSProperties, useEffect, useRef, useState } from "react";
 
 import GridLayout from "react-grid-layout";
 
-import { GridItem } from "@/core/types";
-import { mergeRefs } from "@/core/utils/mergeRef.const";
-import { useEditor } from "@/presentation/context/EditorContext";
-import { EditorPageSettings } from "@/presentation/context/EditorContext/index.types";
+import {
+  EditorPageSettings,
+  GridItem,
+} from "@/presentation/context/EditorContext/index.types";
 
 const CM2PX: number = 37.8; //1mm
 const CM2MM: number = CM2PX / 10; //1mm
@@ -17,11 +17,24 @@ export interface ContainertLabelProps {
   id: string;
   settings: EditorPageSettings;
   items: GridItem[];
+  printing?: boolean;
 }
 
-export const BasicLabel = ({ settings, items }: ContainertLabelProps) => {
+export const BasicLabel = ({
+  settings,
+  items,
+  printing = false,
+}: ContainertLabelProps) => {
   const gridRef = useRef<HTMLDivElement>(null);
-  const { printRef } = useEditor();
+
+  const gridItems = items.map((item) => {
+    return {
+      ...item,
+      isDraggable: !printing,
+      isResizable: !printing,
+      static: !printing
+    };
+  });
 
   const [containerSize, setContainerSize] = useState({
     width: settings.width,
@@ -66,24 +79,21 @@ export const BasicLabel = ({ settings, items }: ContainertLabelProps) => {
   return (
     <div className="relative flex">
       <div
-        className={`bg-white shadow-lg overflow-hidden`}
+        className={`bg-white overflow-hidden ${!printing && "shadow-lg"}`}
         style={containerStyle}
       >
         <GridLayout
-          innerRef={mergeRefs(gridRef, printRef)}
-          className="layout"
-          style={{
-            // backgroundColor: "red",
-          }}
-          layout={items}
+          innerRef={gridRef}
           cols={1}
+          layout={items}
+          // className="layout"
           rowHeight={ROW_HEIGHT}
           width={containerSize.width * CM2MM}
           onLayoutChange={updateContainerSize}
           margin={[settings.itemSpacing * CM2MM, settings.itemSpacing * CM2MM]}
           containerPadding={[settings.margin * CM2MM, settings.margin * CM2MM]}
         >
-          {items.map((item) => {
+          {gridItems.map((item) => {
             return (
               <div
                 key={item.i}

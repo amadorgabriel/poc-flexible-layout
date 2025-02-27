@@ -2,10 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 
-import { Container, GridItem } from "@/core/types";
-import { labelData } from "@/core/data/label.const";
 import { useEditor } from "@/presentation/context/EditorContext";
-import { createGridItemsFromData } from "@/core/data/adapters/label.adapter";
 
 import { BasicLabel } from "../Label/Basic";
 import { PrintMenu } from "../FloatingMenu/PrintMenu";
@@ -15,31 +12,23 @@ import { ConfigurationMenu } from "../FloatingMenu/ConfigurationMenu";
 import { VizualizationMenu } from "../FloatingMenu/VizualizationMenu";
 
 export const Canvas = () => {
-  const { editionMode, zoom, pageSettings } = useEditor();
-
-  const [containers, setContainers] = useState<Container<GridItem>[]>([
-    {
-      id: "1",
-      settings: pageSettings,
-      items: createGridItemsFromData(labelData),
-    },
-  ]);
+  const { editionMode, zoom, pageSettings, pages, onChangePages } = useEditor();
 
   const memoizedBasicLabel = useMemo(() => {
     return (
       <BasicLabel
-        key={containers[0].id}
-        id={containers[0].id}
-        settings={containers[0].settings}
-        items={containers[0].items}
+        key={pages[0].id}
+        id={pages[0].id}
+        settings={pages[0].settings}
+        items={pages[0].items}
       />
     );
-  }, [containers]);
+  }, [pages]);
 
   useEffect(() => {
-    setContainers([
+    onChangePages([
       {
-        ...containers[0],
+        ...pages[0],
         settings: pageSettings,
       },
     ]);

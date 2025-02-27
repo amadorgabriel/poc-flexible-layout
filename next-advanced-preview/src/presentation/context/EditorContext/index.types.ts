@@ -1,7 +1,10 @@
 import { ReactNode, RefObject } from "react";
-import { UseReactToPrintOptions } from "react-to-print";
 
 export type IEditorMode = "basic" | "advanced";
+
+export type IPrintSettings = {
+  columnAmount: number;
+};
 
 export interface EditorContextProps {
   //zooming
@@ -11,14 +14,18 @@ export interface EditorContextProps {
 
   //printing
   printRef: RefObject<HTMLDivElement | null>;
-  printOptions: UseReactToPrintOptions;
-  onChangePrintOptions: (value: UseReactToPrintOptions) => void;
+  printSettings: IPrintSettings;
+  onChangePrintSettings: (value: IPrintSettings) => void;
   onPrint: () => void;
 
   //viewmode
   editionMode: IEditorMode;
-  pageSettings: EditorPageSettings;
   onChangeEditionMode: (value: IEditorMode) => void;
+
+  //page layout
+  pages: PageItem<GridItem>[];
+  pageSettings: EditorPageSettings;
+  onChangePages: (pages: PageItem<GridItem>[]) => void;
   onChangePageSetting: (field: keyof EditorPageSettings, value: number) => void;
 }
 
@@ -35,4 +42,23 @@ export interface EditorPageSettings {
   fontSize: number;
   lineHeight: number;
   margin: number; //padding
+}
+
+export interface GridItem {
+  i: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  content: string;
+  minW?: number | undefined;
+  maxW?: number | undefined;
+  isResizable?: boolean;
+  isDraggable?: boolean;
+}
+
+export interface PageItem<T> {
+  id: string;
+  settings: EditorPageSettings;
+  items: T[];
 }

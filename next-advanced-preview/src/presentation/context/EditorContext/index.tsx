@@ -9,9 +9,14 @@ import {
   EditorContextProps,
   EditorPageSettings,
   EditorProviderProps,
+  GridItem,
   IEditorMode,
+  IPrintSettings,
+  PageItem,
 } from "./index.types";
 import { useReactToPrint, UseReactToPrintOptions } from "react-to-print";
+import { createGridItemsFromData } from "@/core/data/adapters/label.adapter";
+import { labelData } from "@/core/data/label.const";
 
 const EditorContext = createContext<EditorContextProps | undefined>(undefined);
 
@@ -21,7 +26,9 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
 }) => {
   const [zoom, setZoom] = useState(100);
   const [editionMode, setEditionMode] = useState<IEditorMode>(initialMode);
-  const [printOptions, setPrintOptions] = useState<UseReactToPrintOptions>({});
+  const [printSettings, setPrintSettings] = useState<IPrintSettings>({
+    columnAmount: 3,
+  });
   const [pageSettings, setPageSettings] = useState<EditorPageSettings>({
     width: 30.3, //mm
     height: 50.4, //mm
@@ -30,6 +37,13 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
     margin: 2, //mm
     fontSize: 2, //mm
   });
+  const [pages, setPages] = useState<PageItem<GridItem>[]>([
+    {
+      id: "1",
+      settings: pageSettings,
+      items: createGridItemsFromData(labelData),
+    },
+  ]);
 
   const printRef = useRef<HTMLDivElement>(null);
 
@@ -50,7 +64,9 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
   const getPrintStyles = (): string => {
     const stylesObj: Record<"page" | "body", any> = {
       page: {
-        size: `${pageSettings.width}mm ${pageSettings.height}mm`,
+        size: `${pageSettings.width * printSettings.columnAmount}mm ${
+          pageSettings.height
+        }mm`,
         "page-orientation": "upright",
       },
       body: {
@@ -71,7 +87,6 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
   };
 
   const handlePrint = useReactToPrint({
-    ...printOptions,
     contentRef: printRef,
     documentTitle: "Etiqueta test",
     pageStyle: getPrintStyles(),
@@ -95,10 +110,12 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
         zoom,
         pageSettings,
         printRef,
+        pages,
+        onChangePages: setPages,
         onPrint: handlePrint,
         editionMode,
-        printOptions,
-        onChangePrintOptions: setPrintOptions,
+        printSettings,
+        onChangePrintSettings: setPrintSettings,
         onChangeEditionMode,
         onZoomIn: handleZoomIn,
         onZoonOut: handleZoomOut,
