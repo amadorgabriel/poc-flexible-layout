@@ -4,6 +4,8 @@ export type IEditorMode = "basic" | "advanced";
 
 export type IPrintSettings = {
   columnAmount: number;
+  ribbonWidth: number;
+  ribbonHeight: number;
 };
 
 export interface EditorContextProps {
@@ -15,7 +17,7 @@ export interface EditorContextProps {
   //printing
   printRef: RefObject<HTMLDivElement | null>;
   printSettings: IPrintSettings;
-  onChangePrintSettings: (value: IPrintSettings) => void;
+  onChangePrintSettings: (field: keyof IPrintSettings, value: number) => void;
   onPrint: () => void;
 
   //viewmode

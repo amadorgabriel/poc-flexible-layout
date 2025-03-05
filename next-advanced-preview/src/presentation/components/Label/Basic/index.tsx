@@ -32,7 +32,7 @@ export const BasicLabel = ({
       ...item,
       isDraggable: !printing,
       isResizable: !printing,
-      static: !printing
+      static: !printing,
     };
   });
 
@@ -72,12 +72,12 @@ export const BasicLabel = ({
     });
   }, [settings]);
 
-  useEffect(() => {
-    updateContainerSize();
-  }, [gridRef]);
+  // useEffect(() => {
+  //   updateContainerSize();
+  // }, [gridRef]);
 
   return (
-    <div className="relative flex">
+    <div className="relative flex uppercase">
       <div
         className={`bg-white overflow-hidden ${!printing && "shadow-lg"}`}
         style={containerStyle}
@@ -89,7 +89,7 @@ export const BasicLabel = ({
           // className="layout"
           rowHeight={ROW_HEIGHT}
           width={containerSize.width * CM2MM}
-          onLayoutChange={updateContainerSize}
+          // onLayoutChange={updateContainerSize}
           margin={[settings.itemSpacing * CM2MM, settings.itemSpacing * CM2MM]}
           containerPadding={[settings.margin * CM2MM, settings.margin * CM2MM]}
         >

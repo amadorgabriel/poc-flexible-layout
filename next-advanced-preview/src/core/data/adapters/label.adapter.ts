@@ -1,5 +1,5 @@
 import { LabelData } from "@/core/domain/Label";
-import { GridItem } from "@/core/types";
+import { GridItem } from "@/presentation/context/EditorContext/index.types";
 
 export function createGridItemsFromData(data: LabelData): GridItem[] {
   const items: GridItem[] = [];
@@ -44,10 +44,10 @@ export function createGridItemsFromData(data: LabelData): GridItem[] {
     w: 1,
     minW: 1,
     maxW: 1,
-    h: 2,
+    h: 3,
     content: originContent,
   });
-  yPosition += 2;
+  yPosition += 3;
 
   // Code
   items.push({
@@ -76,10 +76,10 @@ export function createGridItemsFromData(data: LabelData): GridItem[] {
     w: 1,
     minW: 1,
     maxW: 1,
-    h: 2,
+    h: 3,
     content: `Tecido: ${fabricContent}`,
   });
-  yPosition += 2;
+  yPosition += 3;
 
   const liningContent = [
     data.composicao.forro.portugues,
@@ -94,10 +94,10 @@ export function createGridItemsFromData(data: LabelData): GridItem[] {
     w: 1,
     minW: 1,
     maxW: 1,
-    h: 2,
+    h: 3,
     content: `Forro: ${liningContent}`,
   });
-  yPosition += 2;
+  yPosition += 3;
 
   const careInstructionsContent = [
     data.instrucoes_de_lavagem.lavagem,
@@ -114,10 +114,10 @@ export function createGridItemsFromData(data: LabelData): GridItem[] {
     w: 1,
     minW: 1,
     maxW: 1,
-    h: 3,
+    h: 5,
     content: careInstructionsContent,
   });
-  yPosition += 3;
+  yPosition += 5;
 
   return items;
 }

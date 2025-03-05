@@ -14,7 +14,7 @@ import {
   IPrintSettings,
   PageItem,
 } from "./index.types";
-import { useReactToPrint, UseReactToPrintOptions } from "react-to-print";
+import { useReactToPrint } from "react-to-print";
 import { createGridItemsFromData } from "@/core/data/adapters/label.adapter";
 import { labelData } from "@/core/data/label.const";
 
@@ -26,16 +26,18 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
 }) => {
   const [zoom, setZoom] = useState(100);
   const [editionMode, setEditionMode] = useState<IEditorMode>(initialMode);
+  const [pageSettings, setPageSettings] = useState<EditorPageSettings>({
+    width: 33, //mm
+    height: 54, //mm
+    itemSpacing: 1, //mm
+    margin: 1, //mm
+    fontSize: 2, //mm
+    lineHeight: 2, //mm
+  });
   const [printSettings, setPrintSettings] = useState<IPrintSettings>({
     columnAmount: 3,
-  });
-  const [pageSettings, setPageSettings] = useState<EditorPageSettings>({
-    width: 30.3, //mm
-    height: 50.4, //mm
-    itemSpacing: 2, //mm
-    lineHeight: 2, //mm
-    margin: 2, //mm
-    fontSize: 2, //mm
+    ribbonWidth: pageSettings.width * 3,
+    ribbonHeight: pageSettings.height,
   });
   const [pages, setPages] = useState<PageItem<GridItem>[]>([
     {
@@ -104,6 +106,18 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
     });
   };
 
+  const handlePrintSettingsChange = (
+    field: keyof IPrintSettings,
+    value: number
+  ) => {
+    if (isNaN(value)) return;
+
+    setPrintSettings({
+      ...printSettings,
+      [field]: value,
+    });
+  };
+
   return (
     <EditorContext.Provider
       value={{
@@ -115,7 +129,7 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
         onPrint: handlePrint,
         editionMode,
         printSettings,
-        onChangePrintSettings: setPrintSettings,
+        onChangePrintSettings: handlePrintSettingsChange,
         onChangeEditionMode,
         onZoomIn: handleZoomIn,
         onZoonOut: handleZoomOut,

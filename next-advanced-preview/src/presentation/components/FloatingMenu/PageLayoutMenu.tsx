@@ -61,7 +61,7 @@ const PageLayoutMenu = () => {
           </label>
           <input
             type="number"
-            value={pageSettings.lineHeight}
+            value={pageSettings.fontSize}
             onChange={(e) => {
               handleChange("lineHeight", e.target.value);
               handleChange("fontSize", e.target.value);
