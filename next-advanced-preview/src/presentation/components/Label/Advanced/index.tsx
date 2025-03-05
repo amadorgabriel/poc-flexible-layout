@@ -4,11 +4,11 @@ import Moveable from "react-moveable";
 
 import { LabelData } from "@/core/domain/Label";
 import { createItemsFromLabelData } from "@/core/data/adapters/labelAdvaced.adapter";
+import { ContainertLabelProps } from "../Basic";
 
-import { ContainertLabel } from "../../Canvas/index.types";
 interface AdvancedLabelProps {
   items: LabelData;
-  settings: ContainertLabel["settings"];
+  settings: ContainertLabelProps["settings"];
 }
 
 export const AdvancedLabel = ({ settings, items }: AdvancedLabelProps) => {

@@ -67,11 +67,11 @@ export const Canvas = () => {
 
       <PageLayoutMenu />
 
-      <ConfigurationMenu />
-
       <FeaturesMenu />
 
       <VizualizationMenu />
+
+      <ConfigurationMenu />
 
       <PrintMenu />
     </div>

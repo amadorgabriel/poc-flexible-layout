@@ -2,9 +2,13 @@ import { Settings } from "lucide-react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
 import { FloatingMenu } from "@/presentation/components/DataDisplay/FloatingMenu";
+import EditionModal from "../modal/EditionModal";
+import { useState } from "react";
 
 export const ConfigurationMenu = () => {
   const { editionMode, onChangeEditionMode } = useEditor();
+
+  const [editionModalOpen, setEditionModalOpen] = useState(false);
 
   return (
     <FloatingMenu className="top-4 right-4">
@@ -22,11 +26,10 @@ export const ConfigurationMenu = () => {
                 id="basic"
                 value="basic"
                 checked={editionMode === "basic"}
-                onChange={(e) =>
-                  onChangeEditionMode(e.target.checked ? "basic" : "advanced")
-                }
+                disabled={editionMode === "advanced"}
+                onChange={() => {}}
               />
-              <label className="text-xs text-gray-600" htmlFor="basic">
+              <label className={`text-xs text-gray-600 ${editionMode === "advanced" && 'cursor-not-allowed opacity-50'}`} htmlFor="basic">
                 Básico
               </label>
             </div>
@@ -38,9 +41,7 @@ export const ConfigurationMenu = () => {
                 id="advanced"
                 checked={editionMode === "advanced"}
                 value="advanced"
-                onChange={(e) =>
-                  onChangeEditionMode(e.target.checked ? "advanced" : "basic")
-                }
+                onChange={() => setEditionModalOpen(true)}
               />
               <label className="text-xs text-gray-600" htmlFor="advanced">
                 Avançado
@@ -49,6 +50,12 @@ export const ConfigurationMenu = () => {
           </fieldset>
         </form>
       </section>
+
+      <EditionModal
+        open={editionModalOpen}
+        onClose={() => setEditionModalOpen(false)}
+        onOpen={() => setEditionModalOpen(true)}
+      />
     </FloatingMenu>
   );
 };

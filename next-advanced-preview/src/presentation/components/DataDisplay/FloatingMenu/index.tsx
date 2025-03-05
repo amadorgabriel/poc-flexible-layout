@@ -18,7 +18,7 @@ export const FloatingMenu = ({
     default: `bg-white rounded-md p-4 border border-slate-600 w-${sizeVariants}`,
   }[variant];
 
-  const containerStyle = `fixed space-x-2 z-5 ${
+  const containerStyle = `fixed space-x-2  ${
     props.className && props.className
   }`;
 
