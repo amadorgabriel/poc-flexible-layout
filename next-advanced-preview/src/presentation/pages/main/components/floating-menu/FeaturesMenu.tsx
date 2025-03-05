@@ -1,16 +1,14 @@
 import { Zap } from "lucide-react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
+import { FloatingMenu } from "@/presentation/components/DataDisplay/FloatingMenu";
 
 export const FeaturesMenu = () => {
   const { editionMode } = useEditor();
 
   return (
-    <aside className="border border-slate-600 p-4 rounded-md bg-white space-y-2 h-full w-[400px]">
-      <h3 className="text-sm font-medium flex items-center">
-        <Zap className="mr-2" size={14} />
-        Funcionalidades:
-      </h3>
+    <FloatingMenu className="top-4 left-4" size="lg">
+      <FloatingMenu.Title title="Funcionalidades" icon={<Zap size={14} />} />
 
       <section>
         <label className="text-xs text-gray-600">Página:</label>
@@ -87,6 +85,6 @@ export const FeaturesMenu = () => {
           <p className="italic">Não listado</p>
         )}
       </section>
-    </aside>
+    </FloatingMenu>
   );
 };

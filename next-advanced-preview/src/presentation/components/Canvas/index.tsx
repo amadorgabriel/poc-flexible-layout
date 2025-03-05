@@ -1,15 +1,15 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
 
 import { BasicLabel } from "../Label/Basic";
-import { PrintMenu } from "../FloatingMenu/PrintMenu";
-import { FeaturesMenu } from "../FloatingMenu/FeaturesMenu";
-import PageLayoutMenu from "../FloatingMenu/PageLayoutMenu";
-import { ConfigurationMenu } from "../FloatingMenu/ConfigurationMenu";
-import { VizualizationMenu } from "../FloatingMenu/VizualizationMenu";
+import { PrintMenu } from "../../pages/main/components/floating-menu/PrintMenu";
+import { FeaturesMenu } from "../../pages/main/components/floating-menu/FeaturesMenu";
+import PageLayoutMenu from "../../pages/main/components/floating-menu/PageLayoutMenu";
+import { ConfigurationMenu } from "../../pages/main/components/floating-menu/ConfigurationMenu";
+import { VizualizationMenu } from "../../pages/main/components/floating-menu/VizualizationMenu";
 
 export const Canvas = () => {
   const { editionMode, zoom, pageSettings, pages, onChangePages } = useEditor();
@@ -65,25 +65,15 @@ export const Canvas = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-18 right-4 ">
-        <PageLayoutMenu />
-      </div>
+      <PageLayoutMenu />
 
-      <div className="fixed top-4 left-4 flex space-x-2 z-50">
-        <FeaturesMenu />
-      </div>
+      <ConfigurationMenu />
 
-      <div className="fixed top-4 right-4 flex space-x-2 z-50">
-        <ConfigurationMenu />
-      </div>
+      <FeaturesMenu />
 
-      <div className="fixed bottom-4 right-4 flex space-x-2 z-50">
-        <VizualizationMenu />
-      </div>
+      <VizualizationMenu />
 
-      <div className="fixed bottom-4 left-4 flex z-50">
-        <PrintMenu />
-      </div>
+      <PrintMenu />
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React from "react";
 import { LayoutPanelLeft } from "lucide-react";
 import { useEditor } from "@/presentation/context/EditorContext";
 import { EditorPageSettings } from "@/presentation/context/EditorContext/index.types";
+import { FloatingMenu } from "@/presentation/components/DataDisplay/FloatingMenu";
 
 const PageLayoutMenu = () => {
   const { onChangePageSetting, pageSettings } = useEditor();
@@ -13,11 +14,12 @@ const PageLayoutMenu = () => {
   };
 
   return (
-    <div className="bg-white rounded-md p-4 border border-slate-600 w-72">
-      <div className="flex items-center mb-3">
-        <LayoutPanelLeft className="w-4 h-4 mr-2" />
-        <h3 className="text-sm font-medium">Página:</h3>
-      </div>
+    <FloatingMenu className="right-4 bottom-18">
+      <FloatingMenu.Title
+        title="Página"
+        icon={<LayoutPanelLeft className="w-4 h-4" />}
+      />
+
       <div className="space-y-3">
         <div>
           <label className="block text-xs text-gray-600 mb-1">
@@ -83,7 +85,7 @@ const PageLayoutMenu = () => {
           />
         </div>
       </div>
-    </div>
+    </FloatingMenu>
   );
 };
 

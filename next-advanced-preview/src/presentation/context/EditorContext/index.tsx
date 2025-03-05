@@ -1,6 +1,5 @@
 import React, {
   createContext,
-  CSSProperties,
   useContext,
   useRef,
   useState,

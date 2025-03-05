@@ -1,16 +1,14 @@
 import { Settings } from "lucide-react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
+import { FloatingMenu } from "@/presentation/components/DataDisplay/FloatingMenu";
 
 export const ConfigurationMenu = () => {
   const { editionMode, onChangeEditionMode } = useEditor();
 
   return (
-    <aside className="border border-slate-600 p-4 rounded-md bg-white space-y-2 h-full w-[300px]">
-      <h3 className="text-sm font-medium flex items-center">
-        <Settings className="mr-2" size={14} />
-        Configurações:
-      </h3>
+    <FloatingMenu className="top-4 right-4">
+      <FloatingMenu.Title title="Configurações" icon={<Settings size={14} />} />
 
       <section>
         <h4 className="block text-xs text-gray-600 mb-1">Modo de edição:</h4>
@@ -51,6 +49,6 @@ export const ConfigurationMenu = () => {
           </fieldset>
         </form>
       </section>
-    </aside>
+    </FloatingMenu>
   );
 };
