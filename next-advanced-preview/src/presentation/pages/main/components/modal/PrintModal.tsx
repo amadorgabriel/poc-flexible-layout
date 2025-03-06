@@ -5,6 +5,7 @@ import { useEditor } from "@/presentation/context/EditorContext";
 import { Modal } from "@/presentation/components/Modal";
 import { BasicLabel } from "@/presentation/components/Label/Basic";
 import { ModalProps } from "@/presentation/components/Modal/index.types";
+import { Test2 } from "@/presentation/components/Label/HtmlLabel/Test2";
 
 export default function PrintModal({
   open = false,
@@ -26,7 +27,68 @@ export default function PrintModal({
     } catch (e) {
       throw new Error("Erro while printing");
     } finally {
-      // onChangeVisibility(false);
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    try {
+      const response = await fetch("/api/generate-pdf");
+      const pdfBlob = await response.blob();
+
+      const url = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "output.pdf"; 
+
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Erro ao baixar o PDF:", error);
+    }
+  };
+
+  const handleDownloadPNG = async () => {
+    try {
+      const response = await fetch("/api/generate-png");
+      const pngBlob = await response.blob();
+
+      const url = URL.createObjectURL(pngBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "output.png"; 
+
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Erro ao baixar o PNG:", error);
+    }
+  };
+
+  const handleDownloadSVG = async () => {
+    try {
+      const response = await fetch("/api/generate-svg");
+      const svg = await response.text();
+
+      const blob = new Blob([svg], { type: "image/svg+xml" });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "output.svg"; // Nome do arquivo para download
+
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Erro ao baixar o SVG:", error);
     }
   };
 
@@ -120,7 +182,8 @@ export default function PrintModal({
         <div>
           <h3 className="text-sm mb-2">Preview</h3>
           <div className="flex justify-center items-center py-8  border border-slate-600 rounded-md paper-grid ">
-            <div
+            {<Test2 />}
+            {/* <div
               ref={printRef}
               className="grid bg-white overflow-hidden"
               style={{
@@ -131,7 +194,7 @@ export default function PrintModal({
               }}
             >
               {memoizedPreview}
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -142,10 +205,28 @@ export default function PrintModal({
             onClick: () => {},
             className:
               "cursor-pointer px-4 py-2 border border-black text-black hover:underline rounded-md",
-            children: "Baixar PDF",
+            children: "Baixar ZPL",
           },
           {
             onClick: () => {},
+            className:
+              "cursor-pointer px-4 py-2 border border-black text-black hover:underline rounded-md",
+            children: "Baixar BMP",
+          },
+          {
+            onClick: handleDownloadPdf,
+            className:
+              "cursor-pointer px-4 py-2 border border-black text-black hover:underline rounded-md",
+            children: "Baixar PDF",
+          },
+          {
+            onClick: handleDownloadPNG,
+            className:
+              "cursor-pointer px-4 py-2 border border-black text-black hover:underline rounded-md",
+            children: "Baixar PNG",
+          },
+          {
+            onClick: handleDownloadSVG,
             className:
               "cursor-pointer px-4 py-2 border border-black text-black hover:underline rounded-md",
             children: "Baixar SVG",

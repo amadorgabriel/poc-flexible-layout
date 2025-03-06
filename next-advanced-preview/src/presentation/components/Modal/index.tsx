@@ -6,7 +6,6 @@ import { ModalContextProps, ModalProps } from "./index.types";
 import { createPortal } from "react-dom";
 
 const ModalContext = createContext<ModalContextProps>({} as ModalContextProps);
-
 export const Modal = ({
   open = false,
   children,
@@ -24,7 +23,7 @@ export const Modal = ({
       >
         {open && (
           <div className="fixed inset-0 flex items-center justify-center bg-[#4747478e] ">
-            <div className="bg-white p-6 rounded-md shadow-lg w-[800px] border border-slate-800 space-y-4">
+            <div className="bg-white p-6 rounded-md shadow-lg w-[950px] border border-slate-800 space-y-4">
               {children}
             </div>
           </div>
