@@ -2,7 +2,7 @@ import satori from "satori";
 import fs from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
-import { Test2 } from "@/presentation/components/Other/Label/HtmlLabel/Test2";
+import { HTMLLabelPreview } from "@/presentation/components/Other/Label/Preview/Html";
 
 export async function GET() {
   try {
@@ -10,18 +10,18 @@ export async function GET() {
       process.cwd(),
       "public",
       "fonts",
-      "Roboto-Medium.ttf"
+      "Arial-Normal.ttf"
     );
     const fontData = fs.readFileSync(fontPath);
 
-    const svg = await satori(<Test2 width={378} height={204} />, {
+    const svg = await satori(<HTMLLabelPreview width={378} height={204} />, {
       width: 378,
       height: 204,
       fonts: [
         {
-          name: "Roboto",
+          name: "Arial",
           data: fontData,
-          weight: 500,
+          weight: 400,
           style: "normal",
         },
       ],
@@ -33,7 +33,6 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.error("Erro ao gerar SVG:", error);
     return new NextResponse(JSON.stringify({ error: "Erro ao gerar SVG" }), {
       status: 500,
       headers: {

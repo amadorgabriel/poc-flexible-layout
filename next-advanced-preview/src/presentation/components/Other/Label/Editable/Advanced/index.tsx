@@ -18,7 +18,6 @@ export const AdvancedLabel = ({ settings, items }: AdvancedLabelProps) => {
   );
   const data = createItemsFromLabelData(items);
 
-  // Calculate initial positions
   const getInitialPosition = (index: number) => {
     const itemsPerColumn = Math.ceil(data.length / 1);
     const column = Math.floor(index / itemsPerColumn);

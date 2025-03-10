@@ -5,7 +5,7 @@ interface CardProps {
   height?: number;
 }
 
-export const Test2 = ({ width, height }: CardProps) => {
+export const HTMLLabelPreview = ({ width, height }: CardProps) => {
   return (
     <div
       style={{
@@ -15,7 +15,7 @@ export const Test2 = ({ width, height }: CardProps) => {
         height: height || 204, // 54 mm ≈ 204 px
         fontSize: "8px", // 2 mm ≈ 8 px
         color: "#000",
-        fontFamily: "Roboto", // Aplique a fonte Roboto
+        fontFamily: "Arial", // Aplique a fonte Roboto
       }}
     >
       {[1, 2, 3].map((_, index) => (

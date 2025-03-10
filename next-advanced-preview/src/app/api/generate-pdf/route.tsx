@@ -2,10 +2,10 @@ import fs from "fs";
 import path from "path";
 import satori from "satori";
 import PDFDocument from "pdfkit";
-import blobStream from "blob-stream";
+import SVGtoPDF from "svg-to-pdfkit";
 
 import { NextResponse } from "next/server";
-import { Test2 } from "@/presentation/components/Other/Label/HtmlLabel/Test2";
+import { HTMLLabelPreview } from "@/presentation/components/Other/Label/Preview/Html";
 
 export async function GET() {
   try {
@@ -13,57 +13,55 @@ export async function GET() {
       process.cwd(),
       "public",
       "fonts",
-      "Roboto-Medium.ttf"
+      "Arial-Normal.ttf"
     );
     const fontData = fs.readFileSync(fontPath);
 
-    const svg = await satori(
-      <Test2 width={374} height={204} />, 
-      {
-        width: 374, 
-        height: 204, 
-        fonts: [
-          {
-            name: "Roboto", 
-            data: fontData,
-            weight: 500, 
-            style: "normal",
-          },
-        ],
-      }
-    );
+    const svg = await satori(<HTMLLabelPreview width={374} height={204} />, {
+      width: 374,
+      height: 204,
+      fonts: [
+        {
+          name: "Arial",
+          data: fontData,
+          weight: 400,
+          style: "normal",
+        },
+      ],
+    });
 
-    // Crie um documento PDF
-    const doc = new PDFDocument({ size: [374, 204] }); // Tamanho da página em pixels
-    const stream = doc.pipe(blobStream());
+    const doc = new PDFDocument({
+      compress: false,
+      size: [374, 204],
+      font: fontPath,
+      autoFirstPage: true,
+    });
 
-    // Adicione o SVG ao PDF
-    doc.image(Buffer.from(svg), 0, 0, { width: 374, height: 204 });
+    const chunks: Buffer[] = [];
+    doc.on("data", (chunk) => chunks.push(chunk));
 
-    // Finalize o PDF
+    SVGtoPDF(doc, svg, 0, 0, {
+      width: 374,
+      height: 204,
+      preserveAspectRatio: "xMidYMid meet",
+    });
+
     doc.end();
 
-    // Retorne o PDF como resposta
     const pdfBuffer = await new Promise<Buffer>((resolve) => {
-      stream.on("finish", async () => {
-        const buffer = stream.toBlob();
-        resolve(buffer as any);
-
-        // const blob = stream.toBlob(); // Obtém o Blob
-        // const arrayBuffer = await blob.arrayBuffer(); // Converte o Blob em ArrayBuffer
-        // const buffer = Buffer.from(arrayBuffer); // Converte o ArrayBuffer em Buffer
-        // resolve(buffer);
+      doc.on("end", () => {
+        const result = Buffer.concat(chunks);
+        resolve(result);
       });
     });
 
     return new NextResponse(pdfBuffer, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": 'attachment; filename="output.pdf"', // Força o download
+        "Content-Disposition": 'attachment; filename="output.pdf"',
       },
     });
   } catch (error) {
-    console.error("Erro ao gerar PDF:", error);
     return new NextResponse(JSON.stringify({ error: "Erro ao gerar PDF" }), {
       status: 500,
       headers: {

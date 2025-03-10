@@ -5,20 +5,17 @@ import { Modal } from "@/presentation/components/Feedback/Modal";
 import Spinner from "@/presentation/components/Feedback/Spinner";
 import { Segmented } from "@/presentation/components/DataDisplay/Segmented";
 import { IFileType } from "@/presentation/context/PrintContext/index.types";
-import { Test2 } from "@/presentation/components/Other/Label/HtmlLabel/Test2";
+import { HTMLLabelPreview } from "@/presentation/components/Other/Label/Preview/Html";
 import { ModalProps } from "@/presentation/components/Feedback/Modal/index.types";
 
 import { getPreviewElement, renderOptions } from "./index.const";
-
-const WIDTH = 374;
-const HEIGHT = 204;
 
 export default function PrintModal({
   open = false,
   onClose,
   onOpen,
 }: Omit<ModalProps, "children">) {
-  const [currRenderOptions, setCurrRenderOptions] = useState<IFileType>("png");
+  const [currRenderOptions, setCurrRenderOptions] = useState<IFileType>("html");
   const [objectURL, setObjetcURL] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [fileResponse, setFileResponse] = useState<Response | null>(null);
@@ -94,11 +91,7 @@ export default function PrintModal({
     options: {
       html: {
         onClick: handlePrint,
-        preview: <Test2 />,
-      },
-      bmp: {
-        onClick: () => {},
-        preview: <p>Preview Bitmap</p>,
+        preview: <HTMLLabelPreview />,
       },
       png: {
         onClick: handleDownloadPNG,
@@ -106,14 +99,16 @@ export default function PrintModal({
       },
       pdf: {
         onClick: handleDownloadPdf,
-        preview: (
+        preview: objectURL && (
           <iframe
             key="pdf"
-            src={
-              objectURL +
-              "#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0"
-            }
+            src={objectURL}
             style={{
+              width: "100%",
+              height: "500px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               transform: `scale(${1})`,
             }}
           />
@@ -125,10 +120,14 @@ export default function PrintModal({
           <div
             className="result-container"
             dangerouslySetInnerHTML={{
-              __html: `<div class="content-wrapper" style="position:absolute;width:100%;height:100%;max-width:${WIDTH}px;max-height:${HEIGHT}px;display:flex;align-items:center;justify-content:center">${fileResponse}</div>`,
+              __html: objectURL,
             }}
-          ></div>
+          />
         ),
+      },
+      bmp: {
+        onClick: () => {},
+        preview: <p>Preview Bitmap</p>,
       },
       zpl: {
         onClick: () => {},
@@ -157,7 +156,11 @@ export default function PrintModal({
       try {
         const response = await fetch(`/api/${route}`);
 
-        if (!response.ok) {
+        const clonedResponse = response.clone();
+
+        console.log("response", response);
+
+        if (!clonedResponse.ok) {
           throw new Error("Erro ao buscar o arquivo");
         }
 
@@ -166,18 +169,19 @@ export default function PrintModal({
 
         switch (currRenderOptions) {
           case "svg":
-            const svg = await response.text();
-            url = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+            const svg = await clonedResponse.text();
+            url = svg;
             break;
 
           default:
-            blob = await response.blob();
+            blob = await clonedResponse.blob();
             url = URL.createObjectURL(blob);
             break;
         }
 
         setObjetcURL(url);
         setFileResponse(response);
+
         setFetchMessage(`[${currRenderOptions}] foi gerado com sucesso.`);
       } catch (error) {
         setFetchMessage(`[${currRenderOptions}] apresentou problemas.`);
@@ -196,7 +200,7 @@ export default function PrintModal({
   }, [currRenderOptions]);
 
   return (
-    <Modal open={open} onClose={onClose} onOpen={onOpen}>
+    <Modal open={open} onClose={onClose} onOpen={onOpen} className="w-[950px]">
       <Modal.Title title="Configurações de impressão" />
 
       <section>
@@ -271,12 +275,35 @@ export default function PrintModal({
         <div>
           <h3 className="text-sm mb-2">Preview</h3>
 
-          <div className="relative flex justify-center items-center py-8  border border-slate-600 rounded-md paper-grid min-h-[500px] ">
-            <div ref={printRef}>
-              {isFetching ? <Spinner size="small" /> : previewElement.preview}
+          <div className="relative flex justify-center items-center   border border-slate-600 rounded-md paper-grid  ">
+            <div
+              ref={printRef}
+              style={{
+                width: "100%",
+                height: "500px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {isFetching ? (
+                <Spinner size="small" />
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    width: "100%",
+                  }}
+                >
+                  {previewElement.preview}
+                </div>
+              )}
             </div>
 
-            <span className="absolute top-3 right-2">
+            <span className="absolute bottom-3 right-2">
               <Segmented
                 options={renderOptions}
                 defaultValue={currRenderOptions}

@@ -4,7 +4,7 @@ import { useEditor } from "@/presentation/context/EditorContext";
 import { EditorPageSettings } from "@/presentation/context/EditorContext/index.types";
 import { FloatingMenu } from "@/presentation/components/DataDisplay/FloatingMenu";
 
-const PageLayoutMenu = () => {
+export const PageLayoutMenu = () => {
   const { onChangePageSetting, pageSettings } = useEditor();
 
   const handleChange = (field: keyof EditorPageSettings, value: string) => {
@@ -88,5 +88,3 @@ const PageLayoutMenu = () => {
     </FloatingMenu>
   );
 };
-
-export default PageLayoutMenu;

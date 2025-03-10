@@ -11,12 +11,12 @@ export default function EditionModal({
   const { onChangeEditionMode } = useEditor();
 
   return (
-    <Modal open={open} onClose={onClose} onOpen={onOpen}>
+    <Modal open={open} onClose={onClose} onOpen={onOpen} className="w-[650px]">
       <Modal.Title title="Deseja mesmo alterar o modo de edição para AVANÇADO?" />
 
       <section className="flex justify-center items-center py-4">
         <p>
-          Essa ação é <b className="text-red-400 text-md">irreversível</b>.
+          Tipo de ação: <b className="text-red-400 text-md">IRREVERSÍVEL</b>
         </p>
       </section>
 

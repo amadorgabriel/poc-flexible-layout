@@ -4,17 +4,17 @@ import React, { useEffect, useMemo } from "react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
 
-import { BasicLabel } from "../../Other/Label/Basic";
+import { BasicLabel } from "../../Other/Label/Editable/Basic";
 import { PrintMenu } from "../../../pages/main/components/floating-menu/PrintMenu";
 import { FeaturesMenu } from "../../../pages/main/components/floating-menu/FeaturesMenu";
-import PageLayoutMenu from "../../../pages/main/components/floating-menu/PageLayoutMenu";
+import { PageLayoutMenu } from "../../../pages/main/components/floating-menu/PageLayoutMenu";
 import { ConfigurationMenu } from "../../../pages/main/components/floating-menu/ConfigurationMenu";
 import { VizualizationMenu } from "../../../pages/main/components/floating-menu/VizualizationMenu";
 
 export const Canvas = () => {
-  const { editionMode, zoom, pageSettings, pages, onChangePages } = useEditor();
+  const { zoom, pageSettings, pages, onChangePages } = useEditor();
 
-  const memoizedBasicLabel = useMemo(() => {
+  const memoizedLabel = useMemo(() => {
     return (
       <BasicLabel
         key={pages[0].id}
@@ -44,24 +44,7 @@ export const Canvas = () => {
             transformOrigin: "top left",
           }}
         >
-          {memoizedBasicLabel}
-
-          {/* {editionMode === "basic"
-            ? containers.map((container) => (
-                <BasicLabel
-                  key={container.id}
-                  id={container.id}
-                  settings={container.settings}
-                  items={container.items}
-                />
-              ))
-            : containers.map((container) => (
-                <AdvancedLabel
-                  key={container.id}
-                  settings={container.settings}
-                  items={labelData}
-                />
-              ))} */}
+          {memoizedLabel}
         </div>
       </div>
 
