@@ -1,10 +1,7 @@
-import { useMemo } from "react";
-
 import { useEditor } from "@/presentation/context/EditorContext";
 
-import { Modal } from "@/presentation/components/Modal";
-import { ModalProps } from "@/presentation/components/Modal/index.types";
-import { CircleAlert } from "lucide-react";
+import { Modal } from "@/presentation/components/Feedback/Modal";
+import { ModalProps } from "@/presentation/components/Feedback/Modal/index.types";
 
 export default function EditionModal({
   open = false,

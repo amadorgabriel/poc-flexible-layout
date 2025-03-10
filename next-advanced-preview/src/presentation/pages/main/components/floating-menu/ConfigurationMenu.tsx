@@ -2,7 +2,7 @@ import { Settings } from "lucide-react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
 import { FloatingMenu } from "@/presentation/components/DataDisplay/FloatingMenu";
-import EditionModal from "../modal/EditionModal";
+import EditionModal from "../modal/edition-modal/inde";
 import { useState } from "react";
 
 export const ConfigurationMenu = () => {

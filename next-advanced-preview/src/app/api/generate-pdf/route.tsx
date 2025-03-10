@@ -5,7 +5,7 @@ import PDFDocument from "pdfkit";
 import blobStream from "blob-stream";
 
 import { NextResponse } from "next/server";
-import { Test2 } from "@/presentation/components/Label/HtmlLabel/Test2";
+import { Test2 } from "@/presentation/components/Other/Label/HtmlLabel/Test2";
 
 export async function GET() {
   try {

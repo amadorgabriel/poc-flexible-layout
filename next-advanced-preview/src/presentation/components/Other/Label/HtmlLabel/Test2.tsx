@@ -60,7 +60,9 @@ export const Test2 = ({ width, height }: CardProps) => {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "normal" }}>
-                  <span style={{ color: "#1f2937" }}>Etiqueta Certa</span>
+                  <span style={{ color: "#1f2937", userSelect: "none" }}>
+                    Etiqueta Certa
+                  </span>
                 </div>
                 <span
                   style={{

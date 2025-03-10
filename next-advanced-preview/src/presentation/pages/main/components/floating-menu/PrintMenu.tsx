@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Printer } from "lucide-react";
 
 import { FloatingMenu } from "@/presentation/components/DataDisplay/FloatingMenu";
-import PrintModal from "../modal/PrintModal";
+import PrintModal from "../modal/print-modal";
 
 export const PrintMenu = () => {
   const [printModalOpen, setPrintModalOpen] = useState(false);

@@ -1,24 +1,12 @@
-import { ReactNode, RefObject } from "react";
+import { ReactNode } from "react";
 
 export type IEditorMode = "basic" | "advanced";
-
-export type IPrintSettings = {
-  columnAmount: number;
-  ribbonWidth: number;
-  ribbonHeight: number;
-};
 
 export interface EditorContextProps {
   //zooming
   zoom: number;
   onZoomIn: () => void;
   onZoonOut: () => void;
-
-  //printing
-  printRef: RefObject<HTMLDivElement | null>;
-  printSettings: IPrintSettings;
-  onChangePrintSettings: (field: keyof IPrintSettings, value: number) => void;
-  onPrint: () => void;
 
   //viewmode
   editionMode: IEditorMode;

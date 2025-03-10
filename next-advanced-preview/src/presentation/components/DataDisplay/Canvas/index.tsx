@@ -4,12 +4,12 @@ import React, { useEffect, useMemo } from "react";
 
 import { useEditor } from "@/presentation/context/EditorContext";
 
-import { BasicLabel } from "../Label/Basic";
-import { PrintMenu } from "../../pages/main/components/floating-menu/PrintMenu";
-import { FeaturesMenu } from "../../pages/main/components/floating-menu/FeaturesMenu";
-import PageLayoutMenu from "../../pages/main/components/floating-menu/PageLayoutMenu";
-import { ConfigurationMenu } from "../../pages/main/components/floating-menu/ConfigurationMenu";
-import { VizualizationMenu } from "../../pages/main/components/floating-menu/VizualizationMenu";
+import { BasicLabel } from "../../Other/Label/Basic";
+import { PrintMenu } from "../../../pages/main/components/floating-menu/PrintMenu";
+import { FeaturesMenu } from "../../../pages/main/components/floating-menu/FeaturesMenu";
+import PageLayoutMenu from "../../../pages/main/components/floating-menu/PageLayoutMenu";
+import { ConfigurationMenu } from "../../../pages/main/components/floating-menu/ConfigurationMenu";
+import { VizualizationMenu } from "../../../pages/main/components/floating-menu/VizualizationMenu";
 
 export const Canvas = () => {
   const { editionMode, zoom, pageSettings, pages, onChangePages } = useEditor();
