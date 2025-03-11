@@ -16,7 +16,10 @@ export default function PrintModal({
   onOpen,
 }: Omit<ModalProps, "children">) {
   const [currRenderOptions, setCurrRenderOptions] = useState<IFileType>("html");
-  const [objectURL, setObjetcURL] = useState<string | null>(null);
+
+  const [pngURL, setPngURL] = useState<string | null>(null);
+  const [pdfURL, setPdfURL] = useState<string | null>(null);
+  const [svgURL, setSvgURL] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [fileResponse, setFileResponse] = useState<Response | null>(null);
   const [fetchMessage, setFetchMessage] = useState<string>("");
@@ -29,41 +32,45 @@ export default function PrintModal({
     onDownloadFile,
   } = usePrint();
 
-  const handlePrint = () => {
-    try {
-      onPrint();
-    } catch (e) {
-      throw new Error("Erro ao imprimir");
-    } finally {
+  const handlePrint = onPrint;
+
+  const fetchPNG = async () => {
+    if (pngURL) {
+      setFetchMessage(`[PNG] foi gerado com sucesso.`);
+      return;
     }
-  };
 
-  const handleDownloadPdf = async () => {
+    setIsFetching(true);
+
     try {
-      const response = await fetch("/api/generate-pdf");
-      const pdfBlob = await response.blob();
+      const response = await fetch("/api/generate-png");
 
-      const url = URL.createObjectURL(pdfBlob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "output.pdf";
+      const clonedResponse = response.clone();
 
-      document.body.appendChild(link);
-      link.click();
+      if (!clonedResponse.ok) {
+        throw new Error("Erro ao buscar o arquivo");
+      }
 
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      const blob = await clonedResponse.blob();
+      const url = URL.createObjectURL(blob);
 
-      setObjetcURL(url);
+      setPngURL(url);
+      setFileResponse(response);
+
+      setFetchMessage(`[PNG] foi gerado com sucesso.`);
     } catch (error) {
-      console.error("Erro ao baixar o PDF:", error);
+      setFetchMessage(`[PNG] apresentou problemas.`);
+    } finally {
+      setIsFetching(false);
     }
   };
 
   const handleDownloadPNG = async () => {
     if (!fileResponse) return;
 
-    const pngBlob = await fileResponse.blob();
+    const clonedResponse = fileResponse.clone();
+
+    const pngBlob = await clonedResponse.blob();
 
     await onDownloadFile({
       blob: pngBlob,
@@ -72,16 +79,93 @@ export default function PrintModal({
     });
   };
 
+  const fetchSVG = async () => {
+    if (svgURL) {
+      setFetchMessage(`[SVG] foi gerado com sucesso.`);
+      return;
+    }
+
+    setIsFetching(true);
+
+    try {
+      const response = await fetch("/api/generate-svg");
+
+      const clonedResponse = response.clone();
+
+      if (!clonedResponse.ok) {
+        throw new Error("Erro ao buscar o arquivo");
+      }
+
+      const svg = await clonedResponse.text();
+
+      setSvgURL(svg);
+      setFileResponse(response);
+
+      setFetchMessage(`[SVG] foi gerado com sucesso.`);
+    } catch (error) {
+      setFetchMessage(`[SVG] apresentou problemas.`);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
   const handleDownloadSVG = async () => {
     if (!fileResponse) return;
 
-    const svg = await fileResponse.text();
+    const clonedResponse = fileResponse.clone();
+
+    const svg = await clonedResponse.text();
 
     const blob = new Blob([svg], { type: "image/svg+xml" });
 
     await onDownloadFile({
       blob,
       extension: "svg",
+      filename: "output",
+    });
+  };
+
+  const fetchPDF = async () => {
+    if (pdfURL) {
+      setFetchMessage(`[PDF] foi gerado com sucesso.`);
+      return;
+    }
+
+    setIsFetching(true);
+
+    try {
+      const response = await fetch("/api/generate-pdf");
+
+      const clonedResponse = response.clone();
+
+      if (!clonedResponse.ok) {
+        throw new Error("Erro ao buscar o arquivo");
+      }
+
+      const blob = await clonedResponse.blob();
+      const url = URL.createObjectURL(blob);
+
+      setPdfURL(url);
+      setFileResponse(response);
+
+      setFetchMessage(`[PDF] foi gerado com sucesso.`);
+    } catch (error) {
+      setFetchMessage(`[PDF] apresentou problemas.`);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    if (!fileResponse) return;
+
+    const clonedResponse = fileResponse.clone();
+
+    const pdfBlob = await clonedResponse.blob();
+
+    await onDownloadFile({
+      blob: pdfBlob,
+      extension: "pdf",
       filename: "output",
     });
   };
@@ -95,14 +179,14 @@ export default function PrintModal({
       },
       png: {
         onClick: handleDownloadPNG,
-        preview: objectURL && <img src={objectURL} alt="Preview" />,
+        preview: pngURL && <img src={pngURL} alt="Preview" />,
       },
       pdf: {
         onClick: handleDownloadPdf,
-        preview: objectURL && (
+        preview: pdfURL && (
           <iframe
             key="pdf"
-            src={objectURL}
+            src={pdfURL}
             style={{
               width: "100%",
               height: "500px",
@@ -114,13 +198,17 @@ export default function PrintModal({
           />
         ),
       },
+      zpl: {
+        onClick: () => {},
+        preview: <p>Preview ZPL</p>,
+      },
       svg: {
         onClick: handleDownloadSVG,
-        preview: objectURL && (
+        preview: svgURL && (
           <div
             className="result-container"
             dangerouslySetInnerHTML={{
-              __html: objectURL,
+              __html: svgURL,
             }}
           />
         ),
@@ -129,64 +217,40 @@ export default function PrintModal({
         onClick: () => {},
         preview: <p>Preview Bitmap</p>,
       },
-      zpl: {
-        onClick: () => {},
-        preview: <p>Preview ZPL</p>,
-      },
     },
   });
 
+  console.log("currRenderOptions", previewElement);
+
   useEffect(() => {
-    if (currRenderOptions === "html") {
-      setFetchMessage(`[${currRenderOptions}] foi gerado com sucesso.`);
-      return;
-    }
-
-    const route = {
-      svg: "generate-svg",
-      png: "generate-png",
-      pdf: "generate-pdf",
-      bmp: "generate-bmp",
-      zpl: "generate-zpl",
-    }[currRenderOptions];
-
     const fetchFile = async () => {
-      setIsFetching(true);
+      switch (currRenderOptions) {
+        case "html":
+          setFetchMessage(`[HTML] foi gerado com sucesso.`);
+          break;
 
-      try {
-        const response = await fetch(`/api/${route}`);
+        case "png":
+          await fetchPNG();
+          break;
 
-        const clonedResponse = response.clone();
+        case "svg":
+          await fetchSVG();
+          break;
 
-        console.log("response", response);
+        case "pdf":
+          await fetchPDF();
+          break;
 
-        if (!clonedResponse.ok) {
-          throw new Error("Erro ao buscar o arquivo");
-        }
+        case "zpl":
+          setFetchMessage(`[ZPL] apresentou problemas.`);
+          break;
 
-        let blob: Blob;
-        let url: string;
+        case "bmp":
+          setFetchMessage(`[BMP] apresentou problemas.`);
+          break;
 
-        switch (currRenderOptions) {
-          case "svg":
-            const svg = await clonedResponse.text();
-            url = svg;
-            break;
-
-          default:
-            blob = await clonedResponse.blob();
-            url = URL.createObjectURL(blob);
-            break;
-        }
-
-        setObjetcURL(url);
-        setFileResponse(response);
-
-        setFetchMessage(`[${currRenderOptions}] foi gerado com sucesso.`);
-      } catch (error) {
-        setFetchMessage(`[${currRenderOptions}] apresentou problemas.`);
-      } finally {
-        setIsFetching(false);
+        default:
+          break;
       }
     };
 
@@ -194,7 +258,6 @@ export default function PrintModal({
 
     return () => {
       setFileResponse(null);
-      setObjetcURL(null);
       setFetchMessage("");
     };
   }, [currRenderOptions]);
@@ -278,13 +341,17 @@ export default function PrintModal({
           <div className="relative flex justify-center items-center   border border-slate-600 rounded-md paper-grid  ">
             <div
               ref={printRef}
-              style={{
-                width: "100%",
-                height: "500px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              style={
+                currRenderOptions !== "html"
+                  ? {
+                      width: "100%",
+                      height: "500px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }
+                  : {}
+              }
             >
               {isFetching ? (
                 <Spinner size="small" />
