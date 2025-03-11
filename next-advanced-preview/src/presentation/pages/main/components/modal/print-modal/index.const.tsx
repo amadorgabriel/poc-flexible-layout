@@ -13,7 +13,7 @@ export const getPreviewElement = ({
 }) => {
   const previewElements: IPreviewElement = {
     zpl: {
-      preview: options.svg.preview,
+      preview: options.zpl.preview,
       button: {
         onClick: options.zpl.onClick,
         className:

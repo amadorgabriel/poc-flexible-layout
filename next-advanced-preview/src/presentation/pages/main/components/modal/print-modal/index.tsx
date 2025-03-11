@@ -10,6 +10,9 @@ import { ModalProps } from "@/presentation/components/Feedback/Modal/index.types
 
 import { getPreviewElement, renderOptions } from "./index.const";
 
+const width = 374;
+const height = 204;
+
 export default function PrintModal({
   open = false,
   onClose,
@@ -116,12 +119,14 @@ export default function PrintModal({
 
     const svg = await clonedResponse.text();
 
+    console.log("clonedResponse", clonedResponse);
+
     const blob = new Blob([svg], { type: "image/svg+xml" });
 
     await onDownloadFile({
       blob,
       extension: "svg",
-      filename: "output",
+      filename: "SVG_POC",
     });
   };
 
@@ -175,11 +180,13 @@ export default function PrintModal({
     options: {
       html: {
         onClick: handlePrint,
-        preview: <HTMLLabelPreview />,
+        preview: <HTMLLabelPreview width={width} height={height} />,
       },
       png: {
         onClick: handleDownloadPNG,
-        preview: pngURL && <img src={pngURL} alt="Preview" />,
+        preview: pngURL && (
+          <img src={pngURL} width={width} height={height} alt="Preview" />
+        ),
       },
       pdf: {
         onClick: handleDownloadPdf,
@@ -187,14 +194,7 @@ export default function PrintModal({
           <iframe
             key="pdf"
             src={pdfURL}
-            style={{
-              width: "100%",
-              height: "500px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              transform: `scale(${1})`,
-            }}
+            className="w-full h-[500px] flex justify-center items-center"
           />
         ),
       },
@@ -219,8 +219,6 @@ export default function PrintModal({
       },
     },
   });
-
-  console.log("currRenderOptions", previewElement);
 
   useEffect(() => {
     const fetchFile = async () => {
@@ -338,33 +336,17 @@ export default function PrintModal({
         <div>
           <h3 className="text-sm mb-2">Preview</h3>
 
-          <div className="relative flex justify-center items-center   border border-slate-600 rounded-md paper-grid  ">
+          <div
+            className={`relative flex justify-center items-center border border-slate-600 min-h-[500px] rounded-md paper-grid`}
+          >
             <div
               ref={printRef}
-              style={
-                currRenderOptions !== "html"
-                  ? {
-                      width: "100%",
-                      height: "500px",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }
-                  : {}
-              }
+              className={`${currRenderOptions === "pdf" && "w-full"}`}
             >
               {isFetching ? (
                 <Spinner size="small" />
               ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100%",
-                    width: "100%",
-                  }}
-                >
+                <div className="flex justify-center items-center h-full w-full">
                   {previewElement.preview}
                 </div>
               )}
