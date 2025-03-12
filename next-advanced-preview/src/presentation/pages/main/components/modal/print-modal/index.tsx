@@ -4,7 +4,10 @@ import { usePrint } from "@/presentation/context/PrintContext";
 import { Modal } from "@/presentation/components/Feedback/Modal";
 import Spinner from "@/presentation/components/Feedback/Spinner";
 import { Segmented } from "@/presentation/components/DataDisplay/Segmented";
-import { IFileType } from "@/presentation/context/PrintContext/index.types";
+import {
+  DownloadOption,
+  IFileType,
+} from "@/presentation/context/PrintContext/index.types";
 import { HTMLLabelPreview } from "@/presentation/components/Other/Label/Preview/Html";
 import { ModalProps } from "@/presentation/components/Feedback/Modal/index.types";
 
@@ -21,6 +24,7 @@ export default function PrintModal({
   const [currRenderOptions, setCurrRenderOptions] = useState<IFileType>("html");
 
   const [pngURL, setPngURL] = useState<string | null>(null);
+  const [bmpURL, setBmpURL] = useState<string | null>(null);
   const [pdfURL, setPdfURL] = useState<string | null>(null);
   const [svgURL, setSvgURL] = useState<string | null>(null);
   const [isFetching, setIsFetching] = useState<boolean>(false);
@@ -68,17 +72,24 @@ export default function PrintModal({
     }
   };
 
-  const handleDownloadPNG = async () => {
+  const handleDownloadFile = async (option: Omit<DownloadOption, "blob">) => {
     if (!fileResponse) return;
 
     const clonedResponse = fileResponse.clone();
 
-    const pngBlob = await clonedResponse.blob();
+    let blob;
+
+    if (option.extension === "svg") {
+      const svg = await clonedResponse.text();
+
+      blob = new Blob([svg], { type: "image/svg+xml" });
+    } else {
+      blob = await clonedResponse.blob();
+    }
 
     await onDownloadFile({
-      blob: pngBlob,
-      extension: "png",
-      filename: "output",
+      ...option,
+      blob,
     });
   };
 
@@ -112,24 +123,6 @@ export default function PrintModal({
     }
   };
 
-  const handleDownloadSVG = async () => {
-    if (!fileResponse) return;
-
-    const clonedResponse = fileResponse.clone();
-
-    const svg = await clonedResponse.text();
-
-    console.log("clonedResponse", clonedResponse);
-
-    const blob = new Blob([svg], { type: "image/svg+xml" });
-
-    await onDownloadFile({
-      blob,
-      extension: "svg",
-      filename: "SVG_POC",
-    });
-  };
-
   const fetchPDF = async () => {
     if (pdfURL) {
       setFetchMessage(`[PDF] foi gerado com sucesso.`);
@@ -161,18 +154,35 @@ export default function PrintModal({
     }
   };
 
-  const handleDownloadPdf = async () => {
-    if (!fileResponse) return;
+  const fetchBMP = async () => {
+    if (bmpURL) {
+      setFetchMessage(`[BMP] foi gerado com sucesso.`);
+      return;
+    }
 
-    const clonedResponse = fileResponse.clone();
+    setIsFetching(true);
 
-    const pdfBlob = await clonedResponse.blob();
+    try {
+      const response = await fetch("/api/generate-bmp");
 
-    await onDownloadFile({
-      blob: pdfBlob,
-      extension: "pdf",
-      filename: "output",
-    });
+      const clonedResponse = response.clone();
+
+      if (!clonedResponse.ok) {
+        throw new Error("Erro ao buscar o arquivo");
+      }
+
+      const blob = await clonedResponse.blob();
+      const url = URL.createObjectURL(blob);
+
+      setBmpURL(url);
+      setFileResponse(response);
+
+      setFetchMessage(`[BMP] foi gerado com sucesso.`);
+    } catch (error) {
+      setFetchMessage(`[BMP] apresentou problemas.`);
+    } finally {
+      setIsFetching(false);
+    }
   };
 
   const previewElement = getPreviewElement({
@@ -183,13 +193,15 @@ export default function PrintModal({
         preview: <HTMLLabelPreview width={width} height={height} />,
       },
       png: {
-        onClick: handleDownloadPNG,
+        onClick: () =>
+          handleDownloadFile({ extension: "png", filename: "PNG_POC" }),
         preview: pngURL && (
           <img src={pngURL} width={width} height={height} alt="Preview" />
         ),
       },
       pdf: {
-        onClick: handleDownloadPdf,
+        onClick: () =>
+          handleDownloadFile({ extension: "pdf", filename: "PDF_POC" }),
         preview: pdfURL && (
           <iframe
             key="pdf"
@@ -198,12 +210,9 @@ export default function PrintModal({
           />
         ),
       },
-      zpl: {
-        onClick: () => {},
-        preview: <p>Preview ZPL</p>,
-      },
       svg: {
-        onClick: handleDownloadSVG,
+        onClick: () =>
+          handleDownloadFile({ extension: "svg", filename: "SVG_POC" }),
         preview: svgURL && (
           <div
             className="result-container"
@@ -214,8 +223,15 @@ export default function PrintModal({
         ),
       },
       bmp: {
+        onClick: () =>
+          handleDownloadFile({ extension: "bmp", filename: "BMP_POC" }),
+        preview: bmpURL && (
+          <img src={bmpURL} width={width} height={height} alt="Preview" />
+        ),
+      },
+      zpl: {
         onClick: () => {},
-        preview: <p>Preview Bitmap</p>,
+        preview: <p>Preview ZPL</p>,
       },
     },
   });
@@ -239,12 +255,12 @@ export default function PrintModal({
           await fetchPDF();
           break;
 
-        case "zpl":
-          setFetchMessage(`[ZPL] apresentou problemas.`);
+        case "bmp":
+          await fetchBMP();
           break;
 
-        case "bmp":
-          setFetchMessage(`[BMP] apresentou problemas.`);
+        case "zpl":
+          setFetchMessage(`[ZPL] apresentou problemas.`);
           break;
 
         default:

@@ -8,6 +8,12 @@ export type IPrintSettings = {
   ribbonHeight: number;
 };
 
+export type DownloadOption = {
+  blob: Blob;
+  filename: string;
+  extension: IFileType;
+};
+
 export interface PrintContextProps {
   printRef: RefObject<HTMLDivElement | null>;
   printSettings: IPrintSettings;
@@ -17,11 +23,7 @@ export interface PrintContextProps {
     blob,
     filename,
     extension,
-  }: {
-    blob: Blob;
-    filename: string;
-    extension: IFileType;
-  }) => Promise<void>;
+  }: DownloadOption) => Promise<void>;
 
   onChangePrintSettings: (field: keyof IPrintSettings, value: number) => void;
 }
